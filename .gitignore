@@ -25,3 +25,19 @@ tramp
 .cask/
 custom.el
 .smex-items
+ac-comphist.dat
+init.el.base
+swank
+/ido.last
+/recentf
+/url/cookies
+emacs.el
+custom.el
+*~
+bookmarks
+*.el
+recentf
+
+# Recovery and backup directories
+/auto-save-list/
+/backups/
