@@ -9,8 +9,8 @@
 
 ;; Turn on debugging
 
-(setq debug-on-error t)
-(setq debug-on-quit t)
+;(setq debug-on-error t)
+;(setq debug-on-quit t)
 
 ;; Load Use-Package
 
@@ -36,54 +36,15 @@
   :ensure t
   :config (exec-path-from-shell-initialize))
 
-;; Turn off splash screen and set major mode to org
-(setq inhibit-splash-screen t
-      initial-scratch-message nil
-      initial-major-mode 'org-mode
-)
-
 ;; Add Homebrew packages to path
 (let ((default-directory "/usr/local/share/emacs/site-lisp/"))
   (normal-top-level-add-subdirs-to-load-path))
 
-;; Theme
-(use-package hc-zenburn-theme
-  :ensure t
-  :config (load-theme 'hc-zenburn t)
-  )
+;; === Appearance ===
 
-;; Set the default font. The "frame-alist" is necessary to set the font when using emacs daemon and client.
-(set-default-font "Monaco-12") ;;; set default font
-(setq default-frame-alist '((font . "Monaco-12"))) ;;; set default font for emacs --daemon / emacsclient
-
-;; Change background color for selected text.
-(set-face-attribute 'region nil :background "#666")
-
-;; Turn on syntax highlighting for all buffers
-(global-font-lock-mode t)
+(load-file "~/.emacs.d/appearance.el")
 
 
-;; Highlight the current line.
-(global-hl-line-mode 1)
-
-;; Match parentheses — especially useful when editing Lisp
-(show-paren-mode 1)
-
-;; Turn off the menu, tool bar, and scroll bar.
-(scroll-bar-mode -1)
-(tool-bar-mode -1)
-(menu-bar-mode 1)
-
-;; Show line and column numbers in mode line:
-(line-number-mode 1)
-(column-number-mode 1)
-(winner-mode 1)
-
-;; Hide mouse when typing:
-(setq make-pointer-invisible t)
-
-;; Set tab to four spaces
-(setq-default tab-width 4) ; emacs 23.1, 24.2, default to 8
 
 ;; Keep custom-set variables separate from configuration file.
 (setf custom-file "~/.emacs.d/custom.el")
@@ -315,6 +276,13 @@
   :ensure t
   :commands (er/mark-symbol)
   :bind* ("C-=" . er/expand-region))
+
+;; == magit ==
+(use-package magit
+  :ensure t
+  :defer t
+  :bind ("C-x g" . magit-status)
+  )
 
 ;; == Markdown ==
 (use-package markdown-mode
@@ -549,7 +517,7 @@ Single Capitals as you type."
 
 
 ;; Start eshell
-(global-set-key (kbd "C-x M") (lambda () (interactive) (eshell t)))
+(global-set-key (kbd "C-x m") (lambda () (interactive) (eshell t)))
 ;; Start a new eshell even if one is active
 (global-set-key (kbd "C-x M") (lambda () (interactive) (eshell t)))
 

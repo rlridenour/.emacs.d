@@ -35,7 +35,6 @@ emacs.el
 custom.el
 *~
 bookmarks
-*.el
 recentf
 
 # Recovery and backup directories
