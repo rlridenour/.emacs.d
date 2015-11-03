@@ -105,3 +105,11 @@
 
 (use-package ag
   :ensure t)
+
+(use-package company
+  :ensure t
+  :diminish company-mode
+  :config
+  (progn
+    (setq company-tooltip-limit 20)
+    (global-company-mode 1)))
