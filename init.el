@@ -49,3 +49,6 @@
 
 (load-file "~/.emacs.d/system.el")
 
+;; === Utilities ===
+
+(load-file "~/.emacs.d/utilities.el")
