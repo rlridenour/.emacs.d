@@ -49,6 +49,9 @@
 ;; === Utilities ===
 (load-file "~/.emacs.d/utilities.el")
 
+;; === Functions ===
+(load-file "~/.emacs.d/functions.el")
+		   
 ;; === Markdown and Pandoc ====
 (load-file "~/.emacs.d/markdown.el")
 
