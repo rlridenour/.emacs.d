@@ -1,3 +1,7 @@
+;;;;;;;;;;;;
+;; System ;;
+;;;;;;;;;;;;
+
 ;; Keep custom-set variables separate from configuration file.
 (setf custom-file "~/.emacs.d/custom.el")
 (load custom-file)
@@ -7,19 +11,14 @@
 (setq mac-command-modifier 'super)
 (setq mac-option-modifier 'meta)
 (setq ns-function-modifier 'hyper) 
-   
-
-
 
 ;; Always prefer UTF-8
-
 
 (prefer-coding-system 'utf-8)
 (set-default-coding-systems 'utf-8)
 (set-terminal-coding-system 'utf-8)
 (set-keyboard-coding-system 'utf-8)
 (setq default-buffer-file-coding-system 'utf-8)
-
 
 ;; Save When Losing Focus
 
@@ -28,39 +27,27 @@
 (save-some-buffers t))
 (add-hook 'focus-out-hook 'save-all)
 
-
 ;; Use "y" and "n":
 (defalias 'yes-or-no-p 'y-or-n-p)
-
-
 
 ;; Confirm killing emacs on graphical sessions:
 (when (window-system)
 (setq confirm-kill-emacs 'yes-or-no-p))
 
-
 ;; Edit by Visual Lines
 (global-visual-line-mode t)
-
-
 
 ;; Navigate visual lines:
 (setq line-move-visual t)
 
-
-
 ;; Single space ends sentence:
 (setq sentence-end-double-space nil)
-
-
 
 ;; Don't make backup files
 (setq make-backup-files nil)
 
-
 ;; Spelling
 (setq flyspell-issue-welcome-flag nil)
-
 
 ;; From [[https://joelkuiper.eu/spellcheck_emacs][Joel Kuiper]]
 
@@ -68,7 +55,6 @@
 (dolist (hook '(text-mode-hook))
   (add-hook hook (lambda () (flyspell-mode 1))))
 
-   
 ;; Check comments and strings when coding.
 (dolist (mode '(emacs-lisp-mode-hook
                 inferior-lisp-mode-hook
@@ -80,7 +66,6 @@
             '(lambda ()
                (flyspell-prog-mode))))
 
-
 ;; Use F7 to check current word, M-F7 for next word.
 (global-set-key (kbd "<f7>") 'ispell-word)
 (defun flyspell-check-next-highlighted-word ()
@@ -90,24 +75,19 @@
   (ispell-word))
 (global-set-key (kbd "M-<f7>") 'flyspell-check-next-highlighted-word)
 
-
 ;; Spell-check with right mouse button.
 (eval-after-load "flyspell"
   '(progn
      (define-key flyspell-mouse-map [down-mouse-3] #'flyspell-correct-word)
      (define-key flyspell-mouse-map [mouse-3] #'undefined)))
 
-
 ;; Use hunspell with US English dictionary.
 (when (executable-find "hunspell")
   (setq-default ispell-program-name "hunspell")
   (setq ispell-really-hunspell t))
 
-
 ;; Store personal dictionary in Dropbox to sync between machines.
 (setq ispell-personal-dictionary "/Users/rlridenour/Dropbox/emacs/ridenour-ispell-dictionary ")
-
-  
 
 ;; Hide various file types, most LaTeX auxiliary files, in Dired.
 (require 'dired-x)
@@ -120,11 +100,9 @@
 ;; Load Abbreviations
 (load "~/Dropbox/emacs/my-emacs-abbrev")
 
-
 ;; Bookmarks
 (require 'bookmark)
 (bookmark-bmenu-list)
-
 
 ;; Recent Files
 (require 'recentf)
@@ -136,55 +114,26 @@
 (defadvice save-buffers-kill-emacs (around no-query-kill-emacs activate)
            (flet ((process-list ())) ad-do-it))
      
-
 ;;Shell
 (setq multi-term-program "/usr/local/bin/zsh")
 
 ;; Kill contents of scratch buffer, not the buffer itself. From [[http://emacswiki.org/emacs/RecreateScratchBuffer][TN]].
-
-
 (defun unkillable-scratch-buffer ()
 	(if (equal (buffer-name (current-buffer)) "*scratch*")
 	    (progn
 	      (delete-region (point-min) (point-max))
 	      nil)
 	  t))
-
 (add-hook 'kill-buffer-query-functions 'unkillable-scratch-buffer)
-
-
 
 ;; Mark date and time that files were saved.
 (add-hook 'before-save-hook 'time-stamp)
-
-
 
 (use-package osx-trash
   :if (eq system-type 'darwin)
   :ensure t
   :init (osx-trash-setup))
 
-
-
-;; == Markdown ==
-(use-package markdown-mode
-  :ensure t
-  :defer t
-  :mode (("\\.text\\'" . markdown-mode)
-         ("\\.markdown\\'" . markdown-mode)
-         ("\\.md\\'" . markdown-mode))
-  )
-
-;Make it easier to bold and italicize in Markdown Mode
-(add-hook 'markdown-mode-hook
-          (lambda ()
-            (local-set-key (kbd "s-b") 'markdown-insert-bold)
-            (local-set-key (kbd "s-i") 'markdown-insert-italic)))
-
-;; I haven't yet figured out why, but pressing =RET= deletes whitespace at the end of the line. That's useful for writing code, I'm sure, but not for writing Markdown text requiring hard line breaks. This little function just inserts two spaces at the end of the line and moves to the next line. I use it for prayers and poetry that I post on the blog, so it's called "mdpoetry." 
-(fset 'mdpoetry
-      "\C-e  \C-n")
-(global-set-key (kbd "<f9>") 'mdpoetry)
 
 
 ;; == LaTex / AucTeX ==
@@ -489,97 +438,7 @@ Single Capitals as you type."
 (global-set-key (kbd "C-c D") 'delete-file-and-buffer)
 (global-set-key (kbd "C-c r") 'rename-buffer-and-file)
 (global-set-key (kbd "C-c o") 'open-with)
-
-
-;; Blog settings
-
-(defun jekyll-timestamp ()
-  "Update existing date: timestamp on a Jekyll page or post."
-  (interactive)
-  (save-excursion (
-		   goto-char 1)
-		  (re-search-forward "^date:")
-		  (let ((beg (point)))
-		    (end-of-line)
-		    (delete-region beg (point)))
-		  (insert (concat " " (format-time-string "%Y-%m-%d %H:%M:%S"))))
-  )
-;; TODO: Make the function add a date variable if none exists.
-
-;; (defun jekyll-timestamp ()
-;;   "Insert a time stamp suitable for use in a Jekyll page or post.  Replaces current text selection."
-;;   (interactive)
-;;   (when (region-active-p) (delete-region (region-beginning) (region-end) ) )
-;;   (insert (format-time-string "%Y-%m-%d %H:%M:%S %z")))
-
-;; All of the below is taken from http://www.gorgnegre.com/linux/using-emacs-orgmode-to-blog-with-jekyll.html
-;; (Later tweaked a bit.)
-
-(global-set-key (kbd "C-x j n") 'jekyll-draft-post)
-(global-set-key (kbd "C-x j p") 'jekyll-publish-post)
-(global-set-key (kbd "C-x j t") 'jekyll-timestamp)
-(global-set-key (kbd "C-x j o") (lambda () (interactive) (find-file "~/Sites/rlridenour.github.io/")))
-
-(global-set-key (kbd "C-x j P") (lambda () (interactive) (find-file "~/Sites/rlridenour.github.io/_posts/")))
-(global-set-key (kbd "C-x j D") (lambda () (interactive) (find-file "~/Sites/rlridenour.github.io/_drafts/")))
-
-(defvar jekyll-directory "~/Sites/rlridenour.github.io/" "Path to Jekyll blog.")
-(defvar jekyll-drafts-dir "_drafts/" "Relative path to drafts directory.")
-(defvar jekyll-posts-dir "_posts/" "Relative path to posts directory.")
-(defvar jekyll-post-ext ".md"  "File extension of Jekyll posts.")
-(defvar jekyll-post-template "---\nlayout: post\ntitle: %s\ntags:\n- \ncomments: true\ndate: \n---\n"
-  "Default template for Jekyll posts. %s will be replace by the post title.")
-
-(defun jekyll-make-slug (s) "Turn a string into a slug."
-  (replace-regexp-in-string " " "-"  (downcase (replace-regexp-in-string "[^A-Za-z0-9 ]" "" s))))
-
-(defun jekyll-yaml-escape (s) "Escape a string for YAML."
-  (if (or (string-match ":" s) (string-match "\"" s)) (concat "\"" (replace-regexp-in-string "\"" "\\\\\"" s) "\"") s))
-
-(defun jekyll-draft-post (title) "Create a new Jekyll blog post."
-  (interactive "sPost Title: ")
-  (let ((draft-file (concat jekyll-directory jekyll-drafts-dir
-                            (jekyll-make-slug title)
-                            jekyll-post-ext)))
-    (if (file-exists-p draft-file)
-        (find-file draft-file)
-      (find-file draft-file)
-      (insert (format jekyll-post-template (jekyll-yaml-escape title))))))
-
-(defun jekyll-publish-post () "Move a draft post to the posts directory, and rename it so that it contains the date."
-  (interactive)
-  (cond
-   ((not (equal
-          (file-name-directory (buffer-file-name (current-buffer)))
-          (expand-file-name (concat jekyll-directory jekyll-drafts-dir))))
-    (message "This is not a draft post.")
-    (insert (file-name-directory (buffer-file-name (current-buffer))) "\n"
-            (concat jekyll-directory jekyll-drafts-dir)))
-   ((buffer-modified-p)
-    (message "Can't publish post; buffer has modifications."))
-   (t
-    (let ((filename
-           (concat jekyll-directory jekyll-posts-dir
-                   (format-time-string "%Y-%m-%d-")
-                   (file-name-nondirectory
-                    (buffer-file-name (current-buffer)))))
-          (old-point (point)))
-      (rename-file (buffer-file-name (current-buffer))
-                   filename)
-      (kill-buffer nil)
-      (find-file filename)
-      (set-window-point (selected-window) old-point)))))
-
-(provide 'setup-jekyll)
-
-
-
-
-
-
-
-
-
+(global-unset-key (kbd "C-z"))
 
 ;; Turn off debugging and set default directory
 

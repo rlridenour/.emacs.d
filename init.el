@@ -41,14 +41,16 @@
   (normal-top-level-add-subdirs-to-load-path))
 
 ;; === Appearance ===
-
 (load-file "~/.emacs.d/appearance.el")
 
-
 ;; === System ===
-
 (load-file "~/.emacs.d/system.el")
 
 ;; === Utilities ===
-
 (load-file "~/.emacs.d/utilities.el")
+
+;; === Markdown and Pandoc ====
+(load-file "~/.emacs.d/markdown.el")
+
+;; === Jekyll-Blog ===
+(load-file "~/.emacs.d/blog.el")
