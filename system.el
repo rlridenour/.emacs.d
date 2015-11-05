@@ -43,8 +43,16 @@
 ;; Single space ends sentence:
 (setq sentence-end-double-space nil)
 
+;; Backup files
 ;; Don't make backup files
-(setq make-backup-files nil)
+;; (setq make-backup-files nil)
+;; Save backups to ~/.saves
+(setq backup-directory-alist `(("." . "~/.saves")))
+(setq backup-by-copying t)
+(setq delete-old-versions t
+  kept-new-versions 6
+  kept-old-versions 2
+  version-control t)
 
 ;; Spelling
 (setq flyspell-issue-welcome-flag nil)
