@@ -23,7 +23,10 @@
   (use-package smex
    :ensure t
    :config (smex-initialize))
+  (use-package hydra
+	:ensure t)
   (ivy-mode))
+
 (use-package counsel
   :ensure t
   :bind ("M-x" . counsel-M-x)

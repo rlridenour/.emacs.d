@@ -58,5 +58,11 @@
 ;; === LaTeX ===
 (load-file "~/.emacs.d/latex.el")
 
+;; === Org-Mode ===
+(load-file "~/.emacs.d/org.el")
+
 ;; === Jekyll-Blog ===
 (load-file "~/.emacs.d/blog.el")
+
+;; === Keybindings ===
+(load-file "~/.emacs.d/keybindings.el")
