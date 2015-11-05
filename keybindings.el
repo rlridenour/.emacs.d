@@ -2,6 +2,17 @@
 ;; Keybindings ;;
 ;;;;;;;;;;;;;;;;;
 
+;; Unbind print function, it just crashes emacs on my mac.
+(global-unset-key (kbd "s-p"))
+(global-set-key (kbd "s-0") 'delete-window) 
+(global-set-key (kbd "s-1") 'delete-other-windows) 
+(global-set-key (kbd "s-3") 'split-window-right)
+(global-set-key (kbd "s-5") 'delete-frame)
+(global-set-key (kbd "S-C-<left>") 'shrink-window-horizontally)
+(global-set-key (kbd "S-C-<right>") 'enlarge-window-horizontally)
+(global-set-key (kbd "S-C-<down>") 'shrink-window)
+(global-set-key (kbd "S-C-<up>") 'enlarge-window)
+
 ;; Hydras
 
 ;; Hydra-toggle
