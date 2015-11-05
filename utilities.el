@@ -12,13 +12,26 @@
 
 (use-package swiper
   :ensure t
-  :bind
-  (([remap isearch-forward]  . swiper)
-   ([remap isearch-backward] . swiper)
-   ("C-c C-r" . ivy-resume)))
+  :bind ("C-s" . swiper)
+  ("C-c C-s" . isearch-forward)
+  ("s-r" . ivy-recentf)
+  ("C-c C-r" . ivy-resume)
+  :config
+  (setq ivy-display-style 'fancy
+        ivy-use-virtual-buffers t
+        ivy-re-builders-alist)
+  (use-package smex
+   :ensure t
+   :config (smex-initialize))
+  (ivy-mode))
+(use-package counsel
+  :ensure t
+  :bind ("M-x" . counsel-M-x)
+  ("C-x C-f" . counsel-find-file)
+  ("s-o" . counsel-find-file)
+  :config
+  (setq counsel-find-file-at-point t))
 
-(ivy-mode 1)
-(setq ivy-use-virtual-buffers t)
 
 ;; avy
 (use-package avy
@@ -27,21 +40,6 @@
 		 ("M-g w" . avy-goto-word-1)
 		 ("M-g M-g" . avy-goto-char-2)))
 
-(use-package counsel
-  :ensure
-  :bind (("C-h f" . counsel-describe-function)
-         ("C-h v" . counsel-describe-variable)
-         ("C-x C-f" . counsel-find-file)
-         ;; ("C-c j" . counsel-git-grep)
-		 ("s-r" . ivy-recentf)
-         ("M-x" . counsel-M-x))
-  :config
-  (setq counsel-find-file-at-point t)
-  (ivy-set-actions
-   'counsel-find-file
-   `((,(propertize "delete" 'face 'font-lock-warning-face)
-      (lambda (x) (delete-file (expand-file-name x ivy--directory))))))
-  (use-package smex :ensure))
 
 (use-package  ace-window
   :ensure
