@@ -63,6 +63,7 @@
   (interactive)
   (move-end-of-line nil)
   (newline-and-indent))
+(global-set-key (kbd "s-<return>") 'rlr/smart-open-line)
 
 ;;; Kill Buffer and Delete File
 ;; From [https://github.com/bbatsov/prelude][Emacs Prelude]
@@ -77,6 +78,7 @@
           (delete-file filename)
           (message "Deleted file %s" filename)
           (kill-buffer))))))
+(global-set-key (kbd "C-c D") 'delete-file-and-buffer)
 
 ;;; Rename Buffer and File
 (defun rename-buffer-and-file ()
@@ -91,6 +93,7 @@
          (t
           (rename-file filename new-name t)
           (set-visited-file-name new-name t t)))))))
+(global-set-key (kbd "C-c r") 'rename-buffer-and-file)
 
 ;;; Open With External App
 (defun open-with (arg)
@@ -109,6 +112,7 @@ With a prefix ARG always prompt for command to use."
                       (read-shell-command "Open current file with: ")
                     open)))
     (start-process "prelude-open-with-process" nil program current-file-name)))
+(global-set-key (kbd "C-c o") 'open-with)
 
 ;;; Switch to Previous Buffer
 (defun prelude-switch-to-previous-buffer ()

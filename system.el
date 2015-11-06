@@ -142,13 +142,10 @@
   :ensure t
   :init (osx-trash-setup))
 
-
-
-
-
-
-
-
+;; Disable warning bell
+;; (setq visible-bell t)
+(setq visible-bell nil) ;; The default
+(setq ring-bell-function 'ignore)
 
 ;; Start eshell
 (global-set-key (kbd "C-x m") (lambda () (interactive) (eshell t)))
@@ -222,26 +219,9 @@
 ;; and down; lines scrolled outside the top or bottom of the rectangle
 ;; are lost, but can be recovered using [C-z].
   
-;; set shortcut to kill whole emacs session
-(global-set-key (kbd "C-x c") 'save-buffers-kill-emacs)
 
-;; Other Miscellaneous Key bindings
-(global-set-key (kbd "RET") 'newline-and-indent)
-;; (global-set-key (kbd "C-;") 'comment-or-uncomment-region)
-(global-set-key (kbd "M-/") 'hippie-expand)
-(global-set-key (kbd "C-+") 'text-scale-increase)
-(global-set-key (kbd "C--") 'text-scale-decrease)
-(global-set-key (kbd "C-c C-k") 'compile)
-;; (global-set-key (kbd "C-x g") 'magit-status)
-;; (global-set-key (kbd "C-r") 'isearch-backward)
-;; (global-set-key (kbd "s-g") 'god-mode)
-;; (global-set-key (kbd "s-o") 'helm-find-files)
-(global-set-key (kbd "s-<return>") 'rlr/smart-open-line)
-(global-set-key (kbd "<s-backspace>") 'kill-whole-line)
-(global-set-key (kbd "C-c D") 'delete-file-and-buffer)
-(global-set-key (kbd "C-c r") 'rename-buffer-and-file)
-(global-set-key (kbd "C-c o") 'open-with)
-(global-unset-key (kbd "C-z"))
+
+
 
 ;; Turn off debugging and set default directory
 
