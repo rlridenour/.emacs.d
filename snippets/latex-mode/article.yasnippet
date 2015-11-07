@@ -1,0 +1,45 @@
+# -*- mode: snippet -*-
+# contributor: Mads D. Kristensen <madsdk@gmail.com>
+# contributor : Song Qiang <tsiangsung@gmail.com>
+# key: article
+# group: skeleton
+# name: \documentclass{article} ...
+# --
+\documentclass[11pt]{article}
+\usepackage{graphicx,epstopdf,amsmath,amssymb,bm,url}
+\usepackage{microtype,todonotes}
+% \usepackage[american]{babel}
+\usepackage[letterpaper,centering]{geometry}
+\usepackage[compact,small]{titlesec}
+\usepackage[parfill]{parskip} % Line between paragraphs
+\usepackage[authordate,url=false,isbn=false,backend=biber]{biblatex-chicago} %Change authoryear to notes if desired.
+\addbibresource{/Users/rlridenour/Dropbox/bibtex/randybib.bib}
+\clubpenalty = 10000 % Reduce orphans and widows
+\widowpenalty = 10000
+
+% Choose one of the following (if not choosing the default, 
+% viz., Computer Modern, font family):
+
+% \usepackage{lmodern}
+% \usepackage{mathpazo}
+% \usepackage{kpfonts}
+% \usepackage{mathptmx}
+% \usepackage{newtxtext,newtxmath}
+% \usepackage{libertine} \usepackage[libertine]{newtxmath}
+
+\usepackage[T1]{fontenc}
+\usepackage{hyperref}
+
+\title{${1:Title}}
+\author{Randy Ridenour}
+%\date{}  % Activate to display a given date or no date
+
+\begin{document}
+\maketitle
+
+$0
+
+% \printbibliography
+
+
+\end{document}

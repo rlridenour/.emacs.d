@@ -1,0 +1,44 @@
+# -*- mode: snippet -*-
+# name: article
+# key: article
+# --
+# Set the article class
+#+LaTeX_CLASS: article
+#+LaTeX_CLASS_OPTIONS: [12pt]
+
+# No need for a table of contents, unless your paper is quite long.
+#+OPTIONS: toc:nil
+
+# Add extra packages.
+#+LATEX_HEADER: \usepackage{epstopdf,bm,url,microtype,todonotes}
+
+# Page layout
+#+LATEX_HEADER: \usepackage[letterpaper,centering]{geometry}
+
+# Make section titles smaller.
+#+LATEX_HEADER: \usepackage[compact,small]{titlesec}
+
+# Blank lines between paragraphs.
+#+LATEX_HEADER: \usepackage[parfill]{parskip}
+
+# Reduce widows and orphans.
+#+LATEX_HEADER: \clubpenalty = 10000
+#+LATEX_HEADER: \widowpenalty = 10000
+
+# Change font
+#+LATEX_HEADER:  \usepackage{mathpazo}
+#+LATEX_HEADER: % \usepackage{libertine} \usepackage[libertine]{newtxmath}
+
+# List formatting
+#+LATEX_HEADER: \usepackage{enumitem}
+#+LATEX_HEADER: \setlist[enumerate,itemize]{noitemsep,nolistsep,leftmargin=*}
+
+# Bibliography
+#+LATEX_HEADER: \usepackage[authordate,url=false,isbn=false,backend=biber]{biblatex-chicago}
+#+LATEX_HEADER: \addbibresource{/Users/rlridenour/Dropbox/bibtex/randybib.bib}
+
+#+TITLE:${1:Title}
+#+AUTHOR: Randy Ridenour
+
+$0
+

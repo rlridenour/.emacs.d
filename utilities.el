@@ -1,14 +1,15 @@
+;;;;;;;;;;;;;;;
+;; Utilities ;;
+;;;;;;;;;;;;;;;
+
 ;; Yasnippet
 (use-package yasnippet
   :ensure t
-  :defer 20
-  :config
-  (progn
-	(setq yas-snippet-dirs
-      '("~/Dropbox/emacs/snippets"
-        "~/.emacs.d/elpa/yasnippet-20151101.1535/snippets"
-        ))))
-(yas-global-mode 1)
+  :defer t
+  :diminish yas-minor-mode
+  :init (progn
+          (yas-global-mode 1)
+          (yas-reload-all)))
 
 (use-package swiper
   :ensure t

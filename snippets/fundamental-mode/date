@@ -1,0 +1,4 @@
+#name : (date)
+# key: ydate
+# --
+(insert (format-time-string "%Y%m%d")))
