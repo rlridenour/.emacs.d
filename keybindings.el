@@ -13,6 +13,8 @@
 (global-set-key (kbd "S-C-<down>") 'shrink-window)
 (global-set-key (kbd "S-C-<up>") 'enlarge-window)
 (global-set-key (kbd "C-x c") 'save-buffers-kill-emacs)
+(global-set-key (kbd "s-p") 'ivy-switch-buffer)
+(global-set-key (kbd "C-x C-b") 'ibuffer)
 
 ;; Other Miscellaneous Key bindings
 (global-set-key (kbd "RET") 'newline-and-indent)

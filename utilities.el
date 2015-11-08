@@ -18,7 +18,6 @@
   ("C-c C-s" . isearch-forward)
   ("s-r" . ivy-recentf)
   ("C-c C-r" . ivy-resume)
-  ("s-p" . ivy-switch-buffer)
   :config
   (setq ivy-display-style 'fancy
         ivy-use-virtual-buffers t
