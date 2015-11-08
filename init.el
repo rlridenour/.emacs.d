@@ -67,3 +67,4 @@
 ;; === Keybindings ===
 (load-file "~/.emacs.d/keybindings.el")
 
+(setq default-directory "~/")

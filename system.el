@@ -126,6 +126,7 @@
 (setq multi-term-program "/usr/local/bin/zsh")
 ;; Make completion case-insensitive in eshell
 (setq eshell-cmpl-ignore-case t)
+(setq pcomplete-ignore-case t)
 
 ;; Kill contents of scratch buffer, not the buffer itself. From [[http://emacswiki.org/emacs/RecreateScratchBuffer][TN]].
 (defun unkillable-scratch-buffer ()
@@ -229,4 +230,4 @@
 
 ;;(setq debug-on-error nil)
 ;;(setq debug-on-quit nil)
-(setq default-directory "~/")
+
