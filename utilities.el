@@ -13,11 +13,12 @@
 
 (use-package swiper
   :ensure t
+  :diminish ivy-mode
   :bind ("C-s" . swiper)
   ("C-c C-s" . isearch-forward)
   ("s-r" . ivy-recentf)
   ("C-c C-r" . ivy-resume)
-  ("H-b" . ivy-switch-buffer)
+  ("s-p" . ivy-switch-buffer)
   :config
   (setq ivy-display-style 'fancy
         ivy-use-virtual-buffers t
@@ -104,6 +105,7 @@
 
 (use-package projectile
   :ensure t
+  :diminish projectile-mode
   :config (projectile-global-mode))
 
 (use-package ag
@@ -116,3 +118,10 @@
   (progn
     (setq company-tooltip-limit 20)
     (global-company-mode 1)))
+
+(use-package empos
+  :ensure t
+  :config
+  (progn
+	(setq empos-available-engines '("arxiv" "crossref")
+		  empos-bib-file "/Users/rlridenour/Dropbox/bibtex/empos.bib")))
