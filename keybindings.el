@@ -2,19 +2,43 @@
 ;; Keybindings ;;
 ;;;;;;;;;;;;;;;;;
 
-;; Unbind print function, it just crashes emacs on my mac.
+(global-unset-key (kbd "C-z"))
 (global-unset-key (kbd "s-p"))
-(global-set-key (kbd "s-0") 'delete-window) 
-(global-set-key (kbd "s-1") 'delete-other-windows) 
-(global-set-key (kbd "s-3") 'split-window-right)
-(global-set-key (kbd "s-5") 'delete-frame)
-(global-set-key (kbd "S-C-<left>") 'shrink-window-horizontally)
-(global-set-key (kbd "S-C-<right>") 'enlarge-window-horizontally)
-(global-set-key (kbd "S-C-<down>") 'shrink-window)
-(global-set-key (kbd "S-C-<up>") 'enlarge-window)
-(global-set-key (kbd "C-x c") 'save-buffers-kill-emacs)
-(global-set-key (kbd "s-p") 'ivy-switch-buffer)
-(global-set-key (kbd "C-x C-b") 'ibuffer)
+
+(use-package key-chord
+  :ensure t
+  :defer t
+  :config
+  (key-chord-mode 1))
+
+(bind-chords
+ ("jk" . prelude-switch-to-previous-buffer)
+ ("kj" . prelude-switch-to-previous-buffer))
+
+(bind-keys
+("s-0" . delete-window)
+("s-1" . delete-other-windows)
+("s-3" . split-window-right)
+("s-5" . delete-frame)
+("S-C-<left>" . shrink-window-horizontally)
+("S-C-<right>" . enlarge-window-horizontally)
+("S-C-<down>" . shrink-window)
+("S-C-<up>" . enlarge-window)
+("C-x c" . save-buffers-kill-emacs)
+;; ("s-p" . ivy-switch-buffer)
+("C-x C-b" . ibuffer))
+
+;; (global-set-key (kbd "s-0") 'delete-window) 
+;; (global-set-key (kbd "s-1") 'delete-other-windows) 
+;; (global-set-key (kbd "s-3") 'split-window-right)
+;; (global-set-key (kbd "s-5") 'delete-frame)
+;; (global-set-key (kbd "S-C-<left>") 'shrink-window-horizontally)
+;; (global-set-key (kbd "S-C-<right>") 'enlarge-window-horizontally)
+;; (global-set-key (kbd "S-C-<down>") 'shrink-window)
+;; (global-set-key (kbd "S-C-<up>") 'enlarge-window)
+;; (global-set-key (kbd "C-x c") 'save-buffers-kill-emacs)
+;; (global-set-key (kbd "s-p") 'ivy-switch-buffer)
+;; (global-set-key (kbd "C-x C-b") 'ibuffer)
 
 ;; Other Miscellaneous Key bindings
 (global-set-key (kbd "RET") 'newline-and-indent)
@@ -32,7 +56,7 @@
 
 
 
-(global-unset-key (kbd "C-z"))
+
 
 ;; Hydras
 

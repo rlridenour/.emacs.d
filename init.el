@@ -31,6 +31,10 @@
 (require 'diminish)
 (require 'bind-key)
 
+(use-package use-package-chords
+  :ensure t
+  :config (key-chord-mode 1))
+
 ;; Set the path variable
 (use-package exec-path-from-shell
   :ensure t

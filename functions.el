@@ -10,7 +10,6 @@
 (global-set-key (kbd "<f8>") 'insert-date)
 (global-set-key (kbd "C-c d") 'insert-date)
 
-
 ;;; Compact-Uncompact Block
   ;; Fill-paragraph from Xah Lee (http://ergoemacs.org/emacs/modernization_fill-paragraph.html)
   (defun rlr/compact-uncompact-block ()

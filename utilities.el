@@ -37,14 +37,12 @@
   :config
   (setq counsel-find-file-at-point t))
 
-
 ;; avy
 (use-package avy
   :ensure t
   :bind (("M-g l" . avy-goto-line)
 		 ("M-g w" . avy-goto-word-1)
 		 ("M-g M-g" . avy-goto-char-2)))
-
 
 (use-package  ace-window
   :ensure
@@ -67,9 +65,6 @@
   :config (global-undo-tree-mode)
   :bind (("s-z" . undo-tree-undo)
          ("s-Z" . undo-tree-redo)))
-
-(use-package use-package-chords
-  :ensure t)
 
 (use-package dash
   :ensure t
