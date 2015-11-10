@@ -21,3 +21,11 @@
 (fset 'mdpoetry
       "\C-e  \C-n")
 (global-set-key (kbd "<f9>") 'mdpoetry)
+
+;; Use Pandoc
+(use-package pandoc-mode
+  :ensure t
+  :config
+  (add-hook 'markdown-mode-hook 'pandoc-mode)
+  (add-hook 'org-mode-hook 'pandoc-mode)
+  (add-hook 'pandoc-mode-hook 'pandoc-load-default-settings))
