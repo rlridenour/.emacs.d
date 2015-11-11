@@ -159,3 +159,11 @@ Single Capitals as you type."
             (lambda ()
                   (interactive)
                   (join-line -1)))
+
+;; Count words
+(defun rlr-count-words (&optional begin end)
+  "count words between BEGIN and END (region); if no region defined, count words in buffer"
+  (interactive "r")
+  (let ((b (if mark-active begin (point-min)))
+      (e (if mark-active end (point-max))))
+    (message "Word count: %s" (how-many "\\w+" b e))))
