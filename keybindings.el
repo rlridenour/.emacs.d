@@ -25,7 +25,8 @@
 ("S-C-<down>" . shrink-window)
 ("S-C-<up>" . enlarge-window)
 ("C-x c" . save-buffers-kill-emacs)
-("s-p" . ivy-switch-buffer)
+;; ("s-p" . ivy-switch-buffer)
+("s-p" . pandoc-main-hydra/body)
 ("C-x C-b" . ibuffer))
 
 ;; (global-set-key (kbd "s-0") 'delete-window) 
