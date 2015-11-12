@@ -25,7 +25,7 @@
 ("S-C-<down>" . shrink-window)
 ("S-C-<up>" . enlarge-window)
 ("C-x c" . save-buffers-kill-emacs)
-;; ("s-p" . ivy-switch-buffer)
+("s-." . ivy-switch-buffer)
 ("s-p" . pandoc-main-hydra/body)
 ("C-x C-b" . ibuffer))
 
@@ -89,5 +89,5 @@
     ("P" (find-file "~/Sites/rlridenour.github.io/_posts/") "post directory")
     ("d" (find-file "~/Sites/rlridenour.github.io/_drafts") "draft directory")
     ("q" nil))
-(global-set-key (kbd "s-.") 'hydra-blog/body)
+(global-set-key (kbd "C-c b") 'hydra-blog/body)
 

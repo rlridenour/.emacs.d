@@ -1,3 +1,4 @@
+
 ;;;;;;;;;;;
 ;; LaTex ;;
 ;;;;;;;;;;;
@@ -26,6 +27,7 @@
 ;; Use Skim as viewer, enable source <-> PDF sync
 ;; make latexmk available via C-c C-c
 ;; Note: SyncTeX is setup via ~/.latexmkrc (see below)
+
 (add-hook 'LaTeX-mode-hook (lambda ()
   (push
     '("latexmk" "latexmk -pdf %s" TeX-run-TeX nil t
@@ -40,8 +42,11 @@
 (setq TeX-view-program-list
      '(("PDF Viewer" "/Applications/Skim.app/Contents/SharedSupport/displayline -b -g %n %o %b")))
 
+;; (setq TeX-view-program-list
+	  ;; '(("Skim" "/Applications/Skim.app/Contents/SharedSupport/displayline %q")))
+
 ;; Start Emacs server
-(server-start)
+;; (server-start)
 
     ;; Make emacs aware of multi-file projects
     ;; (setq-default TeX-master nil)
