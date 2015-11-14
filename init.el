@@ -59,11 +59,12 @@
 ;; === Markdown and Pandoc ====
 (load-file "~/.emacs.d/markdown.el")
 
-;; === LaTeX ===
-(load-file "~/.emacs.d/latex.el")
 
 ;; === Org-Mode ===
 (load-file "~/.emacs.d/org.el")
+
+;; === LaTeX ===
+(load-file "~/.emacs.d/latex.el")
 
 ;; === Jekyll-Blog ===
 (load-file "~/.emacs.d/blog.el")

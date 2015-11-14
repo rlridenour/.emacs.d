@@ -3,7 +3,7 @@
 ;; LaTex ;;
 ;;;;;;;;;;;
 
-(use-package tex
+(use-package tex-site
   :ensure auctex)
 
 ;; **** Italics and Bold
@@ -42,11 +42,9 @@
 (setq TeX-view-program-list
      '(("PDF Viewer" "/Applications/Skim.app/Contents/SharedSupport/displayline -b -g %n %o %b")))
 
-;; (setq TeX-view-program-list
-	  ;; '(("Skim" "/Applications/Skim.app/Contents/SharedSupport/displayline %q")))
 
 ;; Start Emacs server
-;; (server-start)
+(server-start)
 
     ;; Make emacs aware of multi-file projects
     ;; (setq-default TeX-master nil)
