@@ -42,7 +42,8 @@
   :ensure t
   :bind (("M-g l" . avy-goto-line)
 		 ("M-g w" . avy-goto-word-1)
-		 ("M-g M-g" . avy-goto-char-2)))
+		 ("M-g M-g" . avy-goto-char-2)
+		 ("s-2" . avy-goto-char-2)))
 
 (use-package  ace-window
   :ensure

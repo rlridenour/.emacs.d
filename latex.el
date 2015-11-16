@@ -51,7 +51,7 @@
     
     ;; Auto-raise Emacs on activation (from Skim, usually)
     (defun raise-emacs-on-aqua()
-    (shell-command "osascript -e 'tell application \"Emacs\" to activate' &"))
+    (shell-command "osascript -e 'tell application \"Emacs\" to activate' "))
     (add-hook 'server-switch-hook 'raise-emacs-on-aqua)
 
 
