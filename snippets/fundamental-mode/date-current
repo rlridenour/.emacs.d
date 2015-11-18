@@ -1,0 +1,4 @@
+# name: date text (YYYYMMDD)
+# key: ddate
+# --
+`(format-time-string "%B %e, %Y")` 

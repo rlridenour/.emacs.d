@@ -8,8 +8,10 @@
   :defer t
   :diminish yas-minor-mode
   :init (progn
+		  ;; (bind-key "SPC" 'yas-expand yas-minor-mode-map)
           (yas-global-mode 1)
           (yas-reload-all)))
+(define-key yas-minor-mode-map (kbd "SPC") 'yas-expand)
 
 (use-package swiper
   :ensure t

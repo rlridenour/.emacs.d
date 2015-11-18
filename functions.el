@@ -3,12 +3,19 @@
 ;;;;;;;;;;;;;;;
 
 ;;; Insert date
-(defun insert-date ()
+(defun insert-date-string ()
   "Insert current date yyyymmdd."
   (interactive)
   (insert (format-time-string "%Y%m%d")))
-(global-set-key (kbd "<f8>") 'insert-date)
-(global-set-key (kbd "C-c d") 'insert-date)
+
+(defun insert-standard-date ()
+    "Inserts standard date time string." 
+    (interactive)
+    (insert (format-time-string "%B %e, %Y")))
+
+
+(global-set-key (kbd "<f8>") 'insert-standard-date)
+(global-set-key (kbd "C-c d") 'insert-date-string)
 
 ;;; Compact-Uncompact Block
   ;; Fill-paragraph from Xah Lee (http://ergoemacs.org/emacs/modernization_fill-paragraph.html)
