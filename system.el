@@ -54,9 +54,6 @@
   kept-old-versions 2
   version-control t)
 
-;; Delete files by moving to system trash-directory
-
-
 ;; Spelling
 (setq flyspell-issue-welcome-flag nil)
 
@@ -143,12 +140,8 @@
 ;; Mark date and time that files were saved.
 (add-hook 'before-save-hook 'time-stamp)
 
-(use-package osx-trash
-  :if (eq system-type 'darwin)
-  :ensure t
-  :init (progn
-		(osx-trash-setup)
-        (setq delete-by-moving-to-trash)))
+(setq delete-by-moving-to-trash t
+	  trash-directory "~/.Trash/emacs")
 
 ;; Disable warning bell
 ;; (setq visible-bell t)

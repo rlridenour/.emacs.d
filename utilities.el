@@ -122,3 +122,6 @@
   (progn
 	(setq empos-available-engines '("arxiv" "crossref")
 		  empos-bib-file "/Users/rlridenour/Dropbox/bibtex/empos.bib")))
+(use-package reveal-in-osx-finder
+  :ensure t
+  :bind ("C-c z" . reveal-in-osx-finder))
