@@ -54,6 +54,9 @@
   kept-old-versions 2
   version-control t)
 
+;; Delete files by moving to system trash-directory
+
+
 ;; Spelling
 (setq flyspell-issue-welcome-flag nil)
 
@@ -143,7 +146,9 @@
 (use-package osx-trash
   :if (eq system-type 'darwin)
   :ensure t
-  :init (osx-trash-setup))
+  :init (progn
+		(osx-trash-setup)
+        (setq delete-by-moving-to-trash)))
 
 ;; Disable warning bell
 ;; (setq visible-bell t)

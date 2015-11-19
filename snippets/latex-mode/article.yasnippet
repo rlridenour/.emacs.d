@@ -6,13 +6,15 @@
 # name: \documentclass{article} ...
 # --
 \documentclass[11pt]{article}
+%\usepackage{fontspec} %Uncomment if using XeTeX.
+%\setmainfont[Mapping=tex-text]{Linux Libertine} %Uncomment if using XeTeX.
 \usepackage{graphicx,epstopdf,amsmath,amssymb,bm,url}
 \usepackage{microtype,todonotes}
 % \usepackage[american]{babel}
 \usepackage[letterpaper,centering]{geometry}
 \usepackage[compact,small]{titlesec}
 \usepackage[parfill]{parskip} % Line between paragraphs
-\usepackage[authordate,url=false,isbn=false,backend=biber]{biblatex-chicago} %Change authoryear to notes if desired.
+\usepackage[authordate,url=false,isbn=false,backend=biber]{biblatex-chicago} %Change authordate to notes if desired.
 \addbibresource{/Users/rlridenour/Dropbox/bibtex/randybib.bib}
 \clubpenalty = 10000 % Reduce orphans and widows
 \widowpenalty = 10000
@@ -20,14 +22,13 @@
 % Choose one of the following (if not choosing the default, 
 % viz., Computer Modern, font family):
 
-% \usepackage{lmodern}
 % \usepackage{mathpazo}
 % \usepackage{kpfonts}
 % \usepackage{mathptmx}
-% \usepackage{newtxtext,newtxmath}
+\usepackage{newtxtext,newtxmath}
 % \usepackage{libertine} \usepackage[libertine]{newtxmath}
 
-\usepackage[T1]{fontenc}
+\usepackage[T1]{fontenc} %Comment out if using LaTeX.
 \usepackage{hyperref}
 
 \title{${1:Title}}
