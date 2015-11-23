@@ -1,0 +1,28 @@
+# -*- mode: snippet -*-
+# name: handout
+# key: handout
+# --
+# Set the article class
+#+LaTeX_CLASS: tufte-handout
+
+# No need for a table of contents, unless your paper is quite long.
+#+OPTIONS: toc:nil
+
+# Add extra packages.
+#+LATEX_HEADER: \usepackage{epstopdf}
+
+#+Latex_Header: \DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
+
+# Page layout
+#+LATEX_HEADER: \usepackage{geometry}
+
+# Bibliography
+#+LATEX_HEADER: \bibliographystyle{chicago} 
+#+LATEX_HEADER: \bibliography{/Users/rlridenour/Dropbox/bibtex/randybib}
+
+
+#+TITLE:${1:Title}
+#+AUTHOR: Randy Ridenour
+
+$0
+

@@ -5,7 +5,7 @@
 # group: skeleton
 # name: \documentclass{handout} ...
 # --
-\documentclass{tufte-handout}
+\documentclass[nobib]{tufte-handout}
 \usepackage{geometry}                % See geometry.pdf to learn the layout options. There are lots.
 \geometry{letterpaper}                   % ... or a4paper or a5paper or ... 
 %\geometry{landscape}                % Activate for for rotated page geometry
@@ -14,6 +14,9 @@
 \usepackage{amssymb}
 \usepackage{epstopdf}
 \DeclareGraphicsRule{.tif}{png}{.png}{\`convert #1 \`dirname #1\`/\`basename #1 .tif\`.png}
+\usepackage{hyphenat}
+\usepackage[authordate,url=false,isbn=false,backend=biber]{biblatex-chicago} %Change authordate to notes if desired.
+\addbibresource{/Users/rlridenour/Dropbox/bibtex/randybib.bib}
 
 
 \title{${1:Title}}
@@ -25,8 +28,6 @@
 
 $0
 
-% \bibliographystyle{chicago}
-% \bibliography{/Users/rlridenour/Dropbox/bibtex/randybib}
-
+%\printbibliography
 
 \end{document}
