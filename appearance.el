@@ -42,3 +42,9 @@
 
 ;; Set tab to four spaces
 (setq-default tab-width 4) ; emacs 23.1, 24.2, default to 8
+
+;; Show file path in title bar
+(setq frame-title-format
+      '((:eval (if (buffer-file-name)
+                   (abbreviate-file-name (buffer-file-name))
+                 "%b"))))
