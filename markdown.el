@@ -22,6 +22,9 @@
       "\C-e  \C-n")
 (global-set-key (kbd "<f9>") 'mdpoetry)
 
+;; Turn on Orgtbl-mode in Markdown-mode
+(add-hook 'markdown-mode-hook 'turn-on-orgtbl)
+
 ;; Use Pandoc
 (use-package pandoc-mode
   :ensure t
@@ -29,3 +32,29 @@
   (add-hook 'markdown-mode-hook 'pandoc-mode)
   (add-hook 'org-mode-hook 'pandoc-mode)
   (add-hook 'pandoc-mode-hook 'pandoc-load-default-settings))
+
+;; Pandoc Conversion
+;; Converts Markdown files to LaTeX articles and handouts using fish shell functions.
+(defun pandoc-article ()
+  "Convert file to LaTeX article"
+    (interactive)
+    (shell-command (concat "article " (buffer-file-name) " " (file-name-sans-extension buffer-file-name) ".tex"))
+	(find-file (concat (file-name-sans-extension buffer-file-name) ".tex")))
+
+(defun pandoc-handout ()
+  "Convert file to LaTeX tufte-handout"
+    (interactive)
+    (shell-command (concat "handout " (buffer-file-name) " " (file-name-sans-extension buffer-file-name) ".tex"))
+	(find-file (concat (file-name-sans-extension buffer-file-name) ".tex")))
+
+(defun pandoc-docx ()
+  "Convert file to MS Word docx"
+    (interactive)
+    (shell-command (concat "convert " (buffer-file-name) " " (file-name-sans-extension buffer-file-name) ".docx"))
+	(shell-command (concat "open " (file-name-sans-extension buffer-file-name) ".docx")))
+
+(defun pandoc-html ()
+  "Convert file to html"
+    (interactive)
+    (shell-command (concat "convert " (buffer-file-name) " " (file-name-sans-extension buffer-file-name) ".html"))
+	(shell-command (concat "open " (file-name-sans-extension buffer-file-name) ".html")))

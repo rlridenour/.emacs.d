@@ -26,7 +26,7 @@
 ("S-C-<up>" . enlarge-window)
 ("C-x c" . save-buffers-kill-emacs)
 ("s-." . ivy-switch-buffer)
-("s-p" . pandoc-main-hydra/body)
+("H-p" . pandoc-main-hydra/body)
 ("C-x C-b" . ibuffer))
 
 ;; (global-set-key (kbd "s-0") 'delete-window) 
@@ -91,3 +91,10 @@
     ("q" nil))
 (global-set-key (kbd "C-c b") 'hydra-blog/body)
 
+(defhydra hydra-markdown (:color blue)
+  ("a" pandoc-article "article")
+  ("h" pandoc-handout "handout")
+  ("d" pandoc-docx "docx")
+  ("w" pandoc-html "html")
+  ("q" nil))
+(global-set-key (kbd "s-p") 'hydra-markdown/body)
