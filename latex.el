@@ -212,3 +212,10 @@
 ;;         (quote
 ;;          ("user.bib" "local.bib")))
 
+(defun tex-clean ()
+  (interactive)
+  (shell-command "latexmk -c"))
+
+(defun tex-clean-all ()
+  (interactive)
+  (shell-command "latexmk -C"))

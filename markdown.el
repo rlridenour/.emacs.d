@@ -58,3 +58,7 @@
     (interactive)
     (shell-command (concat "convert " (buffer-file-name) " " (file-name-sans-extension buffer-file-name) ".html"))
 	(shell-command (concat "open " (file-name-sans-extension buffer-file-name) ".html")))
+
+(defun pandoc-clean ()
+  (interactive)
+  (shell-command "panclean"))
