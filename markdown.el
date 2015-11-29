@@ -22,8 +22,8 @@
       "\C-e  \C-n")
 (global-set-key (kbd "<f9>") 'mdpoetry)
 
-;; Turn on Orgtbl-mode in Markdown-mode
-(add-hook 'markdown-mode-hook 'turn-on-orgtbl)
+;; Turn on Orgtbl-mode in Markdown-mode EDIT: Orgtble used C-c C-c, which conflicts with some Markdown keybindings.
+;; (add-hook 'markdown-mode-hook 'turn-on-orgtbl)
 
 ;; Use Pandoc
 (use-package pandoc-mode
@@ -40,6 +40,13 @@
     (interactive)
     (shell-command (concat "article " (buffer-file-name) " " (file-name-sans-extension buffer-file-name) ".tex"))
 	(find-file (concat (file-name-sans-extension buffer-file-name) ".tex")))
+
+(defun pandoc-pdf ()
+  "Convert file to LaTeX article"
+    (interactive)
+    (shell-command (concat "article " (buffer-file-name) " " (file-name-sans-extension buffer-file-name) ".tex"))
+	(shell-command (concat "mkpdf " (file-name-sans-extension buffer-file-name) ".tex"))
+	(shell-command (concat "open " (file-name-sans-extension buffer-file-name) ".pdf")))
 
 (defun pandoc-handout ()
   "Convert file to LaTeX tufte-handout"

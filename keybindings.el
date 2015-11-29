@@ -96,8 +96,10 @@
   ("h" pandoc-handout "handout")
   ("d" pandoc-docx "docx")
   ("w" pandoc-html "html")
+  ("p" pandoc-pdf "pdf")
   ("t" pandoc-clean "trash non-md files")
   ("c" tex-clean "clean aux files")
-  ("C" tex-clean-all "clean all"))
-  ("q" nil)
+  ("C" tex-clean-all "clean all")
+  ("q" nil))
 (global-set-key (kbd "s-p") 'hydra-markdown/body)
+
