@@ -41,3 +41,6 @@ recentf
 # Recovery and backup directories
 /auto-save-list/
 /backups/
+
+# eww cache
+/url/
