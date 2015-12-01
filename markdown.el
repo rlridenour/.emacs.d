@@ -41,8 +41,14 @@
     (shell-command (concat "article " (buffer-file-name) " " (file-name-sans-extension buffer-file-name) ".tex"))
 	(find-file (concat (file-name-sans-extension buffer-file-name) ".tex")))
 
+(defun pandoc-obuletter ()
+  "Convert file to LaTeX OBU letter"
+    (interactive)
+    (shell-command (concat "obuletter " (buffer-file-name) " " (file-name-sans-extension buffer-file-name) ".tex"))
+	(find-file (concat (file-name-sans-extension buffer-file-name) ".tex")))
+
 (defun pandoc-pdf ()
-  "Convert file to LaTeX article"
+  "Convert file to PDF"
     (interactive)
     (shell-command (concat "article " (buffer-file-name) " " (file-name-sans-extension buffer-file-name) ".tex"))
 	(shell-command (concat "mkpdf " (file-name-sans-extension buffer-file-name) ".tex"))

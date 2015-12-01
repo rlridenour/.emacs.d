@@ -94,6 +94,7 @@
 (defhydra hydra-markdown (:color blue)
   ("a" pandoc-article "article")
   ("h" pandoc-handout "handout")
+  ("o" pandoc-obuletter "obu letter")
   ("d" pandoc-docx "docx")
   ("w" pandoc-html "html")
   ("p" pandoc-pdf "pdf")

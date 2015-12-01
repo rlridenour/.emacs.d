@@ -33,6 +33,7 @@
     '("latexmk" "latexmk -pdf %s" TeX-run-TeX nil t
       :help "Run latexmk on file")
     TeX-command-list)))
+
 (add-hook 'TeX-mode-hook '(lambda () (setq TeX-command-default "latexmk")))
  
 ;; use Skim as default pdf viewer
