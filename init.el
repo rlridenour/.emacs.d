@@ -69,6 +69,9 @@
 ;; === Jekyll-Blog ===
 (load-file "~/.emacs.d/blog.el")
 
+;; === Eww ===
+(load-file "~/.emacs.d/eww.el")
+
 ;; === Keybindings ===
 (load-file "~/.emacs.d/keybindings.el")
 
