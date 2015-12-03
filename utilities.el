@@ -126,8 +126,3 @@
   :ensure t
   :bind ("C-c z" . reveal-in-osx-finder))
 
-(use-package ace-link
-  :ensure t
-  :defer 2
-  :config
-  (ace-link-setup-default))
