@@ -1,22 +1,10 @@
 ;; Eww browser for Emacs
 
-
-;; (eval-after-load "eww"
-  ;; '(progn (define-key eww-mode-map "f" 'eww-lnum-follow)
-          ;; (define-key eww-mode-map "F" 'eww-lnum-universal)))
-
-
-
 ;; From http://oremacs.com/2014/12/30/ace-link-eww/
 (use-package ace-link
   :ensure t
-  :defer 2
   :init
-  (ace-link-setup-default)
-  :config
-  (progn
-	(define-key eww-mode-map "f" 'eww-lnum-follow)
-    (define-key eww-mode-map "F" 'eww-lnum-universal)))
+    (ace-link-setup-default))
 
 (defun oleh-eww-hook ()
   (define-key eww-mode-map "j" 'oww-down)
@@ -30,11 +18,9 @@
   (define-key eww-mode-map "a" 'move-beginning-of-line)
   (define-key eww-mode-map "e" 'move-end-of-line)
   (define-key eww-mode-map "o" 'ace-link-eww)
+  (define-key eww-mode-map "f" 'ace-link-eww)
   (define-key eww-mode-map "y" 'eww))
 (add-hook 'eww-mode-hook 'oleh-eww-hook)
-
-
-
 
 (defun oww-down (arg)
   (interactive "p")
@@ -52,4 +38,3 @@
         (backward-paragraph arg)
         (forward-line 1))
     (line-move (- arg))))
-
