@@ -70,7 +70,7 @@
 (load-file "~/.emacs.d/blog.el")
 
 ;; === Eww ===
-(load-file "~/.emacs.d/eww.el")
+(load-file "~/.emacs.d/browser.el")
 
 ;; === Keybindings ===
 (load-file "~/.emacs.d/keybindings.el")
