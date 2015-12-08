@@ -27,7 +27,8 @@
 ("C-x c" . save-buffers-kill-emacs)
 ("s-." . ivy-switch-buffer)
 ("H-p" . pandoc-main-hydra/body)
-("C-x C-b" . ibuffer))
+("C-x C-b" . ibuffer)
+("s-2" . swap-windows))
 
 ;; (global-set-key (kbd "s-0") 'delete-window) 
 ;; (global-set-key (kbd "s-1") 'delete-other-windows) 

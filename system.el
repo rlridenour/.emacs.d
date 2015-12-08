@@ -121,7 +121,18 @@
 ;; Don't ask for confirmation to kill processes when exiting Emacs. Credit to [[http://timothypratley.blogspot.com/2015/07/seven-specialty-emacs-settings-with-big.html][Timothy Pratley]].
 (defadvice save-buffers-kill-emacs (around no-query-kill-emacs activate)
            (flet ((process-list ())) ad-do-it))
-     
+
+;; ibuffer
+
+;; Don't ask for unnecessary confirmations
+(setq ibuffer-expert t)
+
+;; Auto-update buffer list
+(add-hook 'ibuffer-mode-hook
+	  '(lambda ()
+	     (ibuffer-auto-mode 1)
+	     (ibuffer-switch-to-saved-filter-groups "home")))
+
 ;;Shell
 (setq multi-term-program "/usr/local/bin/zsh")
 ;; Make completion case-insensitive in eshell
@@ -230,5 +241,5 @@
 ;;(setq debug-on-quit nil)
 
 ;; Convert tabs to spaces
-(setq tab-width 4)
-(setq-default indent-tabs-mode nil)
+;; (setq tab-width 4)
+;; (setq-default indent-tabs-mode nil)
