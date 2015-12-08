@@ -11,7 +11,7 @@
 		  ;; (bind-key "SPC" 'yas-expand yas-minor-mode-map)
           (yas-global-mode 1)
           (yas-reload-all)))
-(define-key yas-minor-mode-map (kbd "SPC") 'yas-expand)
+;; (define-key yas-minor-mode-map (kbd "TAB") 'yas-expand)
 
 (use-package swiper
   :ensure t

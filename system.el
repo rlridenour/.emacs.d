@@ -229,3 +229,6 @@
 ;;(setq debug-on-error nil)
 ;;(setq debug-on-quit nil)
 
+;; Convert tabs to spaces
+(setq tab-width 4)
+(setq-default indent-tabs-mode nil)
