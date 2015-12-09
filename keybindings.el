@@ -28,7 +28,8 @@
 ("s-." . ivy-switch-buffer)
 ("H-p" . pandoc-main-hydra/body)
 ("C-x C-b" . ibuffer)
-("s-2" . swap-windows))
+("s-2" . swap-windows)
+("s-4" . desktop-clear))
 
 ;; (global-set-key (kbd "s-0") 'delete-window) 
 ;; (global-set-key (kbd "s-1") 'delete-other-windows) 
