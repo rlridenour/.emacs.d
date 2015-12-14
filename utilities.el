@@ -127,3 +127,7 @@
   :ensure t
   :bind ("C-c z" . reveal-in-osx-finder))
 
+(use-package smartparens
+  :ensure t)
+(require 'smartparens-config)
+(smartparens-global-mode t)
