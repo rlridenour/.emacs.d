@@ -6,6 +6,11 @@
 (use-package tex-site
   :ensure auctex)
 
+;; (use-package auctex-latexmk
+;;   :ensure t
+;;   :config
+;;   (auctex-latexmk-setup))
+
 ;; **** Italics and Bold
 
 (add-hook 'LaTeX-mode-hook
@@ -221,10 +226,6 @@
   (interactive)
   (shell-command "latexmk -C"))
 
-(use-package auctex-latexmk
-  :ensure t
-  :config
-  (auctex-latexmk-setup))
 
 
 
