@@ -18,7 +18,9 @@
 (bind-keys
 ("s-0" . delete-window)
 ("s-1" . delete-other-windows)
+("s-2" . swap-windows)
 ("s-3" . split-window-right)
+("s-4" . desktop-clear)
 ("s-5" . delete-frame)
 ("S-C-<left>" . shrink-window-horizontally)
 ("S-C-<right>" . enlarge-window-horizontally)
@@ -26,10 +28,9 @@
 ("S-C-<up>" . enlarge-window)
 ("C-x c" . save-buffers-kill-emacs)
 ("s-." . ivy-switch-buffer)
-("H-p" . pandoc-main-hydra/body)
-("C-x C-b" . ibuffer)
-("s-2" . swap-windows)
-("s-4" . desktop-clear))
+("C-x C-b" . ibuffer))
+
+
 
 ;; (global-set-key (kbd "s-0") 'delete-window) 
 ;; (global-set-key (kbd "s-1") 'delete-other-windows) 
@@ -110,3 +111,4 @@
   ("q" nil))
 (global-set-key (kbd "s-p") 'hydra-markdown/body)
 
+markdown-insert-header-dwim
