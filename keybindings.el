@@ -61,7 +61,6 @@
 
 
 
-
 ;; Hydras
 
 ;; Hydra-toggle
@@ -79,7 +78,7 @@
   ("t" toggle-truncate-lines "truncate")
   ("w" whitespace-mode "whitespace")
   ("q" nil "global"))
-(cancel-set-key (kbd "s-t") 'hydra-toggle/body)
+(global-set-key (kbd "s-t") 'hydra-toggle/body)
 
 ;; Hydra-Blog
 
@@ -112,4 +111,3 @@
   ("q" nil))
 (global-set-key (kbd "s-p") 'hydra-markdown/body)
 
-markdown-insert-header-dwim
