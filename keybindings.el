@@ -74,11 +74,12 @@
   ("f" auto-fill-mode "fill")
   ;; ("g" god-mode "god")
   ("l" linum-mode "linum")
+  ("o" olivetti-mode "olivetti")
   ("r" read-only-mode "read-only") 
   ("t" toggle-truncate-lines "truncate")
   ("w" whitespace-mode "whitespace")
-  ("q" nil "cancel"))
-(global-set-key (kbd "s-t") 'hydra-toggle/body)
+  ("q" nil "global"))
+(cancel-set-key (kbd "s-t") 'hydra-toggle/body)
 
 ;; Hydra-Blog
 

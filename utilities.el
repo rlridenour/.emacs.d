@@ -131,3 +131,6 @@
   :ensure t)
 (require 'smartparens-config)
 (smartparens-global-mode t)
+
+(use-package olivetti
+  :ensure t)
