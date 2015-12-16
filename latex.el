@@ -220,3 +220,11 @@
 (defun tex-clean-all ()
   (interactive)
   (shell-command "latexmk -C"))
+
+(use-package auctex-latexmk
+  :ensure t
+  :config
+  (auctex-latexmk-setup))
+
+
+

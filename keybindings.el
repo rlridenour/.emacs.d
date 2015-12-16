@@ -103,6 +103,10 @@
   ("t" pandoc-clean "trash non-md files")
   ("c" tex-clean "clean aux files")
   ("C" tex-clean-all "clean all")
+  ("1" markdown-insert-header-atx-1 "header 1")
+  ("2" markdown-insert-header-atx-2 "header 2")
+  ("3" markdown-insert-header-atx-3 "header 3")
+  ("4" markdown-insert-header-atx-4 "header 4")
   ("q" nil))
 (global-set-key (kbd "s-p") 'hydra-markdown/body)
 
