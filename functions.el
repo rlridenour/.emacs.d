@@ -193,3 +193,122 @@ Single Capitals as you type."
            (set-window-start w2 s1))))
   (other-window 1))
 
+
+;; From http://blog.binchen.org/posts/hello-ivy-mode-bye-helm.html
+
+(defun ivy-imenu-get-candidates-from (alist  &optional prefix)
+  (cl-loop for elm in alist
+           nconc (if (imenu--subalist-p elm)
+                       (ivy-imenu-get-candidates-from
+                        (cl-loop for (e . v) in (cdr elm) collect
+                                 (cons e (if (integerp v) (copy-marker v) v)))
+                        (concat prefix (if prefix ".") (car elm)))
+                   (and (cdr elm) ; bug in imenu, should not be needed.
+                        (setcdr elm (copy-marker (cdr elm))) ; Same as [1].
+                        (list (cons (concat prefix (if prefix ".") (car elm))
+                                    (copy-marker (cdr elm))))))))
+
+
+(defun ivy-imenu-goto ()
+  "Go to buffer position"
+  (interactive)
+  (let ((imenu-auto-rescan t) items)
+    (unless (featurep 'imenu)
+      (require 'imenu nil t))
+    (setq items (imenu--make-index-alist t))
+    (ivy-read "imenu items:"
+              (ivy-imenu-get-candidates-from (delete (assoc "*Rescan*" items) items))
+              :action (lambda (k) (goto-char k)))))
+
+
+(defun ivy-bookmark-goto ()
+  "Open ANY bookmark"
+  (interactive)
+  (let (bookmarks filename)
+    ;; load bookmarks
+    (unless (featurep 'bookmark)
+      (require 'bookmark))
+    (bookmark-maybe-load-default-file)
+    (setq bookmarks (and (boundp 'bookmark-alist) bookmark-alist))
+    ;; do the real thing
+    (ivy-read "bookmarks:"
+              (delq nil (mapcar (lambda (bookmark)
+                                  (let (key)
+                                    ;; build key which will be displayed
+                                    (cond
+                                     ((and (assoc 'filename bookmark) (cdr (assoc 'filename bookmark)))
+                                      (setq key (format "%s (%s)" (car bookmark) (cdr (assoc 'filename bookmark)))))
+                                     ((and (assoc 'location bookmark) (cdr (assoc 'location bookmark)))
+                                      ;; bmkp-jump-w3m is from bookmark+
+                                      (unless (featurep 'bookmark+)
+                                        (require 'bookmark+))
+                                      (setq key (format "%s (%s)" (car bookmark) (cdr (assoc 'location bookmark)))))
+                                     (t
+                                      (setq key (car bookmark))))
+                                    ;; re-shape the data so full bookmark be passed to ivy-read:action
+                                    (cons key bookmark)))
+                                bookmarks))
+              :action (lambda (bookmark)
+                        (bookmark-jump bookmark)))
+    ))
+
+
+;; Title-case from http://ergoemacs.org/emacs/elisp_title_case_text.html
+
+(defun xah-title-case-region-or-line (φbegin φend)
+  "Title case text between nearest brackets, or current line, or text selection.
+Capitalize first letter of each word, except words like {to, of, the, a, in, or, and, …}. If a word already contains cap letters such as HTTP, URL, they are left as is.
+
+When called in a elisp program, φbegin φend are region boundaries.
+URL `http://ergoemacs.org/emacs/elisp_title_case_text.html'
+Version 2015-05-07"
+  (interactive
+   (if (use-region-p)
+       (list (region-beginning) (region-end))
+     (let (
+           ξp1
+           ξp2
+           (ξskipChars "^\"<>(){}[]“”‘’‹›«»「」『』【】〖〗《》〈〉〔〕"))
+       (progn
+         (skip-chars-backward ξskipChars (line-beginning-position))
+         (setq ξp1 (point))
+         (skip-chars-forward ξskipChars (line-end-position))
+         (setq ξp2 (point)))
+       (list ξp1 ξp2))))
+  (let* (
+         (ξstrPairs [
+                     [" A " " a "]
+                     [" And " " and "]
+                     [" At " " at "]
+                     [" As " " as "]
+                     [" By " " by "]
+                     [" Be " " be "]
+                     [" Into " " into "]
+                     [" In " " in "]
+                     [" Is " " is "]
+                     [" It " " it "]
+                     [" For " " for "]
+                     [" Of " " of "]
+                     [" Or " " or "]
+                     [" On " " on "]
+                     [" Via " " via "]
+                     [" The " " the "]
+                     [" That " " that "]
+                     [" To " " to "]
+                     [" Vs " " vs "]
+                     [" With " " with "]
+                     [" From " " from "]
+                     ["'S " "'s "]
+                     ]))
+    (save-excursion 
+      (save-restriction
+        (narrow-to-region φbegin φend)
+        (upcase-initials-region (point-min) (point-max))
+        (let ((case-fold-search nil))
+          (mapc
+           (lambda (ξx)
+             (goto-char (point-min))
+             (while
+                 (search-forward (aref ξx 0) nil t)
+               (replace-match (aref ξx 1) 'FIXEDCASE 'LITERAL)))
+           ξstrPairs))))))

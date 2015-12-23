@@ -39,11 +39,18 @@
   :config
   (setq counsel-find-file-at-point t))
 
+;; flx
+(use-package flx-ido
+  :ensure t
+  :config
+  (setq flx-ido-use-faces t)
+    (flx-ido-mode 1))
+
 ;; avy
 (use-package avy
   :ensure t
   :bind (("M-g l" . avy-goto-line)
-		 ("s-l" . avy-goto-line)
+		 ;; ("s-l" . avy-goto-line)
 		 ("M-g w" . avy-goto-word-1)
 		 ("M-g M-g" . avy-goto-char-2)
 		 ("s-;" . avy-goto-char-2)))
