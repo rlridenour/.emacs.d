@@ -39,13 +39,6 @@
   :config
   (setq counsel-find-file-at-point t))
 
-;; flx
-(use-package flx-ido
-  :ensure t
-  :config
-  (setq flx-ido-use-faces t)
-    (flx-ido-mode 1))
-
 ;; avy
 (use-package avy
   :ensure t
