@@ -156,8 +156,17 @@
 
 ;; Disable warning bell
 ;; (setq visible-bell t)
-(setq visible-bell nil) ;; The default
-(setq ring-bell-function 'ignore)
+;; (setq visible-bell nil) ;; The default
+;; (setq ring-bell-function 'ignore)
+
+;; This flashes the mode-line (from http://www.stefanom.org/prettify-my-emacs-symbols/)
+(defun my-terminal-visible-bell ()
+   "A friendlier visual bell effect."
+   (invert-face 'mode-line)
+   (run-with-timer 0.1 nil 'invert-face 'mode-line))
+ 
+ (setq visible-bell nil
+       ring-bell-function 'my-terminal-visible-bell)
 
 ;; Start eshell
 (global-set-key (kbd "C-x m") (lambda () (interactive) (eshell t)))
