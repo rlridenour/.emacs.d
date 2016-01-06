@@ -312,3 +312,10 @@ Version 2015-05-07"
                  (search-forward (aref ξx 0) nil t)
                (replace-match (aref ξx 1) 'FIXEDCASE 'LITERAL)))
            ξstrPairs))))))
+
+;; Find non-ascii characters in current buffer
+(defun occur-non-ascii ()
+  "Find any non-ascii characters in the current buffer."
+  (interactive)
+  (occur "[^[:ascii:]]"))
+
