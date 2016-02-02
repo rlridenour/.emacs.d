@@ -95,4 +95,5 @@
 ("<s-backspace>" . kill-whole-line)
 ("s-t" . hydra-toggle/body)
 ("s-p" . hydra-markdown/body)
-("s-l" . hydra-locate/body))
+("s-l" . hydra-locate/body)
+("C-c k" . prelude-kill-other-buffers))

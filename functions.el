@@ -127,6 +127,18 @@ Repeated invocations toggle between the two most recently open buffers."
   (interactive)
   (switch-to-buffer (other-buffer (current-buffer) 1)))
 
+(require 'dash)
+
+(defun prelude-kill-other-buffers ()
+  "Kill all buffers but the current one.
+Doesn't mess with special buffers."
+  (interactive)
+  (-each
+   (->> (buffer-list)
+     (-filter #'buffer-file-name)
+     (--remove (eql (current-buffer) it)))
+   #'kill-buffer))
+
 ;;; Double Capitals
 ;; From  [[http://endlessparentheses.com/fixing-double-capitals-as-you-type.html?source=rss][Endless Parentheses]]
 ;; Define function
