@@ -134,3 +134,7 @@
 
 (use-package olivetti
   :ensure t)
+
+(use-package neotree
+  :ensure t
+  :bind ("C-c n" . neotree-toggle))
