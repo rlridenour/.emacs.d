@@ -137,4 +137,5 @@
 
 (use-package neotree
   :ensure t
-  :bind ("C-c n" . neotree-toggle))
+  :bind ("C-c n" . neotree-toggle)
+  :config (setq neo-smart-open t))
