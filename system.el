@@ -133,6 +133,16 @@
 	     (ibuffer-auto-mode 1)
 	     (ibuffer-switch-to-saved-filter-groups "home")))
 
+;; Isearch
+;; From Xah Lee, http://ergoemacs.org/emacs/emacs_isearch_by_arrow_keys.html
+(progn
+  ;; set arrow keys in isearch. left/right is backward/forward, up/down is history. press Return to exit
+  (define-key isearch-mode-map (kbd "<up>") 'isearch-ring-retreat )
+  (define-key isearch-mode-map (kbd "<down>") 'isearch-ring-advance )
+  (define-key isearch-mode-map (kbd "<left>") 'isearch-repeat-backward) ; single key, useful
+  (define-key isearch-mode-map (kbd "<right>") 'isearch-repeat-forward) ; single key, useful
+  )
+
 ;;Shell
 (setq multi-term-program "/usr/local/bin/zsh")
 ;; Make completion case-insensitive in eshell
