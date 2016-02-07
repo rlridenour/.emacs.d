@@ -139,3 +139,8 @@
   :ensure t
   :bind ("C-c n" . neotree-toggle)
   :config (setq neo-smart-open t))
+
+(use-package aggressive-indent
+  :ensure t
+  :config (global-aggressive-indent-mode 1))
+
