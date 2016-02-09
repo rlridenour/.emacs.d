@@ -78,7 +78,7 @@
 ("s-1" . delete-other-windows)
 ("s-2" . swap-windows)
 ("s-3" . split-window-right)
-("s-4" . desktop-clear)
+("s-4" . nuke-all-buffers)
 ("s-5" . delete-frame)
 ("S-C-<left>" . shrink-window-horizontally)
 ("S-C-<right>" . enlarge-window-horizontally)

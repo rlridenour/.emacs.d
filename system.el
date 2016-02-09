@@ -20,11 +20,14 @@
 (set-keyboard-coding-system 'utf-8)
 (setq default-buffer-file-coding-system 'utf-8)
 
+;; Use TeX to input special characters
+(setq default-input-method 'TeX)
+
 ;; Save When Losing Focus
 
 (defun save-all ()
   (interactive)
-(save-some-buffers t))
+  (save-some-buffers t))
 (add-hook 'focus-out-hook 'save-all)
 
 ;; Use "y" and "n":

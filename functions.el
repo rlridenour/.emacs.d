@@ -333,8 +333,18 @@ Version 2015-05-07"
 
 ;; Unfill paragraph
 ;;; Stefan Monnier <foo at acm.org>. It is the opposite of fill-paragraph    
-    (defun unfill-paragraph (&optional region)
-      "Takes a multi-line paragraph and makes it into a single line of text."
-      (interactive (progn (barf-if-buffer-read-only) '(t)))
-      (let ((fill-column (point-max)))
-        (fill-paragraph nil region)))
+(defun unfill-paragraph (&optional region)
+  "Takes a multi-line paragraph and makes it into a single line of text."
+  (interactive (progn (barf-if-buffer-read-only) '(t)))
+  (let ((fill-column (point-max)))
+	(fill-paragraph nil region)))
+
+;; From https://github.com/ocodo/.emacs.d/blob/master/custom/handy-functions.el
+(defun nuke-all-buffers ()
+  "Kill all buffers, leaving *scratch* only."
+  (interactive)
+  (mapc
+   (lambda (buffer)
+     (kill-buffer buffer))
+   (buffer-list))
+  (delete-other-windows))
