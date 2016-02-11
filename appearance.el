@@ -23,7 +23,7 @@
 
 ;; Highlight the current line.
 (global-hl-line-mode 1)
-(set-face-background hl-line-face "gray15")
+(set-face-background hl-line-face "gray17")
 
 ;; Match parentheses — especially useful when editing Lisp
 (show-paren-mode 1)
