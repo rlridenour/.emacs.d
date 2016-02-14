@@ -87,6 +87,7 @@
 ("S-C-<up>" . enlarge-window)
 ("C-x c" . save-buffers-kill-emacs)
 ("s-." . ivy-switch-buffer)
+("s-," . ivy-imenu-goto)
 ("C-x C-b" . ibuffer)
 ("RET" . newline-and-indent)
 ("M-/" . hippie-expand)
