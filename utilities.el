@@ -46,7 +46,7 @@
 		 ;; ("s-l" . avy-goto-line)
 		 ("M-g w" . avy-goto-word-1)
 		 ("M-g M-g" . avy-goto-char-2)
-		 ("s-;" . avy-goto-char-2)))
+		 ("s-;" . avy-goto-char-timer)))
 
 (use-package  ace-window
   :ensure
