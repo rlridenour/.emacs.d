@@ -101,4 +101,5 @@
 ("s-l" . hydra-locate/body)
 ("C-c k" . prelude-kill-other-buffers)
 ("C-c u" . unfill-paragraph)
-("s-d" . bjm/ivy-dired-recent-dirs))
+("s-d" . bjm/ivy-dired-recent-dirs)
+("s-=" . endless/ispell-word-then-abbrev))
