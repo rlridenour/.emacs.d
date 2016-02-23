@@ -37,7 +37,7 @@ custom.el
 bookmarks
 recentf
 *.eld
-
+abbrev_defs
 # Recovery and backup directories
 /auto-save-list/
 /backups/
