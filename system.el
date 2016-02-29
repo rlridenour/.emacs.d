@@ -46,6 +46,9 @@
 ;; Single space ends sentence:
 (setq sentence-end-double-space nil)
 
+;; Use tab for indentation and completion. From http://emacsredux.com/blog/2016/01/31/use-tab-to-indent-or-complete/
+(setq tab-always-indent 'complete)
+
 ;; Backup files
 ;; Don't make backup files
 ;; (setq make-backup-files nil)
