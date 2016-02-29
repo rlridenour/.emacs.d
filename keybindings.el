@@ -19,7 +19,7 @@
   ("a" abbrev-mode "abbrev")
   ("c" column-number-mode "column")
   ("d" toggle-debug-on-error "debug")
-  ;; ("e" evil-mode "evil")
+  ("e" evil-mode "evil")
   ("f" auto-fill-mode "fill")
   ;; ("g" god-mode "god")
   ("l" linum-mode "linum")
