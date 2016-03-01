@@ -144,5 +144,3 @@
   :ensure t
   :config (global-aggressive-indent-mode 1))
 
-(use-package evil
-  :ensure t)

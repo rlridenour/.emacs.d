@@ -75,4 +75,8 @@
 ;; === Keybindings ===
 (load-file "~/.emacs.d/keybindings.el")
 
+;; === Evil ===
+(load-file "~/.emacs.d/evil.el")
+
+
 (setq default-directory "~/")
