@@ -144,3 +144,9 @@
   :ensure t
   :config (global-aggressive-indent-mode 1))
 
+;; From http://pragmaticemacs.com/emacs/dynamically-filter-directory-listing-with-dired-narrow/
+;;narrow dired to match filter
+(use-package dired-narrow
+  :ensure t
+  :bind (:map dired-mode-map
+              ("/" . dired-narrow)))
