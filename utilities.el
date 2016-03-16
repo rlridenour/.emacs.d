@@ -150,3 +150,7 @@
   :ensure t
   :bind (:map dired-mode-map
               ("/" . dired-narrow)))
+
+(use-package nlinum
+  :ensure t
+  :config (global-nlinum-mode 1))

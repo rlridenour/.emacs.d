@@ -280,3 +280,5 @@
 (add-hook 'minibuffer-setup-hook #'my-minibuffer-setup-hook)
 (add-hook 'minibuffer-exit-hook #'my-minibuffer-exit-hook)
 
+;; Start server
+(unless (daemonp) (server-mode 1))
