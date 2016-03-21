@@ -102,4 +102,5 @@
 ("C-c k" . prelude-kill-other-buffers)
 ("C-c u" . unfill-paragraph)
 ("s-d" . bjm/ivy-dired-recent-dirs)
-("s-=" . endless/ispell-word-then-abbrev))
+("s-=" . endless/ispell-word-then-abbrev)
+("<f5>" . call-last-kbd-macro))
