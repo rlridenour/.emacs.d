@@ -154,3 +154,6 @@
 (use-package nlinum
   :ensure t
   :config (global-nlinum-mode 1))
+
+(use-package biblio
+  :ensure t)
