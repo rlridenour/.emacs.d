@@ -22,6 +22,9 @@
 
 ;; Use TeX to input special characters
 (setq default-input-method 'TeX)
+;; Start TeX input when switching buffers
+;; (defadvice switch-to-buffer (after activate-input-method activate)
+;; (activate-input-method "TeX"))
 
 ;; Save When Losing Focus
 
