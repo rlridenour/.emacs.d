@@ -277,19 +277,29 @@ Unless NOERROR is non-nil, throw an error if link not found."
 ("\\paragraph{%s}" . "\\paragraph*{%s}")
 ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
 
- ;; tufte-handout class for writing classy handouts and papers
+;; tufte-handout class for writing classy handouts and papers
 (require 'ox-latex) 
 (add-to-list 'org-latex-classes
-'("tuftehandout"
-"\\documentclass{tufte-handout}
+			 '("tuftehandout"
+			   "\\documentclass{tufte-handout}
 \\usepackage{color}
 \\usepackage{amssymb}
 \\usepackage{amsmath}
 \\usepackage{gensymb}
 \\usepackage{nicefrac}
 \\usepackage{units}"
-("\\section{%s}" . "\\section*{%s}")
-("\\subsection{%s}" . "\\subsection*{%s}")
-("\\paragraph{%s}" . "\\paragraph*{%s}")
-("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+			   ("\\section{%s}" . "\\section*{%s}")
+			   ("\\subsection{%s}" . "\\subsection*{%s}")
+			   ("\\paragraph{%s}" . "\\paragraph*{%s}")
+			   ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+
+;; Beamer export
+(add-to-list 'org-latex-classes
+             '("beamer"
+               "\\documentclass\[presentation\]\{beamer\}"
+               ("\\section\{%s\}" . "\\section*\{%s\}")
+               ("\\subsection\{%s\}" . "\\subsection*\{%s\}")
+               ("\\subsubsection\{%s\}" . "\\subsubsection*\{%s\}")))
+
+
 
