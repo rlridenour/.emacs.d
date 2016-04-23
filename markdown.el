@@ -37,15 +37,22 @@
 ;; Converts Markdown files to LaTeX articles and handouts using fish shell functions.
 (defun pandoc-article ()
   "Convert file to LaTeX article"
-    (interactive)
-    (shell-command (concat "article " (buffer-file-name) " " (file-name-sans-extension buffer-file-name) ".tex"))
-	(find-file (concat (file-name-sans-extension buffer-file-name) ".tex")))
+  (interactive)
+  (shell-command (concat "article " (buffer-file-name) " " (file-name-sans-extension buffer-file-name) ".tex"))
+  (find-file (concat (file-name-sans-extension buffer-file-name) ".tex")))
+
+(defun pandoc-beamer ()
+  "Convert file to Beamer slides"
+  (interactive)
+  (shell-command (concat "beamer " (buffer-file-name) " " (file-name-sans-extension buffer-file-name) ".pdf"))
+  (shell-command (concat "open " (file-name-sans-extension buffer-file-name) ".pdf")))
+
 
 (defun pandoc-obuletter ()
   "Convert file to LaTeX OBU letter"
-    (interactive)
-    (shell-command (concat "obuletter " (buffer-file-name) " " (file-name-sans-extension buffer-file-name) ".tex"))
-	(find-file (concat (file-name-sans-extension buffer-file-name) ".tex")))
+  (interactive)
+  (shell-command (concat "obuletter " (buffer-file-name) " " (file-name-sans-extension buffer-file-name) ".tex"))
+  (find-file (concat (file-name-sans-extension buffer-file-name) ".tex")))
 
 (defun pandoc-pdf ()
   "Convert file to PDF"
