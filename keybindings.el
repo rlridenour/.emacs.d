@@ -47,6 +47,7 @@
 (defhydra hydra-markdown (:color blue)
   ("a" pandoc-article "article")
   ("b" pandoc-beamer "beamer")
+  ("s" pandoc-slides "slides")
   ("h" pandoc-handout "handout")
   ("o" pandoc-obuletter "obu letter")
   ("d" pandoc-docx "docx")

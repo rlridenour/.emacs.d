@@ -42,9 +42,15 @@
   (find-file (concat (file-name-sans-extension buffer-file-name) ".tex")))
 
 (defun pandoc-beamer ()
+  "Convert file to LaTeX beamer file"
+  (interactive)
+  (shell-command (concat "beamer " (buffer-file-name) " " (file-name-sans-extension buffer-file-name) ".tex"))
+  (find-file (concat (file-name-sans-extension buffer-file-name) ".tex")))
+
+(defun pandoc-slides ()
   "Convert file to Beamer slides"
   (interactive)
-  (shell-command (concat "beamer " (buffer-file-name) " " (file-name-sans-extension buffer-file-name) ".pdf"))
+  (shell-command (concat "slides " (buffer-file-name) " " (file-name-sans-extension buffer-file-name) ".pdf"))
   (shell-command (concat "open " (file-name-sans-extension buffer-file-name) ".pdf")))
 
 
