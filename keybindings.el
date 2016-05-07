@@ -88,7 +88,7 @@
 ("S-C-<down>" . shrink-window)
 ("S-C-<up>" . enlarge-window)
 ("C-x c" . save-buffers-kill-emacs)
-("s-." . ivy-switch-buffer)
+;; ("s-." . ivy-switch-buffer)
 ("C-c i" . ivy-imenu-goto)
 ("C-c b" . ivy-bookmark-goto)
 ("C-x C-b" . ibuffer)
