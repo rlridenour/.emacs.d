@@ -50,6 +50,10 @@
 ;; === System ===
 (load-file "~/.emacs.d/system.el")
 
+;; === Helm ===
+(load-file "~/.emacs.d/helm.el")
+
+
 ;; === Utilities ===
 (load-file "~/.emacs.d/utilities.el")
 

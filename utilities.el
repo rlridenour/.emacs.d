@@ -2,6 +2,7 @@
 ;; Utilities ;;
 ;;;;;;;;;;;;;;;
 
+
 ;; Yasnippet
 (use-package yasnippet
   :ensure t
@@ -13,31 +14,31 @@
           (yas-reload-all)))
 ;; (define-key yas-minor-mode-map (kbd "TAB") 'yas-expand)
 
-(use-package swiper
-  :ensure t
-  :diminish ivy-mode
-  :bind ("C-s" . swiper)
-  ("C-c C-s" . isearch-forward)
-  ("s-r" . ivy-recentf)
-  ("C-c C-r" . ivy-resume)
-  :config
-  (setq ivy-display-style 'fancy
-        ivy-use-virtual-buffers t
-        ivy-re-builders-alist)
-  (use-package smex
-   :ensure t
-   :config (smex-initialize))
-  (use-package hydra
-	:ensure t)
-  (ivy-mode))
+;; (use-package swiper
+;;   :ensure t
+;;   :diminish ivy-mode
+;;   :bind ("C-s" . swiper)
+;;   ("C-c C-s" . isearch-forward)
+;;   ("s-r" . ivy-recentf)
+;;   ("C-c C-r" . ivy-resume)
+;;   :config
+;;   (setq ivy-display-style 'fancy
+;;         ivy-use-virtual-buffers t
+;;         ivy-re-builders-alist)
+;;   (use-package smex
+;;    :ensure t
+;;    :config (smex-initialize))
+;;   (use-package hydra
+;; 	:ensure t)
+;;   (ivy-mode))
 
-(use-package counsel
-  :ensure t
-  :bind ("M-x" . counsel-M-x)
-  ("C-x C-f" . counsel-find-file)
-  ("s-o" . counsel-find-file)
-  :config
-  (setq counsel-find-file-at-point t))
+;; (use-package counsel
+;;   :ensure t
+;;   :bind ("M-x" . counsel-M-x)
+;;   ("C-x C-f" . counsel-find-file)
+;;   ("s-o" . counsel-find-file)
+;;   :config
+;;   (setq counsel-find-file-at-point t))
 
 ;; avy
 (use-package avy
@@ -157,3 +158,4 @@
 
 (use-package biblio
   :ensure t)
+
