@@ -32,13 +32,13 @@
 ;; 	:ensure t)
 ;;   (ivy-mode))
 
-;; (use-package counsel
-;;   :ensure t
-;;   :bind ("M-x" . counsel-M-x)
-;;   ("C-x C-f" . counsel-find-file)
-;;   ("s-o" . counsel-find-file)
-;;   :config
-;;   (setq counsel-find-file-at-point t))
+(use-package counsel
+  :ensure t
+  :bind (("C-x C-f" . counsel-find-file))
+  ;; ("M-x" . counsel-M-x)
+  ;;   ("s-o" . counsel-find-file)
+  :config
+  (setq counsel-find-file-at-point t))
 
 ;; avy
 (use-package avy

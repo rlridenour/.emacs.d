@@ -5,7 +5,7 @@
   :ensure t
   :bind
   (("C-M-z" . helm-resume)
-   ("C-x C-f" . helm-find-files)
+   ;; ("C-x C-f" . helm-find-files)
    ("s-o" . helm-find-files)
    ("C-h b" . helm-descbinds)
    ("C-x h" . helm-mini)
@@ -127,15 +127,13 @@
                                       helm-source-buffer-not-found))
 
     ;; List of times to show in helm-world-time
-    (setq display-time-world-list '(("PST8PDT" "Los Altos")
-                                    ("America/Denver" "Denver")
-                                    ("EST5EDT" "Boston")
+    (setq display-time-world-list '(("America/Chicago" "Norman")
+                                    ("America/New_York" "New York")
+									("Pacific/Honolulu" "Honolulu")
                                     ("UTC" "UTC")
                                     ("Europe/London" "London")
-                                    ("Europe/Amsterdam" "Amsterdam")
-                                    ("Asia/Bangkok" "Bangkok")
-                                    ("Asia/Tokyo" "Tokyo")
-                                    ("Australia/Sydney" "Sydney")))
+                                    ("Asia/Baghdad" "Baghdad")
+                                    ("Asia/Kabul" "Kabul")))
 
     (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebind tab to do persistent action
     (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB works in terminal
