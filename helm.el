@@ -271,26 +271,33 @@
 
     ;; (global-set-key (kbd "C-c M-C-h") 'helm-httpstatus)
     ;; (global-set-key (kbd "C-c M-h") 'helm-clj-http)
+	(use-package helm-projectile
+	  :ensure t
+	  :init
+	  (progn
+		;; (setq helm-projectile-fuzzy-match nil)
+		(require 'helm-projectile)
+		(helm-projectile-on)))
 
-    (use-package helm-swoop
-      :bind (("M-i" . helm-swoop)
-             ("M-I" . helm-swoop-back-to-last-point)
-             ("C-c M-i" . helm-multi-swoop))
-      :config
-      (progn
-        ;; When doing isearch, hand the word over to helm-swoop
-        (define-key isearch-mode-map (kbd "M-i") 'helm-swoop-from-isearch)
-        ;; From helm-swoop to helm-multi-swoop-all
-        (define-key helm-swoop-map (kbd "M-i") 'helm-multi-swoop-all-from-helm-swoop)
-        ;; Save buffer when helm-multi-swoop-edit complete
-        (setq helm-multi-swoop-edit-save t
-              ;; If this value is t, split window inside the current window
-              helm-swoop-split-with-multiple-windows nil
-              ;; Split direcion. 'split-window-vertically or 'split-window-horizontally
-              helm-swoop-split-direction 'split-window-vertically
-              ;; If nil, you can slightly boost invoke speed in exchange for text color
-              helm-swoop-speed-or-color nil)))
+	(use-package helm-swoop
+	  :bind (("M-i" . helm-swoop)
+			 ("M-I" . helm-swoop-back-to-last-point)
+			 ("C-c M-i" . helm-multi-swoop))
+	  :config
+	  (progn
+		;; When doing isearch, hand the word over to helm-swoop
+		(define-key isearch-mode-map (kbd "M-i") 'helm-swoop-from-isearch)
+		;; From helm-swoop to helm-multi-swoop-all
+		(define-key helm-swoop-map (kbd "M-i") 'helm-multi-swoop-all-from-helm-swoop)
+		;; Save buffer when helm-multi-swoop-edit complete
+		(setq helm-multi-swoop-edit-save t
+			  ;; If this value is t, split window inside the current window
+			  helm-swoop-split-with-multiple-windows nil
+			  ;; Split direcion. 'split-window-vertically or 'split-window-horizontally
+			  helm-swoop-split-direction 'split-window-vertically
+			  ;; If nil, you can slightly boost invoke speed in exchange for text color
+			  helm-swoop-speed-or-color nil)))
 	(use-package swiper-helm
 	  :ensure t
 	  :bind (("s-f" . swiper-helm)))
-    ))
+	))
