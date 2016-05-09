@@ -25,7 +25,8 @@
    ("C-h t" . helm-world-time))
   :init (progn
 		  (helm-mode 1)
-		  (helm-autoresize-mode 1))
+		  (helm-autoresize-mode 1)
+		  (setq helm-ff-newfile-prompt-p nil))
   :diminish ""
   :config
   (progn
