@@ -27,37 +27,38 @@
 
 ;; **** Use Org Mode for TXT files
 
-(add-to-list 'auto-mode-alist '("\\.txt\\'" . org-mode))
-  
+;; (add-to-list 'auto-mode-alist '("\\.txt\\'" . org-mode))
+(add-to-list 'auto-mode-alist '("\\.txt\\'" . markdown-mode))
+
 ;; **** Archive Settings
-    ;; Where archived projects and tasks go.
+;; Where archived projects and tasks go.
 
 
-  (setq org-archive-location "~/Dropbox/Org/archive.org::From %s")
+(setq org-archive-location "~/Dropbox/Org/archive.org::From %s")
 
 
 ;; **** Mobile Settings
-   ;; Sync orgmode files with Dropbox and iPhone. 
+;; Sync orgmode files with Dropbox and iPhone. 
 
 
-   ;; Set to the location of your Org files on your local system
-   (setq org-directory "~/Dropbox/Org")
-   ;; Set to <your Dropbox root directory>/MobileOrg.
-   (setq org-mobile-directory "~/Dropbox/MobileOrg")
-   ;; Set to the files (or directory of files) you want sync'd
-   (setq org-agenda-files (quote ("~/Dropbox/Org")))
-   ;; Set to the name of the file where new notes will be stored
-   (setq org-mobile-inbox-for-pull "~/Dropbox/Org/from-mobile.org")
-   
+;; Set to the location of your Org files on your local system
+(setq org-directory "~/Dropbox/Org")
+;; Set to <your Dropbox root directory>/MobileOrg.
+(setq org-mobile-directory "~/Dropbox/MobileOrg")
+;; Set to the files (or directory of files) you want sync'd
+(setq org-agenda-files (quote ("~/Dropbox/Org")))
+;; Set to the name of the file where new notes will be stored
+(setq org-mobile-inbox-for-pull "~/Dropbox/Org/from-mobile.org")
+
 
 
 
 ;; **** Babel Settings
-   ;; Configure org-mode so that when you edit source code in an indirect buffer (with C-c '), the buffer is opened in the current window. That way, your window organization isn't broken when switching.
+;; Configure org-mode so that when you edit source code in an indirect buffer (with C-c '), the buffer is opened in the current window. That way, your window organization isn't broken when switching.
 
 
 
-  (setq org-src-window-setup 'current-window)
+(setq org-src-window-setup 'current-window)
 
 ;; **** Exporter Settings and Helpful Packages
 ;; HTML and LaTeX exporters are shown by default. We add the Markdown exporter to the menu.

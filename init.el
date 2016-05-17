@@ -82,5 +82,7 @@
 ;; === Evil ===
 (load-file "~/.emacs.d/evil.el")
 
+;; === Programming ===
+(load-file "~/.emacs.d/programming.el")
 
 (setq default-directory "~/")
