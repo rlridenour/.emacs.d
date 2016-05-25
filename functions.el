@@ -429,3 +429,20 @@ abort completely with `C-g'."
 
 (setq save-abbrevs 'silently)
 (setq-default abbrev-mode t)
+
+;; From Xah Lee, http://ergoemacs.org/emacs/elisp_unicode_replace_invisible_chars.html
+(defun xah-replace-BOM-mark-etc ()
+  "Query replace some invisible Unicode chars.
+The chars to be searched are:
+ ZERO WIDTH NO-BREAK SPACE (codepoint 65279, #xfeff)
+ RIGHT-TO-LEFT MARK (codepoint 8207, #x200f)
+ RIGHT-TO-LEFT OVERRIDE (codepoint 8238, #x202e)
+
+Search begins at cursor position. (respects `narrow-to-region')
+
+This is useful for text copied from twitter or Google Plus, because they often contain BOM mark. See URL `http://xahlee.info/comp/unicode_BOM_byte_orde_mark.html'
+
+URL `http://ergoemacs.org/emacs/elisp_unicode_replace_invisible_chars.html'
+Version 2015-10-25"
+  (interactive)
+  (query-replace-regexp "\u200f\\|\u202e\\|\ufeff" ""))

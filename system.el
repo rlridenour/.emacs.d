@@ -28,10 +28,14 @@
 
 ;; Save When Losing Focus
 
-(defun save-all ()
-  (interactive)
-  (save-some-buffers t))
-(add-hook 'focus-out-hook 'save-all)
+;; (defun save-all ()
+;;   (interactive)
+;;   (save-some-buffers t))
+;; (add-hook 'focus-out-hook 'save-all)
+
+;; auto save often
+;; save every 20 characters typed (this is the minimum)
+(setq auto-save-interval 20)
 
 ;; Use "y" and "n":
 (defalias 'yes-or-no-p 'y-or-n-p)
