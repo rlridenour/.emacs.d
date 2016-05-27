@@ -88,3 +88,7 @@
 (defun pandoc-clean ()
   (interactive)
   (shell-command "panclean"))
+
+(use-package markdown-mac-link
+  :ensure t)
+
