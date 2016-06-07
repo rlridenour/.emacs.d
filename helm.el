@@ -6,7 +6,7 @@
   :bind
   (("C-M-z" . helm-resume)
    ;; ("C-x C-f" . helm-find-files)
-   ("s-o" . helm-find-files)
+   ;; ("s-o" . helm-find-files)
    ("C-h b" . helm-descbinds)
    ("C-x h" . helm-mini)
    ("s-r" . helm-mini)
