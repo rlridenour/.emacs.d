@@ -41,6 +41,6 @@ abbrev_defs
 # Recovery and backup directories
 /auto-save-list/
 /backups/
-
+*.cache
 # eww cache
 /url/
