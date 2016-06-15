@@ -72,8 +72,8 @@
   ("q" nil))
 
 (bind-chords
-("jk" . prelude-switch-to-previous-buffer)
-("kj" . prelude-switch-to-previous-buffer))
+ ("jh" . prelude-switch-to-previous-buffer)
+ ("hj" . prelude-switch-to-previous-buffer))
 
 (bind-keys
 ("s-0" . delete-window)
