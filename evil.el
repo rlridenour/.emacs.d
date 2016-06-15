@@ -75,7 +75,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   (key-chord-define evil-replace-state-map "kj" 'evil-normal-state)
 
   ;; h/l wrap around to next lines
-  evil-cross-lines t
+  (setq-default evil-cross-lines t)
 
   ))
 
