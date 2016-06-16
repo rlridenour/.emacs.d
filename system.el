@@ -110,6 +110,7 @@
 ;; Store personal dictionary in Dropbox to sync between machines.
 (setq ispell-personal-dictionary "/Users/rlridenour/Dropbox/emacs/ridenour-ispell-dictionary ")
 
+
 ;; Hide various file types, most LaTeX auxiliary files, in Dired.
 (require 'dired-x)
 (setq-default dired-omit-files-p t) ; this is buffer-local variable

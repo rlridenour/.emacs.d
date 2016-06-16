@@ -34,9 +34,9 @@
 
 (use-package counsel
   :ensure t
-  :bind (("C-x C-f" . counsel-find-file))
-  ;; ("M-x" . counsel-M-x)
-  ("s-o" . counsel-find-file)
+  :bind (("C-x C-f" . counsel-find-file)
+		 ;; ("M-x" . counsel-M-x)
+		 ("s-o" . counsel-find-file))
   :config
   (setq counsel-find-file-at-point t))
 
@@ -47,7 +47,7 @@
 		 ;; ("s-l" . avy-goto-line)
 		 ("M-g w" . avy-goto-word-1)
 		 ("M-g M-g" . avy-goto-char-2)
-		 ("s-;" . avy-goto-char-timer)))
+		 ("s-/" . avy-goto-char-timer)))
 
 (use-package  ace-window
   :ensure
@@ -163,3 +163,11 @@
 (use-package volatile-highlights
   :config
   (volatile-highlights-mode t))
+
+
+;; Use flyspell-correct-ivy
+(use-package flyspell-correct-ivy
+  :ensure t
+  :after flyspell
+  :bind (:map flyspell-mode-map
+              ("s-;" . flyspell-correct-word-generic)))
