@@ -107,6 +107,10 @@
   (setq-default ispell-program-name "hunspell")
   (setq ispell-really-hunspell t))
 
+;; tell ispell that apostrophes are part of words and select US dictionary, from http://pragmaticemacs.com/emacs/basic-spell-checking/
+(setq ispell-local-dictionary-alist
+      `((nil "[[:alpha:]]" "[^[:alpha:]]" "[']" t ("-d" "en_US") nil utf-8)))
+
 ;; Store personal dictionary in Dropbox to sync between machines.
 (setq ispell-personal-dictionary "/Users/rlridenour/Dropbox/emacs/ridenour-ispell-dictionary ")
 
