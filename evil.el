@@ -85,5 +85,23 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 
 
 
+;; Set initial state for some modes.
 
+(loop for (mode . state) in '(
+							  ;; (inferior-emacs-lisp-mode . emacs)
+                              ;; (pylookup-mode . emacs)
+                              ;; (comint-mode . emacs)
+                              (shell-mode . emacs)
+                              (term-mode . emacs)
+                              ;; (bc-menu-mode . emacs)
+                              ;; (magit-branch-manager-mode-map . emacs)
+                              ;; (rdictcc-buffer-mode . emacs)
+                              (ebib-entry-mode . emacs)
+                              (ebib-index-mode . emacs)
+                              (ebib-log-mode . emacs))
+      do (evil-set-initial-state mode state))
 
+(use-package evil-surround
+  :ensure t
+  :config
+  (global-evil-surround-mode 1))

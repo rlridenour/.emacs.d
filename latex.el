@@ -233,6 +233,7 @@
   (interactive)
   (shell-command "latexmk -C"))
 
-
-
-
+(use-package ebib
+  :ensure t
+  :init
+  (setq ebib-preload-bib-search-dirs "~/Dropbox/bibtex/randybib.bib"))
