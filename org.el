@@ -21,6 +21,8 @@
 
 ;; Use evil-org for evil keybindings in org mode.
 
+(use-package evil-org
+  :ensure t)
 
 ;; (require 'evil-org)
 
@@ -207,10 +209,12 @@
 ;;(setq org-default-notes-file (concat org-directory "/notes.org"))
 (setq org-capture-templates
       '(("t" "Todo" entry (file+headline "~/Dropbox/Org/tasks.org" "Tasks")
-             "* TODO %?\n  %i\n  %a")
+		 "* TODO %?\n  %i\n  %a")
         ("j" "Journal" entry (file+datetree "~/Dropbox/Org/journal.org")
-             "* %?\nEntered on %U\n  %i\n  %a")))
-     (define-key global-map "\C-cc" 'org-capture)
+		 "* %?\nEntered on %U\n  %i\n  %a")))
+(define-key global-map "\C-cc" 'org-capture)
+
+(add-hook 'org-capture-mode-hook 'evil-insert-state)
 
 ;; **** Tab doesn't split headings
 
