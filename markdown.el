@@ -89,6 +89,7 @@
   (interactive)
   (shell-command "panclean"))
 
-(use-package markdown-mac-link
-  :ensure t)
-
+(if (eq system-type 'darwin)
+	(use-package markdown-mac-link
+	  :ensure t)
+  )
