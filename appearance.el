@@ -1,8 +1,8 @@
 ;; Turn off splash screen and set major mode to org
 (setq inhibit-splash-screen t
       initial-scratch-message nil
-      initial-major-mode 'org-mode)
-
+      ;; initial-major-mode 'org-mode
+	  )
 
 ;; Theme
 (use-package hc-zenburn-theme
