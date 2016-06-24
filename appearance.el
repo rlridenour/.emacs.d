@@ -51,3 +51,12 @@
       '((:eval (if (buffer-file-name)
                    (abbreviate-file-name (buffer-file-name))
                  "%b"))))
+
+
+(use-package spaceline
+  :ensure t
+  :config
+  (progn
+	(require 'spaceline-config)
+	(spaceline-spacemacs-theme)
+	(setq spaceline-highlight-face-func 'spaceline-highlight-face-evil-state)))
