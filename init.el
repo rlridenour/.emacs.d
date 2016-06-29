@@ -51,8 +51,10 @@
 (load-file "~/.emacs.d/system.el")
 
 ;; === Helm ===
-(load-file "~/.emacs.d/helm.el")
+;; (load-file "~/.emacs.d/helm.el")
 
+;; === Ivy ===
+(load-file "~/.emacs.d/ivy.el")
 
 ;; === Utilities ===
 (load-file "~/.emacs.d/utilities.el")
