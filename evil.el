@@ -12,14 +12,15 @@
 	  (progn
 		(evil-leader/set-leader "<SPC>")
 		(evil-leader/set-key
-		  "f" 'swiper-helm
+		  ;; "f" 'swiper-helm
 		  "k" 'kill-this-buffer
 		  "o" 'counsel-find-file
 		  "p" 'hydra-markdown/body
-		  "r" 'helm-mini
+		  ;; "r" 'helm-mini
+		  "r" 'ivy-recentf
 		  "t" 'hydra-toggle/body
 		  "w" 'save-buffer
-		  "x" 'helm-M-x
+		  "x" 'counsel-M-x
 		  )))
 	;; boot evil by default
 	(evil-mode 1))

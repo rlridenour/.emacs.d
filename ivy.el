@@ -23,13 +23,14 @@
   ("<f2> u" . counsel-unicode-char)
   ("C-c g" . counsel-git)
   ("C-c j" . counsel-git-grep)
-  ("C-c k" . counsel-ag)
+  ("C-c a" . counsel-ag)
   ("C-x l" . counsel-locate)
   ("C-S-o" . counsel-rhythmbox)
   ("C-c C-r" . ivy-resume)
-  :config
-  (ivy-mode 1)
+  :init
   (setq ivy-display-style 'fancy)
   (setq ivy-use-virtual-buffers t)
   (setq ivy-height 10)
-  (setq ivy-count-format "(%d/%d) "))
+  (setq ivy-count-format "(%d/%d) ")
+  :config
+  (ivy-mode 1))
