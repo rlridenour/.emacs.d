@@ -304,5 +304,8 @@
 ;; overwrite selected text
 (delete-selection-mode t)
 
+;; Do not use external GPG password entry
+(setenv "GPG_AGENT_INFO" nil)
+
 ;; Start server
 (unless (daemonp) (server-mode 1))
