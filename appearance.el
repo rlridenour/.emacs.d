@@ -53,7 +53,12 @@
                    (abbreviate-file-name (buffer-file-name))
                  "%b"))))
 
+;; Show date and time
+(setq display-time-24hr-format t)
+(setq display-time-day-and-date t)
+(display-time)
 
+;; Modeline
 (use-package spaceline
   :ensure t
   :config
