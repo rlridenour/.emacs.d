@@ -154,7 +154,10 @@
 
 (use-package nlinum
   :ensure t
-  :config (global-nlinum-mode 1))
+  :config
+  (global-nlinum-mode 1)
+  (unless window-system
+	(setq nlinum-format "%d ")))
 
 (use-package biblio
   :ensure t)

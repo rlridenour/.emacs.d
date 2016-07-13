@@ -22,7 +22,7 @@
   ("e" evil-mode "evil")
   ("f" auto-fill-mode "fill")
   ;; ("g" god-mode "god")
-  ;; ("l" linum-mode "linum")
+  ("l" nlinum-mode "linum")
   ("o" olivetti-mode "olivetti")
   ("r" read-only-mode "read-only") 
   ("t" toggle-truncate-lines "truncate")
