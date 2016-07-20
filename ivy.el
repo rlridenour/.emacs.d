@@ -8,7 +8,7 @@
   :diminish ivy-mode
   :bind
   ("s-r" . ivy-recentf)
-  ("C-s" . swiper)
+  ;; ("C-s" . swiper)
   ("s-f" . swiper)
   ("M-x" . counsel-M-x)
   ("C-x C-f" . counsel-find-file)

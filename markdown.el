@@ -17,6 +17,10 @@
             (local-set-key (kbd "s-b") 'markdown-insert-bold)
             (local-set-key (kbd "s-i") 'markdown-insert-italic)))
 
+;; Enable wc-mode
+
+(add-hook 'markdown-mode-hook 'wc-mode)
+
 ;; I haven't yet figured out why, but pressing =RET= deletes whitespace at the end of the line. That's useful for writing code, I'm sure, but not for writing Markdown text requiring hard line breaks. This little function just inserts two spaces at the end of the line and moves to the next line. I use it for prayers and poetry that I post on the blog, so it's called "mdpoetry." 
 (fset 'mdpoetry
       "\C-e  \C-n")

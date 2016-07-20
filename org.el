@@ -306,5 +306,8 @@ Unless NOERROR is non-nil, throw an error if link not found."
                ("\\subsection\{%s\}" . "\\subsection*\{%s\}")
                ("\\subsubsection\{%s\}" . "\\subsubsection*\{%s\}")))
 
+;; Enable wc-mode
+
+(add-hook 'org-mode-hook 'wc-mode)
 
 

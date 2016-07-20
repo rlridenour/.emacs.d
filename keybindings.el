@@ -26,7 +26,8 @@
   ("o" olivetti-mode "olivetti")
   ("r" read-only-mode "read-only") 
   ("t" toggle-truncate-lines "truncate")
-  ("w" whitespace-mode "whitespace")
+  ("w" wc-mode "word-count")
+  ("W" whitespace-mode "whitespace")
   ("q" nil "global"))
 ;; (global-set-key (kbd "s-t") 'hydra-toggle/body)
 

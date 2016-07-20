@@ -164,6 +164,7 @@
 
 ;; volatile highlights - temporarily highlight changes from pasting etc
 (use-package volatile-highlights
+  :ensure t
   :config
   (volatile-highlights-mode t))
 
@@ -174,3 +175,9 @@
   :after flyspell
   :bind (:map flyspell-mode-map
               ("s-;" . flyspell-correct-word-generic)))
+
+;; Word count with wc-mode
+
+(use-package wc-mode
+  :ensure t)
+
