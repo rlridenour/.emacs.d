@@ -69,6 +69,7 @@
 
 ;; Spelling
 (setq flyspell-issue-welcome-flag nil)
+(setq flyspell-issue-message-flag nil)
 
 ;; From [[https://joelkuiper.eu/spellcheck_emacs][Joel Kuiper]]
 

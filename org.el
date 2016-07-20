@@ -310,4 +310,8 @@ Unless NOERROR is non-nil, throw an error if link not found."
 
 (add-hook 'org-mode-hook 'wc-mode)
 
+;; Ignore TeX commands
+
+(add-hook 'org-mode-hook (lambda () (setq ispell-parser 'tex)))
+(add-hook 'org-mode-hook 'flyspell-ignore-tex)
 

@@ -98,3 +98,7 @@
 	  :ensure t)
   )
 
+;; Ispell ignore TeX 
+(add-hook 'markdown-mode-hook (lambda () (setq ispell-parser 'tex)))
+(add-hook 'markdown-mode-hook 'flyspell-ignore-tex)
+

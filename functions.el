@@ -446,3 +446,8 @@ URL `http://ergoemacs.org/emacs/elisp_unicode_replace_invisible_chars.html'
 Version 2015-10-25"
   (interactive)
   (query-replace-regexp "\u200f\\|\u202e\\|\ufeff" ""))
+
+;; Ispell ignore TeX commands
+(defun flyspell-ignore-tex ()
+  (interactive)
+  (set (make-variable-buffer-local 'ispell-parser) 'tex))

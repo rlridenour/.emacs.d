@@ -18,6 +18,7 @@
   "toggle"
   ("a" abbrev-mode "abbrev")
   ("c" column-number-mode "column")
+  ("C" cdlatex-mode "cdlatex")
   ("d" toggle-debug-on-error "debug")
   ("e" evil-mode "evil")
   ("f" auto-fill-mode "fill")

@@ -181,3 +181,7 @@
 (use-package wc-mode
   :ensure t)
 
+;; Cdlatex makes inserting LaTeX easier.
+
+(use-package cdlatex
+  :ensure t)
