@@ -12,7 +12,7 @@
 	  (progn
 		(evil-leader/set-leader "<SPC>")
 		(evil-leader/set-key
-		  ;; "f" 'swiper-helm
+		  "f" 'swiper
 		  "k" 'kill-this-buffer
 		  "o" 'counsel-find-file
 		  "p" 'hydra-markdown/body
