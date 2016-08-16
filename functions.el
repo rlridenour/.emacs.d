@@ -451,3 +451,11 @@ Version 2015-10-25"
 (defun flyspell-ignore-tex ()
   (interactive)
   (set (make-variable-buffer-local 'ispell-parser) 'tex))
+
+;; Make parent directory when creating new file. From http://mbork.pl/2016-07-25_Making_directories_on_the_fly
+(defun make-parent-directory ()
+  "Make sure the directory of `buffer-file-name' exists."
+  (make-directory (file-name-directory buffer-file-name) t))
+
+(add-hook 'find-file-not-found-functions #'make-parent-directory)
+
