@@ -33,4 +33,25 @@
   (setq ivy-height 10)
   (setq ivy-count-format "(%d/%d) ")
   :config
-  (ivy-mode 1))
+  (ivy-mode 1)
+  ;; version of ivy-yank-word to yank from start of word
+  ;; from http://pragmaticemacs.com/emacs/search-or-swipe-for-the-current-word/
+  (defun bjm/ivy-yank-whole-word ()
+	"Pull next word from buffer into search string."
+	(interactive)
+	(let (amend)
+	  (with-ivy-window
+		;;move to last word boundary
+		(re-search-backward "\\b")
+		(let ((pt (point))
+			  (le (line-end-position)))
+		  (forward-word 1)
+		  (if (> (point) le)
+			  (goto-char pt)
+			(setq amend (buffer-substring-no-properties pt (point))))))
+	  (when amend
+		(insert (replace-regexp-in-string "  +" " " amend)))))
+
+  ;; bind it to M-j
+  (define-key ivy-minibuffer-map (kbd "M-j") 'bjm/ivy-yank-whole-word)
+  )
