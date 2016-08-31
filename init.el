@@ -87,4 +87,8 @@
 ;; === Programming ===
 (load-file "~/.emacs.d/programming.el")
 
+;; === Eshell ===
+(load-file "~/.emacs.d/eshell.el")
+
+
 (setq default-directory "~/")
