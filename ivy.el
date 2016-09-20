@@ -7,7 +7,7 @@
   :ensure t
   :diminish ivy-mode
   :bind
-  (("s-r" . ivy-recentf)
+  (("s-r" . counsel-recentf)
    ;; ("C-s" . swiper)
    ("s-f" . swiper)
    ("M-x" . counsel-M-x)
