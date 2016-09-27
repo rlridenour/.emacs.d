@@ -90,6 +90,7 @@
 ("S-C-<down>" . shrink-window)
 ("S-C-<up>" . enlarge-window)
 ("C-x c" . save-buffers-kill-emacs)
+("C-x w" . delete-frame)
 ;; ("s-." . helm-buffers-list)
 ;; ("C-c i" . ivy-imenu-goto)	
 ;; ("C-c b" . ivy-bookmark-goto)
