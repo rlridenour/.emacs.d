@@ -185,3 +185,10 @@
 
 (use-package cdlatex
   :ensure t)
+
+;; Move-text - move current line or active region up or down with m-arrow key
+
+(use-package move-text
+  :ensure t
+  :config
+  (move-text-default-bindings))
