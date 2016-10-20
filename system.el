@@ -172,7 +172,20 @@
   )
 
 ;;Shell
-(setq multi-term-program "/usr/local/bin/zsh")
+(setq multi-term-program "/usr/local/bin/fish")
+(setq explicit-shell-file-name "/usr/local/bin/fish")
+
+(defun oleh-term-exec-hook ()
+  (let* ((buff (current-buffer))
+         (proc (get-buffer-process buff)))
+    (set-process-sentinel
+     proc
+     `(lambda (process event)
+        (if (string= event "finished\n")
+            (kill-buffer ,buff))))))
+
+;; From http://oremacs.com/2015/01/01/three-ansi-term-tips/
+(add-hook 'term-exec-hook 'oleh-term-exec-hook)
 ;; Make completion case-insensitive in eshell
 (setq eshell-cmpl-ignore-case t)
 (setq pcomplete-ignore-case t)
@@ -185,6 +198,11 @@
 	      nil)
 	  t))
 (add-hook 'kill-buffer-query-functions 'unkillable-scratch-buffer)
+
+
+(eval-after-load "term"
+  '(define-key term-raw-map (kbd "C-c C-y") 'term-paste))
+
 
 ;; Mark date and time that files were saved.
 (add-hook 'before-save-hook 'time-stamp)
