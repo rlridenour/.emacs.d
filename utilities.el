@@ -192,3 +192,15 @@
   :ensure t
   :config
   (move-text-default-bindings))
+
+;; (use-package visual-fill-column
+;;   :ensure t
+;;   :defer t
+;;   :bind (("C-c t v" . visual-fill-column-mode))
+;;   :init
+;;   (dolist (hook '(visual-line-mode-hook
+;;                   prog-mode-hook
+;;                   text-mode-hook))
+;;     (add-hook hook #'visual-fill-column-mode))
+;;   :config (setq-default visual-fill-column-center-text t
+;;                         visual-fill-column-fringes-outside-margins nil))
