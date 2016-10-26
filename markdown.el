@@ -93,10 +93,10 @@
   (interactive)
   (shell-command "panclean"))
 
-(if (eq system-type 'darwin)
-	(use-package markdown-mac-link
-	  :ensure t)
-  )
+;;(if (eq system-type 'darwin)
+;;	(use-package markdown-mac-link
+;;	  :ensure t)
+;;  )
 
 ;; Ispell ignore TeX 
 (add-hook 'markdown-mode-hook (lambda () (setq ispell-parser 'tex)))
