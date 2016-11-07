@@ -237,3 +237,15 @@
   :ensure t
   :init
   (setq ebib-preload-bib-search-dirs "~/Dropbox/bibtex/randybib.bib"))
+
+;; Beamer
+
+(setq LaTeX-paragraph-commands '("pause" "blpause"))
+
+;; Dim tilde
+(add-hook
+ 'TeX-mode-hook
+ (lambda ()
+   (font-lock-add-keywords
+	nil
+	'(("~" . 'font-latex-sedate-face)))))
