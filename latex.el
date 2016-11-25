@@ -249,3 +249,12 @@
    (font-lock-add-keywords
 	nil
 	'(("~" . 'font-latex-sedate-face)))))
+
+;; Lilypond
+(setq load-path (append (list (expand-file-name "~/.emacs.d/lilypond")) load-path))
+(load-file "~/.emacs.d/lilypond/lilypond-init.el")
+(autoload 'LilyPond-mode "lilypond-mode")
+(setq auto-mode-alist
+      (cons '("\\.ly$" . LilyPond-mode) auto-mode-alist))
+
+(add-hook 'LilyPond-mode-hook (lambda () (turn-on-font-lock)))

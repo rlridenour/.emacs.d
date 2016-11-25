@@ -90,7 +90,4 @@
 ;; === Eshell ===
 (load-file "~/.emacs.d/eshell.el")
 
-;; Lilypond
-(setq load-path (append (list (expand-file-name "~/.emacs.d/lilypond")) load-path))
-(load-file "~/.emacs.d/lilypond/lilypond-init.el")
 (setq default-directory "~/")
