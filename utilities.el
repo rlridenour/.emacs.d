@@ -118,12 +118,13 @@
     (setq company-tooltip-limit 20)
     (global-company-mode 1)))
 
-(use-package empos
-  :ensure t
-  :config
-  (progn
-	(setq empos-available-engines '("arxiv" "crossref")
-		  empos-bib-file "/Users/rlridenour/Dropbox/bibtex/empos.bib")))
+;; (use-package empos
+;;   :ensure t
+;;   :config
+;;   (progn
+;; 	(setq empos-available-engines '("arxiv" "crossref")
+;; 		  empos-bib-file "/Users/rlridenour/Dropbox/bibtex/empos.bib")))
+
 (use-package reveal-in-osx-finder
   :ensure t
   :bind ("C-c z" . reveal-in-osx-finder))
@@ -136,10 +137,10 @@
 (use-package olivetti
   :ensure t)
 
-(use-package neotree
-  :ensure t
-  :bind ("C-c n" . neotree-toggle)
-  :config (setq neo-smart-open t))
+;; (use-package neotree
+;;   :ensure t
+;;   :bind ("C-c n" . neotree-toggle)
+;;   :config (setq neo-smart-open t))
 
 (use-package aggressive-indent
   :ensure t
@@ -152,12 +153,12 @@
   :bind (:map dired-mode-map
               ("/" . dired-narrow)))
 
-(use-package dired-ranger
-  :ensure t
-  :bind (:map dired-mode-map
-              ("W" . dired-ranger-copy)
-              ("X" . dired-ranger-move)
-              ("Y" . dired-ranger-paste)))
+;; (use-package dired-ranger
+;;   :ensure t
+;;   :bind (:map dired-mode-map
+;;               ("W" . dired-ranger-copy)
+;;               ("X" . dired-ranger-move)
+;;               ("Y" . dired-ranger-paste)))
 
 (use-package nlinum
   :ensure t
@@ -169,11 +170,11 @@
 (use-package biblio
   :ensure t)
 
-;; volatile highlights - temporarily highlight changes from pasting etc
-(use-package volatile-highlights
-  :ensure t
-  :config
-  (volatile-highlights-mode t))
+;; ;; volatile highlights - temporarily highlight changes from pasting etc
+;; (use-package volatile-highlights
+;;   :ensure t
+;;   :config
+;;   (volatile-highlights-mode t))
 
 
 ;; Use flyspell-correct-ivy
