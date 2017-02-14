@@ -228,3 +228,8 @@
 
   (setq web-mode-enable-auto-closing t)
   (setq web-mode-enable-auto-quoting t)) ; this fixes the quote problem I mentioned
+
+(use-package which-key
+  :ensure t
+  :config
+  (which-key-mode))
