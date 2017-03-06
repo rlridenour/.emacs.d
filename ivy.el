@@ -58,3 +58,9 @@
   ;; bind it to M-j
   (define-key ivy-minibuffer-map (kbd "M-j") 'bjm/ivy-yank-whole-word)
   )
+
+(use-package flyspell-correct-ivy
+  :ensure t
+  :after flyspell
+  :bind (:map flyspell-mode-map
+              ("C-c $" . flyspell-correct-word-generic)))
