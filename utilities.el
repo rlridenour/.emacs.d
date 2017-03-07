@@ -182,7 +182,8 @@
   :ensure t
   :after flyspell
   :bind (:map flyspell-mode-map
-              ("s-;" . flyspell-correct-word-generic)))
+              ("s-;" . flyspell-correct-word-generic)
+			  ("C-;" . flyspell-correct-previous-word-generic)))
 
 ;; Word count with wc-mode
 
