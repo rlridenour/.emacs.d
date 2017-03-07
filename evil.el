@@ -21,6 +21,7 @@
 		  "t" 'hydra-toggle/body
 		  "w" 'save-buffer
 		  "x" 'counsel-M-x
+		  "ci" 'evilnc-comment-or-uncomment-lines
 		  )))
 	;; boot evil by default
 	(evil-mode 1))
