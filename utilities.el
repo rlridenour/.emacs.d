@@ -144,7 +144,8 @@
 
 (use-package aggressive-indent
   :ensure t
-  :config (global-aggressive-indent-mode 1))
+  :config (add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode)
+  (add-to-list 'aggressive-indent-excluded-modes 'markdown-mode))
 
 ;; From http://pragmaticemacs.com/emacs/dynamically-filter-directory-listing-with-dired-narrow/
 ;;narrow dired to match filter
