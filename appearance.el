@@ -14,7 +14,7 @@
 ;; (if (eq system-type 'darwin)
 ;; (set-default-font "Monaco-12") ;;; set default font
 (set-default-font "DejaVu Sans Mono-12")
-(setq default-frame-alist '((font . "DejaVu Sans Mono-12"))) ;;; set default font for emacs --daemon / emacsclient
+(setq default-frame-alist '((font . "DejaVu Sans Mono-12.5"))) ;;; set default font for emacs --daemon / emacsclient
 
 
 ;; Change background color for selected text.
