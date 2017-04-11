@@ -113,23 +113,23 @@
 
 
 
-  (add-hook 'org-mode-hook
-            (lambda ()
-              (local-set-key "\M-\C-n" 'outline-next-visible-heading)
-              (local-set-key "\M-\C-p" 'outline-previous-visible-heading)
-              (local-set-key "\M-\C-u" 'outline-up-heading)
-              ;; table
-              (local-set-key "\M-\C-w" 'org-table-copy-region)
-              (local-set-key "\M-\C-y" 'org-table-paste-rectangle)
-              (local-set-key "\M-\C-l" 'org-table-sort-lines)
-              ;; display images
-              (local-set-key "\M-I" 'org-toggle-iimage-in-org)
-              ;; yasnippet (using the new org-cycle hooks)
-              ;;(make-variable-buffer-local 'yas/trigger-key)
-              ;;(setq yas/trigger-key [tab])
-              ;;(add-to-list 'org-tab-first-hook 'yas/org-very-safe-expand)
-              ;;(define-key yas/keymap [tab] 'yas/next-field)
-              ))
+(add-hook 'org-mode-hook
+		  (lambda ()
+			(local-set-key "\M-\C-n" 'outline-next-visible-heading)
+			(local-set-key "\M-\C-p" 'outline-previous-visible-heading)
+			(local-set-key "\M-\C-u" 'outline-up-heading)
+			;; table
+			(local-set-key "\M-\C-w" 'org-table-copy-region)
+			(local-set-key "\M-\C-y" 'org-table-paste-rectangle)
+			(local-set-key "\M-\C-l" 'org-table-sort-lines)
+			;; display images
+			(local-set-key "\M-I" 'org-toggle-iimage-in-org)
+			;; yasnippet (using the new org-cycle hooks)
+			;;(make-variable-buffer-local 'yas/trigger-key)
+			;;(setq yas/trigger-key [tab])
+			;;(add-to-list 'org-tab-first-hook 'yas/org-very-safe-expand)
+			;;(define-key yas/keymap [tab] 'yas/next-field)
+			))
 
 
 ;; **** Speed keys
@@ -138,64 +138,64 @@
 ;; See the =org-speed-commands-default= variable for a list of the keys and commands enabled at the beginning of headlines.  All code blocks are available at the beginning of a code block, the following key sequence =C-c C-v h= (bound to =org-babel-describe-bindings=) will display a list of the code blocks commands and their related keys.
 
 
-  (setq org-use-speed-commands t)
+(setq org-use-speed-commands t)
 
 
 ;; **** Code blocks
 ;; This activates a number of widely used languages, you are encouraged to activate more languages using the customize interface for the =org-babel-load-languages= variable, or with an elisp form like the one below.  The customize interface of =org-babel-load-languages= contains an up to date list of the currently supported languages.
 
-  (org-babel-do-load-languages
-   'org-babel-load-languages
-   '((emacs-lisp . t)
-     (sh . t)
-     (R . t)
-     (perl . t)
-     (ruby . t)
-     (python . t)
-     (js . t)
-     (haskell . t)))
+;; (org-babel-do-load-languages
+;;  'org-babel-load-languages
+;;  '((emacs-lisp . t)
+;;    (sh . t)
+;;    (R . t)
+;;    (perl . t)
+;;    (ruby . t)
+;;    (python . t)
+;;    (js . t)
+;;    (haskell . t)))
 
 
 ;; The next block makes org-babel aware that a lower-case 'r' in a =src= block header should be processed as R. 
 
 ;; #+source: add-r
 
-    (add-to-list 'org-src-lang-modes
-                 '("r" . ess-mode))
+;; (add-to-list 'org-src-lang-modes
+;; 			 '("r" . ess-mode))
 
 
 ;; **** Code block fontification
 
 ;; The following displays the contents of code blocks in Org-mode files using the major-mode of the code.  It also changes the behavior of =TAB= to as if it were used in the appropriate major mode.  This means that reading and editing code form inside of your Org-mode files is much more like reading and editing of code using its major mode.
 
-  (setq org-src-fontify-natively t)
-  (setq org-src-tab-acts-natively t)
+(setq org-src-fontify-natively t)
+(setq org-src-tab-acts-natively t)
 
 
 ;; Don't ask for confirmation on every =C-c C-c= code-block compile. 
 
 
-  (setq org-confirm-babel-evaluate nil)
+(setq org-confirm-babel-evaluate nil)
 
 
 ;; **** Nice Bulleted Lists
-  ;; (require 'org-bullets)
-  ;; (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+;; (require 'org-bullets)
+;; (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
 
 
 
 
 
 ;; **** Configure Org-babel
-   ;; - Add LaTeX to the list of languages Org-babel will recognize.
- 
-     (require 'ob-latex)
-  ;; (org-babel-add-interpreter "latex")
-  ;; (add-to-list 'org-babel-tangle-langs '("latex" "tex"))
+;; - Add LaTeX to the list of languages Org-babel will recognize.
 
-   ;; - Add LaTeX to a list of languages that raise noweb-type errors.
- 
-  (add-to-list 'org-babel-noweb-error-langs "latex")
+(require 'ob-latex)
+;; (org-babel-add-interpreter "latex")
+;; (add-to-list 'org-babel-tangle-langs '("latex" "tex"))
+
+;; - Add LaTeX to a list of languages that raise noweb-type errors.
+
+(add-to-list 'org-babel-noweb-error-langs "latex")
 
 
 
@@ -315,3 +315,38 @@ Unless NOERROR is non-nil, throw an error if link not found."
 (add-hook 'org-mode-hook (lambda () (setq ispell-parser 'tex)))
 (add-hook 'org-mode-hook 'flyspell-ignore-tex)
 
+(defun scimax/org-return ()
+  "Add new list or headline "
+  (interactive)
+  (cond
+   ((org-in-item-p)
+    (if (org-element-property :contents-begin (org-element-context))
+        (org-insert-heading)
+      (beginning-of-line)
+      (setf (buffer-substring
+             (line-beginning-position) (line-end-position)) "")
+      (org-return)))
+   ((org-at-heading-p)
+    (if (not (string= "" (org-element-property :title (org-element-context))))
+        (progn (org-end-of-meta-data)
+               (org-insert-heading))
+      (beginning-of-line)
+      (setf (buffer-substring
+             (line-beginning-position) (line-end-position)) "")))
+   ((org-at-table-p)
+    (if (-any?
+         (lambda (x) (not (string= "" x)))
+         (nth
+          (- (org-table-current-dline) 1)
+          (org-table-to-lisp)))
+        (org-return)
+      ;; empty row
+      (beginning-of-line)
+      (setf (buffer-substring
+             (line-beginning-position) (line-end-position)) "")
+      (org-return)))
+   (t
+    (org-return))))
+
+(define-key org-mode-map (kbd "RET")
+  'scimax/org-return)
