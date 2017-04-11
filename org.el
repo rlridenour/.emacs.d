@@ -144,16 +144,16 @@
 ;; **** Code blocks
 ;; This activates a number of widely used languages, you are encouraged to activate more languages using the customize interface for the =org-babel-load-languages= variable, or with an elisp form like the one below.  The customize interface of =org-babel-load-languages= contains an up to date list of the currently supported languages.
 
-;; (org-babel-do-load-languages
-;;  'org-babel-load-languages
-;;  '((emacs-lisp . t)
-;;    (sh . t)
-;;    (R . t)
-;;    (perl . t)
-;;    (ruby . t)
-;;    (python . t)
-;;    (js . t)
-;;    (haskell . t)))
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((emacs-lisp . t)
+   (sh . t)
+   (R . t)
+   (perl . t)
+   (ruby . t)
+   (python . t)
+   (js . t)
+   (haskell . t)))
 
 
 ;; The next block makes org-babel aware that a lower-case 'r' in a =src= block header should be processed as R. 
