@@ -6,8 +6,14 @@
 # name: xelatex-article
 # --
 \documentclass[11pt]{article}
-\usepackage{fontspec}
-\setmainfont[Mapping=tex-text]{Linux Libertine}
+
+\usepackage[libertine]{newtxmath}
+\usepackage[no-math]{fontspec}
+\defaultfontfeatures{Ligatures=TeX}
+\setmainfont{Linux Libertine O}
+
+\DeclareSymbolFont{operators}{\encodingdefault}{\familydefault}{m}{n}
+
 \usepackage{graphicx,epstopdf,amsmath,amssymb,natbib,bm,url}
 \usepackage{microtype,todonotes}
 % \usepackage[american]{babel}
@@ -17,15 +23,6 @@
 \clubpenalty = 10000 % Reduce orphans and widows
 \widowpenalty = 10000
 
-% Choose one of the following (if not choosing the default, 
-% viz., Computer Modern, font family):
-
-% \usepackage{lmodern}
-% \usepackage{mathpazo}
-% \usepackage{kpfonts}
-% \usepackage{mathptmx}
-% \usepackage{newtxtext,newtxmath}
-% \usepackage{libertine} \usepackage[libertine]{newtxmath}
 
 
 \usepackage{hyperref}
