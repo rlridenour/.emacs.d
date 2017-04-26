@@ -6,54 +6,67 @@
 (use-package tex-site
   :ensure auctex)
 
+
+(use-package tex                        ; TeX editing/processing
+  :ensure auctex
+  :defer t
+  :config
+  (validate-setq
+   TeX-parse-self t                     ; Parse documents to provide completion
+                                        ; for packages, etc.
+   TeX-auto-save t                      ; Automatically save style information
+   TeX-electric-sub-and-superscript t   ; Automatically insert braces after
+                                        ; sub- and superscripts in math mode
+   TeX-electric-math '("\\(" . "\\)")
+   ;; Don't insert magic quotes right away.
+   TeX-quote-after-quote t
+   ;; Don't ask for confirmation when cleaning
+   TeX-clean-confirm nil
+   ;; Provide forward and inverse search with SyncTeX
+   TeX-source-correlate-mode t
+   TeX-source-correlate-method 'synctex)
+  (setq-default TeX-master nil          ; Ask for the master file
+                TeX-engine 'luatex      ; Use a modern engine
+                ;; Redundant in 11.88, but keep for older AUCTeX
+                TeX-PDF-mode t)
+
+  ;; Move to chktex
+  (setcar (cdr (assoc "Check" TeX-command-list)) "chktex -v6 %s"))
 ;; (use-package auctex-latexmk
 ;;   :ensure t
 ;;   :config
 ;;   (auctex-latexmk-setup))
 
+
+(use-package auctex-latexmk             ; latexmk command for AUCTeX
+  :ensure t
+  :defer t
+  :after latex
+  :config (auctex-latexmk-setup))
+
+(use-package auctex-skim                ; Skim as viewer for AUCTeX
+  :load-path "lisp/"
+  :commands (auctex-skim-select)
+  :after tex
+  :config (auctex-skim-select))
+
+
+
+
+
+
+
 ;; **** Italics and Bold
 
 (add-hook 'LaTeX-mode-hook
-   '(lambda ()
-        (define-key LaTeX-mode-map (kbd "s-i") (kbd "\C-c \C-f \C-e"))
-	(define-key LaTeX-mode-map (kbd "s-b") (kbd "\C-c \C-f \C-b"))
-    )
-)
+		  '(lambda ()
+			 (define-key LaTeX-mode-map (kbd "s-i") (kbd "\C-c \C-f \C-e"))
+			 (define-key LaTeX-mode-map (kbd "s-b") (kbd "\C-c \C-f \C-b"))
+			 )
+		  )
 
 
 
-
-;; **** SyncTeX, PDF mode, Skim
-;; Set up AUCTeX to work with the Skim PDF viewer.
-
-
-
- 
-;; Use Skim as viewer, enable source <-> PDF sync
-;; make latexmk available via C-c C-c
-;; Note: SyncTeX is setup via ~/.latexmkrc (see below)
-
-(add-hook 'LaTeX-mode-hook (lambda ()
-							 (push
-							  '("latexmk" "latexmk -pdf %s" TeX-run-TeX nil t
-								:help "Run latexmk on file")
-							  TeX-command-list)))
-
-
-(add-hook 'LaTeX-mode-hook (lambda ()
-							 (push
-							  '("xelatexmk" "latexmk -pdf -xelatex %s" TeX-run-TeX nil t
-								:help "Run latexmk xelatex on file")
-							  TeX-command-list)))
-
-(add-hook 'TeX-mode-hook '(lambda () (setq TeX-command-default "latexmk")))
- 
-;; use Skim as default pdf viewer
-;; Skim's displayline is used for forward search (from .tex to .pdf)
-;; option -b highlights the current line; option -g opens Skim in the background  
-(setq TeX-view-program-selection '((output-pdf "PDF Viewer")))
-(setq TeX-view-program-list
-     '(("PDF Viewer" "/Applications/Skim.app/Contents/SharedSupport/displayline -b -g %n %o %b")))
 
 
 ;; Start Emacs server

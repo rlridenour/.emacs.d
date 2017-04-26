@@ -2,6 +2,9 @@
 ;; System ;;
 ;;;;;;;;;;;;
 
+(use-package validate                   ; Validate options
+  :ensure t)
+
 ;; Keep custom-set variables separate from configuration file.
 (setf custom-file "~/.emacs.d/custom.el")
 (load custom-file)
