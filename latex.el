@@ -271,3 +271,12 @@
       (cons '("\\.ly$" . LilyPond-mode) auto-mode-alist))
 
 (add-hook 'LilyPond-mode-hook (lambda () (turn-on-font-lock)))
+
+;; Run latexmk after save.
+(add-hook 'after-save-hook
+		  (lambda ()
+			(when (string= major-mode 'latex-mode)
+			  (TeX-run-latexmk
+			   "LaTeX"
+			   (format "latexmk -pdf %s" (buffer-file-name))
+			   (file-name-base (buffer-file-name))))))
