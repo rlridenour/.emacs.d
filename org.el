@@ -73,6 +73,39 @@
 ;; Markdown exporter
 (require 'ox-md)
 
+;; 'rlr-org-article' for export org documents to the LaTex 'article', using
+;; LuaLaTeX and some fancy fonts; requires LuaTeX  (see org-latex-to-pdf-process)
+(add-to-list 'org-latex-classes
+			 '("rlr-org-article"
+			   "\\documentclass[11pt]{article}
+
+\\usepackage{iftex,graphicx,epstopdf,amsmath,amssymb,url}
+\\usepackage{microtype,todonotes}
+\\usepackage[american]{babel}
+\\usepackage[letterpaper,centering]{geometry}
+\\usepackage[sf,sc]{titlesec}
+\\usepackage[parfill]{parskip} % Line between paragraphs
+
+\\usepackage[authordate,url=false,isbn=false,backend=biber]{biblatex-chicago} %Change authordate to notes if desired.
+\\addbibresource{/Users/rlridenour/Dropbox/bibtex/randybib.bib}
+\\clubpenalty = 10000 % Reduce orphans and widows
+\\widowpenalty = 10000
+
+\\usepackage{lualatex-math,luatextra}
+\\usepackage{libertine}
+\\usepackage{unicode-math}
+\\setmathfont[Scale=MatchUppercase]{libertinusmath-regular.otf}
+\\usepackage[unicode=true]{hyperref}
+
+\\title{}
+      [NO-DEFAULT-PACKAGES]
+      [NO-PACKAGES]"
+			   ("\\section{%s}" . "\\section*{%s}")
+			   ("\\subsection{%s}" . "\\subsection*{%s}")
+			   ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+			   ("\\paragraph{%s}" . "\\paragraph*{%s}")
+			   ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+
 (setq org-completion-use-ido t)
 ;; (require 'org-special-blocks)
 ;; (if window-system (require 'org-mouse))
