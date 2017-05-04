@@ -1,6 +1,6 @@
 # -*- mode: snippet -*-
-# name: article
-# key: article
+# name: latex-article
+# key: larticle
 # --
 # Set the article class
 #+LaTeX_CLASS: article

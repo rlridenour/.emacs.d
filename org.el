@@ -77,7 +77,7 @@
 ;; LuaLaTeX and some fancy fonts; requires LuaTeX  (see org-latex-to-pdf-process)
 (add-to-list 'org-latex-classes
 			 '("rlr-org-article"
-			   "\\documentclass[11pt]{article}
+			   "\\documentclass[12pt]{article}
 
 \\usepackage{iftex,graphicx,epstopdf,amsmath,amssymb,url}
 \\usepackage{microtype,todonotes}
