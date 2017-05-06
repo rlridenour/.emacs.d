@@ -13,24 +13,27 @@
 ;; Set the default font. The "frame-alist" is necessary to set the font when using emacs daemon and client.
 ;; (if (eq system-type 'darwin)
 ;; (set-default-font "Monaco-12") ;;; set default font
-(set-default-font "DejaVu Sans Mono-12.5")
-(setq default-frame-alist '((font . "DejaVu Sans Mono-12.5"))) ;;; set default font for emacs --daemon / emacsclient
+;; (set-default-font "DejaVu Sans Mono-12.5")
+;; (setq default-frame-alist '((font . "DejaVu Sans Mono-12.5"))) ;;; set default font for emacs --daemon / emacsclient
 
-(progn
-  ;; use variable-width font for some modes
-  (defun rlr-use-variable-width-font ()
-    "Set current buffer to use variable-width font."
-    (variable-pitch-mode 1)
-    ;; (text-scale-increase 0.5 )
-    )
-  (add-hook 'nxml-mode-hook 'rlr-use-variable-width-font)
-  (add-hook 'emacs-lisp-mode-hook 'rlr-use-variable-width-font)
-  (add-hook 'js-mode-hook 'rlr-use-variable-width-font)
-  (add-hook 'css-mode-hook 'rlr-use-variable-width-font)
-  (add-hook 'html-mode-hook 'rlr-use-variable-width-font)
-  (add-hook 'LaTeX-mode-hook 'rlr-use-variable-width-font)
-  (add-hook 'markdown-mode-hook 'rlr-use-variable-width-font)
-  )
+(set-default-font "Inconsolata-14")
+(setq default-frame-alist '((font . "Inconsolata-14"))) ;;; set default font for emacs --daemon / emacsclient
+
+;; (progn
+;;   ;; use variable-width font for some modes
+;;   (defun rlr-use-variable-width-font ()
+;;     "Set current buffer to use variable-width font."
+;;     (variable-pitch-mode 1)
+;;     ;; (text-scale-increase 0.5 )
+;;     )
+;;   (add-hook 'nxml-mode-hook 'rlr-use-variable-width-font)
+;;   (add-hook 'emacs-lisp-mode-hook 'rlr-use-variable-width-font)
+;;   (add-hook 'js-mode-hook 'rlr-use-variable-width-font)
+;;   (add-hook 'css-mode-hook 'rlr-use-variable-width-font)
+;;   (add-hook 'html-mode-hook 'rlr-use-variable-width-font)
+;;   (add-hook 'LaTeX-mode-hook 'rlr-use-variable-width-font)
+;;   (add-hook 'markdown-mode-hook 'rlr-use-variable-width-font)
+;;   )
 
 ;; Change background color for selected text.
 (set-face-attribute 'region nil :background "#666")
