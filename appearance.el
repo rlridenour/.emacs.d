@@ -16,8 +16,8 @@
 ;; (set-default-font "DejaVu Sans Mono-12.5")
 ;; (setq default-frame-alist '((font . "DejaVu Sans Mono-12.5"))) ;;; set default font for emacs --daemon / emacsclient
 
-(set-default-font "Inconsolata-14")
-(setq default-frame-alist '((font . "Inconsolata-14"))) ;;; set default font for emacs --daemon / emacsclient
+(set-default-font "Droid Sans Mono Slashed-13")
+(setq default-frame-alist '((font . "Droid Sans Mono Slashed-13"))) ;;; set default font for emacs --daemon / emacsclient
 
 ;; (progn
 ;;   ;; use variable-width font for some modes
