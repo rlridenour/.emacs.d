@@ -17,7 +17,7 @@
 		  "o" 'counsel-find-file
 		  "p" 'hydra-markdown/body
 		  ;; "r" 'helm-mini
-		  "r" 'ivy-recentf
+		  "r" 'counsel-recentf
 		  "t" 'hydra-toggle/body
 		  "w" 'save-buffer
 		  "x" 'counsel-M-x
