@@ -11,20 +11,19 @@
   :ensure auctex
   :defer t
   :config
-  (validate-setq
-   TeX-parse-self t                     ; Parse documents to provide completion
+  (setq TeX-parse-self t                     ; Parse documents to provide completion
                                         ; for packages, etc.
-   TeX-auto-save t                      ; Automatically save style information
-   TeX-electric-sub-and-superscript t   ; Automatically insert braces after
+		TeX-auto-save t                      ; Automatically save style information
+		TeX-electric-sub-and-superscript t   ; Automatically insert braces after
                                         ; sub- and superscripts in math mode
-   TeX-electric-math '("\\(" . "\\)")
-   ;; Don't insert magic quotes right away.
-   TeX-quote-after-quote t
-   ;; Don't ask for confirmation when cleaning
-   TeX-clean-confirm nil
-   ;; Provide forward and inverse search with SyncTeX
-   TeX-source-correlate-mode t
-   TeX-source-correlate-method 'synctex)
+		TeX-electric-math '("\\(" . "\\)")
+		;; Don't insert magic quotes right away.
+		TeX-quote-after-quote t
+		;; Don't ask for confirmation when cleaning
+		TeX-clean-confirm nil
+		;; Provide forward and inverse search with SyncTeX
+		TeX-source-correlate-mode t
+		TeX-source-correlate-method 'synctex)
   (setq-default TeX-master nil          ; Ask for the master file
                 TeX-engine 'luatex      ; Use a modern engine
                 ;; Redundant in 11.88, but keep for older AUCTeX
@@ -273,10 +272,10 @@
 (add-hook 'LilyPond-mode-hook (lambda () (turn-on-font-lock)))
 
 ;; Run latexmk after save.
-(add-hook 'after-save-hook
-		  (lambda ()
-			(when (string= major-mode 'latex-mode)
-			  (TeX-run-latexmk
-			   "LaTeX"
-			   (format "latexmk -pdf %s" (buffer-file-name))
-			   (file-name-base (buffer-file-name))))))
+;; (add-hook 'after-save-hook
+;; 		  (lambda ()
+;; 			(when (string= major-mode 'latex-mode)
+;; 			  (TeX-run-latexmk
+;; 			   "LaTeX"
+;; 			   (format "latexmk -pdf %s" (buffer-file-name))
+;; 			   (file-name-base (buffer-file-name))))))
