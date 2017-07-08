@@ -73,7 +73,10 @@
 (load-file "~/.emacs.d/latex.el")
 
 ;; === Jekyll-Blog ===
-(load-file "~/.emacs.d/blog.el")
+;; (load-file "~/.emacs.d/jekyll.el")
+
+;; === Hugo-Blog ===
+(load-file "~/.emacs.d/hugo.el")
 
 ;; === Eww ===
 (load-file "~/.emacs.d/browser.el")

@@ -4,12 +4,12 @@
   "Update existing date: timestamp on a Jekyll page or post."
   (interactive)
   (save-excursion (
-		   goto-char 1)
-		  (re-search-forward "^date:")
-		  (let ((beg (point)))
-		    (end-of-line)
-		    (delete-region beg (point)))
-		  (insert (concat " " (format-time-string "%Y-%m-%d %H:%M:%S"))))
+				   goto-char 1)
+				  (re-search-forward "^date:")
+				  (let ((beg (point)))
+					(end-of-line)
+					(delete-region beg (point)))
+				  (insert (concat " " (format-time-string "%Y-%m-%d %H:%M:%S"))))
   )
 ;; TODO: Make the function add a date variable if none exists.
 
@@ -78,3 +78,4 @@
       (set-window-point (selected-window) old-point)))))
 
 (provide 'setup-jekyll)
+
