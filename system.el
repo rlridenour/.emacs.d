@@ -238,8 +238,8 @@
 ;; CUA mode for rectangle editing
 ;; Sometimes very useful (but we don't use the core cua keys.)
 
-  (setq cua-enable-cua-keys nil)
-  (cua-mode)
+(setq cua-enable-cua-keys nil)
+(cua-mode)
 
 ;; To start a rectangle, use [C-return] and extend it using the normal
 ;; movement keys (up, down, left, right, home, end, C-home,
@@ -298,7 +298,7 @@
 ;; [M-C-up] and [M-C-down] scrolls the lines INSIDE the rectangle up
 ;; and down; lines scrolled outside the top or bottom of the rectangle
 ;; are lost, but can be recovered using [C-z].
-  
+
 
 
 
@@ -309,8 +309,8 @@
 ;;(setq debug-on-quit nil)
 
 ;; Convert tabs to spaces
-;; (setq tab-width 4)
-;; (setq-default indent-tabs-mode nil)
+(setq tab-width 4)
+(setq-default indent-tabs-mode nil)
 
 ;; Garbage collection from http://bling.github.io/blog/2016/01/18/why-are-you-changing-gc-cons-threshold/
 

@@ -62,34 +62,10 @@
                  (shell-command it))
             (magit-push-current-to-upstream nil)))
 
-;; (defun hugo-publish-post () "Move a draft post to the posts directory, and rename it so that it contains the date."
-;; 	   (interactive)
-;; 	   (cond
-;; 		((not (equal
-;; 			   (file-name-directory (buffer-file-name (current-buffer)))
-;; 			   (expand-file-name (concat hugo-directory hugo-drafts-dir))))
-;; 		 (message "This is not a draft post.")
-;; 		 (insert (file-name-directory (buffer-file-name (current-buffer))) "\n"
-;; 				 (concat hugo-directory hugo-drafts-dir)))
-;; 		((buffer-modified-p)
-;; 		 (message "Can't publish post; buffer has modifications."))
-;; 		(t
-;; 		 (let ((filename
-;; 				(concat hugo-directory hugo-posts-dir
-;; 						(format-time-string "%Y-%m-%d-")
-;; 						(file-name-nondirectory
-;; 						 (buffer-file-name (current-buffer)))))
-;; 			   (old-point (point)))
-;; 		   (rename-file (buffer-file-name (current-buffer))
-;; 						filename)
-;; 		   (kill-buffer nil)
-;; 		   (find-file filename)
-;; 		   (set-window-point (selected-window) old-point)))))
-
 (global-set-key (kbd "C-c h n") 'hugo-draft-post)
-;; (global-set-key (kbd "C-c h p") 'hugo-publish-post)
+(global-set-key (kbd "C-c h p") 'hugo-publish-post)
 (global-set-key (kbd "C-c h t") 'hugo-timestamp)
-(global-set-key (kbd "C-c h o") (lambda () (interactive) (find-file "~/Sites/hugo/source/")))
-
+(global-set-key (kbd "C-c h O") (lambda () (interactive) (find-file "~/Sites/hugo/source/")))
 (global-set-key (kbd "C-c h P") (lambda () (interactive) (find-file "~/Sites/hugo/source/content/post/")))
 (provide 'setup-hugo)
+(global-set-key (kbd "C-c h d") 'hugo-deploy)
