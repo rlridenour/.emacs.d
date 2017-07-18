@@ -94,3 +94,4 @@
 (load-file "~/.emacs.d/eshell.el")
 
 (setq default-directory "~/")
+(put 'dired-find-alternate-file 'disabled nil)
