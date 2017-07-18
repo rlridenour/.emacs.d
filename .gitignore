@@ -1,4 +1,5 @@
 # -*- mode: gitignore; -*-
+
 *~
 \#*\#
 /.emacs.desktop
@@ -7,20 +8,24 @@
 auto-save-list
 tramp
 .\#*
+
 # Org-mode
 .org-id-locations
 *_archive
 # flymake-mode
 *_flymake.*
+
 # eshell files
 /eshell/history
 /eshell/lastdir
 # elpa packages
 /elpa/
+
 # reftex files
 *.rel
 # AUCTeX auto folder
 /auto/
+
 # cask packages
 .cask/
 custom.el
@@ -38,9 +43,11 @@ bookmarks
 recentf
 *.eld
 abbrev_defs
+
 # Recovery and backup directories
 /auto-save-list/
 /backups/
 *.cache
+
 # eww cache
 /url/
