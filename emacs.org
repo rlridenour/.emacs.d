@@ -1,0 +1,2503 @@
+#+begin_src emacs-lisp :tangle yes
+
+;; User Information
+
+(setq user-full-name "Randy Ridenour"
+      user-mail-address "rlridenour@gmail.com")
+
+;; Load Common Lisp
+
+(require 'cl)
+
+;; Turn on debugging
+
+;(setq debug-on-error t)
+;(setq debug-on-quit t)
+
+;; Load Use-Package
+
+(require 'package)
+(setq package-enable-at-startup nil)
+(add-to-list 'package-archives
+             '("melpa" . "http://melpa.org/packages/"))
+
+(package-initialize)
+
+;; Bootstrap `use-package'
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
+
+(eval-when-compile
+  (require 'use-package))
+(require 'diminish)
+(require 'bind-key)
+
+(use-package use-package-chords
+  :ensure t
+  :config (key-chord-mode 1))
+
+;; Set the path variable
+(use-package exec-path-from-shell
+  :ensure t
+  :config (exec-path-from-shell-initialize))
+
+;; Add Homebrew packages to path
+(let ((default-directory "/usr/local/share/emacs/site-lisp/"))
+  (normal-top-level-add-subdirs-to-load-path))
+
+;; Turn off splash screen and set major mode to org
+(setq inhibit-splash-screen t
+      initial-scratch-message nil
+      ;; initial-major-mode 'org-mode
+	  )
+
+;; Theme
+(use-package hc-zenburn-theme
+  :ensure t
+  :config (load-theme 'hc-zenburn t)
+  )
+
+;; Set the default font. The "frame-alist" is necessary to set the font when using emacs daemon and client.
+;; (if (eq system-type 'darwin)
+;; (set-default-font "Monaco-12") ;;; set default font
+;; (set-default-font "DejaVu Sans Mono-12.5")
+;; (setq default-frame-alist '((font . "DejaVu Sans Mono-12.5"))) ;;; set default font for emacs --daemon / emacsclient
+
+(set-default-font "Droid Sans Mono Slashed-13")
+(setq default-frame-alist '((font . "Droid Sans Mono Slashed-13"))) ;;; set default font for emacs --daemon / emacsclient
+
+;; (progn
+;;   ;; use variable-width font for some modes
+;;   (defun rlr-use-variable-width-font ()
+;;     "Set current buffer to use variable-width font."
+;;     (variable-pitch-mode 1)
+;;     ;; (text-scale-increase 0.5 )
+;;     )
+;;   (add-hook 'nxml-mode-hook 'rlr-use-variable-width-font)
+;;   (add-hook 'emacs-lisp-mode-hook 'rlr-use-variable-width-font)
+;;   (add-hook 'js-mode-hook 'rlr-use-variable-width-font)
+;;   (add-hook 'css-mode-hook 'rlr-use-variable-width-font)
+;;   (add-hook 'html-mode-hook 'rlr-use-variable-width-font)
+;;   (add-hook 'LaTeX-mode-hook 'rlr-use-variable-width-font)
+;;   (add-hook 'markdown-mode-hook 'rlr-use-variable-width-font)
+;;   )
+
+;; Change background color for selected text.
+(set-face-attribute 'region nil :background "#666")
+
+;; Turn on syntax highlighting for all buffers
+(global-font-lock-mode t)
+
+
+;; Highlight the current line.
+(global-hl-line-mode 1)
+(set-face-background hl-line-face "gray12")
+
+
+;; Match parentheses — especially useful when editing Lisp
+(show-paren-mode 1)
+
+;; Turn off the menu, tool bar, and scroll bar.
+(scroll-bar-mode -1)
+(tool-bar-mode -1)
+(menu-bar-mode 1)
+
+;; Show line and column numbers in mode line:
+(line-number-mode 1)
+(column-number-mode 1)
+(winner-mode 1)
+
+;; Hide mouse when typing:
+(setq make-pointer-invisible t)
+
+;; Set tab to four spaces
+(setq-default tab-width 4) ; emacs 23.1, 24.2, default to 8
+
+;; Show file path in title bar
+(setq frame-title-format
+      '((:eval (if (buffer-file-name)
+                   (abbreviate-file-name (buffer-file-name))
+                 "%b"))))
+
+;; Show date and time
+(setq display-time-24hr-format t)
+(setq display-time-day-and-date t)
+(display-time)
+
+;; Modeline
+(use-package spaceline
+  :ensure t
+  :config
+  (progn
+	(require 'spaceline-config)
+	(spaceline-spacemacs-theme)
+	(setq spaceline-highlight-face-func 'spaceline-highlight-face-evil-state)))
+
+;;;;;;;;;;;;
+;; System ;;
+;;;;;;;;;;;;
+
+;; (use-package validate                   ; Validate options
+;; :ensure t)
+
+;; Keep custom-set variables separate from configuration file.
+(setf custom-file "~/.emacs.d/custom.el")
+(load custom-file)
+
+;; Set modifier keys in OS X
+   
+(setq mac-command-modifier 'super)
+(setq mac-option-modifier 'meta)
+(setq ns-function-modifier 'hyper) 
+
+;; Always prefer UTF-8
+
+(prefer-coding-system 'utf-8)
+(set-default-coding-systems 'utf-8)
+(set-terminal-coding-system 'utf-8)
+(set-keyboard-coding-system 'utf-8)
+(setq default-buffer-file-coding-system 'utf-8)
+
+;; Use TeX to input special characters
+(setq default-input-method 'TeX)
+;; Start TeX input when switching buffers
+;; (defadvice switch-to-buffer (after activate-input-method activate)
+;; (activate-input-method "TeX"))
+
+;; Save When Losing Focus
+
+;; (defun save-all ()
+;;   (interactive)
+;;   (save-some-buffers t))
+;; (add-hook 'focus-out-hook 'save-all)
+
+;; auto save often
+;; save every 20 characters typed (this is the minimum)
+(setq auto-save-interval 20)
+
+;; Use "y" and "n":
+(defalias 'yes-or-no-p 'y-or-n-p)
+
+;; Confirm killing emacs on graphical sessions:
+(when (window-system)
+(setq confirm-kill-emacs 'yes-or-no-p))
+
+;; Edit by Visual Lines
+(global-visual-line-mode t)
+
+;; Navigate visual lines:
+(setq line-move-visual t)
+
+;; Single space ends sentence:
+(setq sentence-end-double-space nil)
+
+;; Use tab for indentation and completion. From http://emacsredux.com/blog/2016/01/31/use-tab-to-indent-or-complete/
+(setq-default tab-always-indent 'complete)
+
+;; Backup files
+;; Don't make backup files
+;; (setq make-backup-files nil)
+;; Save backups to ~/.saves
+(setq backup-directory-alist `(("." . "~/.saves")))
+(setq backup-by-copying t)
+(setq delete-old-versions t
+  kept-new-versions 6
+  kept-old-versions 2
+  version-control t)
+
+;; Spelling
+(setq flyspell-issue-welcome-flag nil)
+(setq flyspell-issue-message-flag nil)
+
+;; From [[https://joelkuiper.eu/spellcheck_emacs][Joel Kuiper]]
+
+;; Enable flyspell mode for highlighting spelling errors.
+(dolist (hook '(text-mode-hook))
+  (add-hook hook (lambda () (flyspell-mode 1))))
+
+;; Check comments and strings when coding.
+(dolist (mode '(emacs-lisp-mode-hook
+                inferior-lisp-mode-hook
+                clojure-mode-hook
+                python-mode-hook
+                js-mode-hook
+                R-mode-hook))
+  (add-hook mode
+            '(lambda ()
+               (flyspell-prog-mode))))
+
+;; Use F7 to check current word, M-F7 for next word.
+(global-set-key (kbd "<f7>") 'ispell-word)
+(defun flyspell-check-next-highlighted-word ()
+  "Custom function to spell check next highlighted word"
+  (interactive)
+  (flyspell-goto-next-error)
+  (ispell-word))
+(global-set-key (kbd "M-<f7>") 'flyspell-check-next-highlighted-word)
+
+;; Spell-check with right mouse button.
+(eval-after-load "flyspell"
+  '(progn
+     (define-key flyspell-mouse-map [down-mouse-3] #'flyspell-correct-word)
+     (define-key flyspell-mouse-map [mouse-3] #'undefined)))
+
+;; find aspell and hunspell automatically
+(cond
+ ;; try hunspell at first
+ ;; if hunspell does NOT exist, use aspell
+ ((executable-find "hunspell")
+  (setq ispell-program-name "hunspell")
+  (setq ispell-local-dictionary "en_US")
+  (setq ispell-local-dictionary-alist
+        ;; Please note the list `("-d" "en_US")` contains ACTUAL parameters passed to hunspell
+        ;; You could use `("-d" "en_US,en_US-med")` to check with multiple dictionaries
+        '(("en_US" "[[:alpha:]]" "[^[:alpha:]]" "[']" nil ("-d" "en_US") nil utf-8)
+          )))
+
+ ((executable-find "aspell")
+  (setq ispell-program-name "aspell")
+  ;; Please note ispell-extra-args contains ACTUAL parameters passed to aspell
+  (setq ispell-extra-args '("--sug-mode=ultra" "--lang=en_US"))))
+
+;; Store personal dictionary in Dropbox to sync between machines.
+(setq ispell-personal-dictionary "/Users/rlridenour/Dropbox/emacs/ridenour-ispell-dictionary ")
+
+
+;; Hide various file types, most LaTeX auxiliary files, in Dired.
+(require 'dired-x)
+(setq-default dired-omit-files-p t) ; this is buffer-local variable
+(setq dired-omit-files
+      (concat dired-omit-files "\\|^\\..+$"))
+(setq-default dired-omit-extensions '("fdb_latexmk" "aux" "bbl" "blg" "fls" "glo" "idx" "ilg" "ind" "ist" "log" "out" "gz" "DS_Store"))
+(setq dired-dwim-target t)
+
+;; Load Abbreviations
+(load "~/Dropbox/emacs/my-emacs-abbrev")
+
+;; Bookmarks
+(require 'bookmark)
+(bookmark-bmenu-list)
+
+;; Recent Files
+(require 'recentf)
+(setq recentf-max-saved-items 200
+      recentf-max-menu-items 15)
+(recentf-mode)
+
+;; Don't ask for confirmation to kill processes when exiting Emacs. Credit to [[http://timothypratley.blogspot.com/2015/07/seven-specialty-emacs-settings-with-big.html][Timothy Pratley]].
+(defadvice save-buffers-kill-emacs (around no-query-kill-emacs activate)
+  (cl-flet ((process-list ())) ad-do-it))
+
+;; ibuffer
+
+;; Don't ask for unnecessary confirmations
+(setq ibuffer-expert t)
+
+;; Auto-update buffer list
+(add-hook 'ibuffer-mode-hook
+	  '(lambda ()
+	     (ibuffer-auto-mode 1)
+	     (ibuffer-switch-to-saved-filter-groups "home")))
+
+;; Isearch
+;; From Xah Lee, http://ergoemacs.org/emacs/emacs_isearch_by_arrow_keys.html
+(progn
+  ;; set arrow keys in isearch. left/right is backward/forward, up/down is history. press Return to exit
+  (define-key isearch-mode-map (kbd "<up>") 'isearch-ring-retreat )
+  (define-key isearch-mode-map (kbd "<down>") 'isearch-ring-advance )
+  (define-key isearch-mode-map (kbd "<left>") 'isearch-repeat-backward) ; single key, useful
+  (define-key isearch-mode-map (kbd "<right>") 'isearch-repeat-forward) ; single key, useful
+  )
+
+;;Shell
+(setq multi-term-program "/usr/local/bin/fish")
+(setq explicit-shell-file-name "/usr/local/bin/fish")
+
+(defun oleh-term-exec-hook ()
+  (let* ((buff (current-buffer))
+         (proc (get-buffer-process buff)))
+    (set-process-sentinel
+     proc
+     `(lambda (process event)
+        (if (string= event "finished\n")
+            (kill-buffer ,buff))))))
+
+;; From http://oremacs.com/2015/01/01/three-ansi-term-tips/
+(add-hook 'term-exec-hook 'oleh-term-exec-hook)
+;; Make completion case-insensitive in eshell
+(setq eshell-cmpl-ignore-case t)
+(setq pcomplete-ignore-case t)
+
+;; Kill contents of scratch buffer, not the buffer itself. From [[http://emacswiki.org/emacs/RecreateScratchBuffer][TN]].
+(defun unkillable-scratch-buffer ()
+	(if (equal (buffer-name (current-buffer)) "*scratch*")
+	    (progn
+	      (delete-region (point-min) (point-max))
+	      nil)
+	  t))
+(add-hook 'kill-buffer-query-functions 'unkillable-scratch-buffer)
+
+
+(eval-after-load "term"
+  '(define-key term-raw-map (kbd "C-c C-y") 'term-paste))
+
+
+;; Mark date and time that files were saved.
+(add-hook 'before-save-hook 'time-stamp)
+
+(setq delete-by-moving-to-trash t
+	  trash-directory "~/.Trash/emacs")
+
+;; Disable warning bell
+;; (setq visible-bell t)
+;; (setq visible-bell nil) ;; The default
+;; (setq ring-bell-function 'ignore)
+
+;; This flashes the mode-line (from http://www.stefanom.org/prettify-my-emacs-symbols/)
+(defun my-terminal-visible-bell ()
+   "A friendlier visual bell effect."
+   (invert-face 'mode-line)
+   (run-with-timer 0.1 nil 'invert-face 'mode-line))
+ 
+ (setq visible-bell nil
+       ring-bell-function 'my-terminal-visible-bell)
+
+;; Start eshell
+(global-set-key (kbd "C-x m") (lambda () (interactive) (eshell t)))
+;; Start a new eshell even if one is active
+(global-set-key (kbd "C-x M") (lambda () (interactive) (eshell t)))
+
+;; Start a regular shell
+(global-set-key (kbd "C-x M-m") 'shell)
+
+;; CUA mode for rectangle editing
+;; Sometimes very useful (but we don't use the core cua keys.)
+
+(setq cua-enable-cua-keys nil)
+(cua-mode)
+
+;; To start a rectangle, use [C-return] and extend it using the normal
+;; movement keys (up, down, left, right, home, end, C-home,
+;; C-end). Once the rectangle has the desired size, you can cut or
+;; copy it using C-w and M-w, and you can
+;; subsequently insert it - as a rectangle - using C-y.  So
+;; the only new command you need to know to work with cua-mode
+;; rectangles is C-return!
+;;
+;; Normally, when you paste a rectangle using C-v (C-y), each line of
+;; the rectangle is inserted into the existing lines in the buffer.
+;; If overwrite-mode is active when you paste a rectangle, it is
+;; inserted as normal (multi-line) text.
+;;
+;; And there's more: If you want to extend or reduce the size of the
+;; rectangle in one of the other corners of the rectangle, just use
+;; [return] to move the cursor to the "next" corner.  Or you can use
+;; the [M-up], [M-down], [M-left], and [M-right] keys to move the
+;; entire rectangle overlay (but not the contents) in the given
+;; direction.
+;;
+;; [C-return] cancels the rectangle
+;; [C-space] activates the region bounded by the rectangle
+
+;; cua-mode's rectangle support also includes all the normal rectangle
+;; functions with easy access:
+;;
+;; [M-a] aligns all words at the left edge of the rectangle
+;; [M-b] fills the rectangle with blanks (tabs and spaces)
+;; [M-c] closes the rectangle by removing all blanks at the left edge
+;;       of the rectangle
+;; [M-f] fills the rectangle with a single character (prompt)
+;; [M-i] increases the first number found on each line of the rectangle
+;;       by the amount given by the numeric prefix argument (default 1)
+;;       It recognizes 0x... as hexadecimal numbers
+;; [M-k] kills the rectangle as normal multi-line text (for paste)
+;; [M-l] downcases the rectangle
+;; [M-m] copies the rectangle as normal multi-line text (for paste)
+;; [M-n] fills each line of the rectangle with increasing numbers using
+;;       a supplied format string (prompt)
+;; [M-o] opens the rectangle by moving the highlighted text to the
+;;       right of the rectangle and filling the rectangle with blanks.
+;; [M-p] toggles virtual straight rectangle edges
+;; [M-P] inserts tabs and spaces (padding) to make real straight edges
+;; [M-q] performs text filling on the rectangle
+;; [M-r] replaces REGEXP (prompt) by STRING (prompt) in rectangle
+;; [M-R] reverse the lines in the rectangle
+;; [M-s] fills each line of the rectangle with the same STRING (prompt)
+;; [M-t] performs text fill of the rectangle with TEXT (prompt)
+;; [M-u] upcases the rectangle
+;; [M-|] runs shell command on rectangle
+;; [M-'] restricts rectangle to lines with CHAR (prompt) at left column
+;; [M-/] restricts rectangle to lines matching REGEXP (prompt)
+;; [C-?] Shows a brief list of the above commands.
+
+;; [M-C-up] and [M-C-down] scrolls the lines INSIDE the rectangle up
+;; and down; lines scrolled outside the top or bottom of the rectangle
+;; are lost, but can be recovered using [C-z].
+
+
+
+
+
+;; Turn off debugging and set default directory
+
+;;(setq debug-on-error nil)
+;;(setq debug-on-quit nil)
+
+;; Convert tabs to spaces
+(setq tab-width 4)
+(setq-default indent-tabs-mode nil)
+
+;; Garbage collection from http://bling.github.io/blog/2016/01/18/why-are-you-changing-gc-cons-threshold/
+
+(defun my-minibuffer-setup-hook ()
+  (setq gc-cons-threshold most-positive-fixnum))
+
+(defun my-minibuffer-exit-hook ()
+  (setq gc-cons-threshold 800000))
+
+(add-hook 'minibuffer-setup-hook #'my-minibuffer-setup-hook)
+(add-hook 'minibuffer-exit-hook #'my-minibuffer-exit-hook)
+
+;; overwrite selected text
+(delete-selection-mode t)
+
+;; Do not use external GPG password entry
+(setenv "GPG_AGENT_INFO" nil)
+
+;; Start server
+(unless (daemonp) (server-mode 1))
+
+;;;;;;;;;;;;;;
+;; Ivy-Mode ;;
+;;;;;;;;;;;;;;
+
+
+(use-package swiper
+  :ensure t
+  :diminish ivy-mode
+  :bind
+  (("s-r" . counsel-recentf)
+   ;; ("C-s" . swiper)
+   ("s-f" . swiper)
+   ("M-x" . counsel-M-x)
+   ("C-x C-f" . counsel-find-file)
+   ("s-o" . counsel-find-file)
+   ("C-c b" . counsel-bookmark)
+   ("C-c i" . counsel-imenu)
+   ("s-." . ivy-switch-buffer)
+   ("<f1> f" . counsel-describe-function)
+   ("<f1> v" . counsel-describe-variable)
+   ("<f1> l" . counsel-load-library)
+   ("<f2> i" . counsel-info-lookup-symbol)
+   ("<f2> u" . counsel-unicode-char)
+   ("C-c g" . counsel-git)
+   ("C-c j" . counsel-git-grep)
+   ("C-c a" . counsel-ag)
+   ("C-x l" . counsel-locate)
+   ("C-S-o" . counsel-rhythmbox)
+   ("C-c C-r" . ivy-resume)
+   ("M-y" . counsel-yank-pop)
+   :map ivy-minibuffer-map
+   ("M-y" . ivy-next-line-and-call))
+  :init
+  (setq ivy-display-style 'fancy)
+  (setq ivy-use-virtual-buffers t)
+  (setq ivy-height 10)
+  (setq ivy-count-format "(%d/%d) ")
+  :config
+  (ivy-mode 1)
+  ;; version of ivy-yank-word to yank from start of word
+  ;; from http://pragmaticemacs.com/emacs/search-or-swipe-for-the-current-word/
+  (defun bjm/ivy-yank-whole-word ()
+	"Pull next word from buffer into search string."
+	(interactive)
+	(let (amend)
+	  (with-ivy-window
+		;;move to last word boundary
+		(re-search-backward "\\b")
+		(let ((pt (point))
+			  (le (line-end-position)))
+		  (forward-word 1)
+		  (if (> (point) le)
+			  (goto-char pt)
+			(setq amend (buffer-substring-no-properties pt (point))))))
+	  (when amend
+		(insert (replace-regexp-in-string "  +" " " amend)))))
+
+  ;; bind it to M-j
+  (define-key ivy-minibuffer-map (kbd "M-j") 'bjm/ivy-yank-whole-word)
+  )
+
+
+;;;;;;;;;;;;;;;
+;; Utilities ;;
+;;;;;;;;;;;;;;;
+
+
+;; Yasnippet
+(use-package yasnippet
+  :ensure t
+  :defer t
+  :diminish yas-minor-mode
+  :init (progn
+		  ;; (bind-key "SPC" 'yas-expand yas-minor-mode-map)
+          (yas-global-mode 1)
+          (yas-reload-all)))
+;; (define-key yas-minor-mode-map (kbd "TAB") 'yas-expand)
+
+;; (use-package swiper
+;;   :ensure t
+;;   :diminish ivy-mode
+;;   :bind ("C-s" . swiper)
+;;   ("C-c C-s" . isearch-forward)
+;;   ("s-r" . ivy-recentf)
+;;   ("C-c C-r" . ivy-resume)
+;;   :config
+;;   (setq ivy-display-style 'fancy
+;;         ivy-use-virtual-buffers t
+;;         ivy-re-builders-alist)
+;;   (use-package smex
+;;    :ensure t
+;;    :config (smex-initialize))
+;;   (use-package hydra
+;; 	:ensure t)
+;;   (ivy-mode))
+
+;; (use-package counsel
+;;   :ensure t
+;;   :bind (("C-x C-f" . counsel-find-file)
+;; 		 ;; ("M-x" . counsel-M-x)
+;; 		 ("s-o" . counsel-find-file))
+;;   :config
+;;   (setq counsel-find-file-at-point t))
+
+;; avy
+(use-package avy
+  :ensure t
+  :bind (("M-g l" . avy-goto-line)
+		 ;; ("s-l" . avy-goto-line)
+		 ("M-g w" . avy-goto-word-1)
+		 ("M-g M-g" . avy-goto-char-2)
+		 ("s-/" . avy-goto-char-timer)))
+
+(use-package  ace-window
+  :ensure
+  :bind ("s-w" . ace-window)
+  :config
+  ;; (setq aw-leading-char-style 'path)
+  (setq aw-background nil)
+  (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
+
+(use-package smex
+  :ensure t
+  :bind (([remap execute-extended-command] . smex)
+         ("s-P" . smex))
+  :config
+  (smex-initialize)
+  (setq smex-save-file (expand-file-name ".smex-items" user-emacs-directory)))
+
+(use-package undo-tree
+  :ensure t
+  :config (global-undo-tree-mode)
+  :bind (("s-z" . undo-tree-undo)
+         ("s-Z" . undo-tree-redo)))
+
+(use-package dash
+  :ensure t
+  :config (dash-enable-font-lock))
+
+(use-package expand-region
+  :ensure t
+  :commands (er/mark-symbol)
+  :bind* ("C-=" . er/expand-region))
+
+;; == magit ==
+(use-package magit
+  :ensure t
+  :defer t
+  :bind ("C-x g" . magit-status))
+
+(use-package evil-nerd-commenter
+  :ensure t
+  :config (evilnc-default-hotkeys))
+
+(use-package shrink-whitespace
+  :ensure t
+  :bind ("M-=" . shrink-whitespace))
+
+(use-package easy-kill
+  :ensure t
+  :bind ([remap kill-ring-save] . easy-kill))
+
+(use-package zop-to-char
+  :ensure t
+  :bind ([remap zap-to-char] . zop-to-char))
+
+(use-package projectile
+  :ensure t
+  :diminish projectile-mode
+  :config (projectile-global-mode))
+
+(use-package ag
+  :ensure t)
+
+(use-package company
+  :ensure t
+  :diminish company-mode
+  :config
+  (progn
+    (setq company-tooltip-limit 20)
+    (global-company-mode 1)))
+
+;; (use-package empos
+;;   :ensure t
+;;   :config
+;;   (progn
+;; 	(setq empos-available-engines '("arxiv" "crossref")
+;; 		  empos-bib-file "/Users/rlridenour/Dropbox/bibtex/empos.bib")))
+
+(use-package reveal-in-osx-finder
+  :ensure t
+  :bind ("C-c z" . reveal-in-osx-finder))
+
+(use-package smartparens
+  :ensure t)
+(require 'smartparens-config)
+(smartparens-global-mode t)
+
+(use-package olivetti
+  :ensure t)
+
+;; (use-package neotree
+;;   :ensure t
+;;   :bind ("C-c n" . neotree-toggle)
+;;   :config (setq neo-smart-open t))
+
+(use-package aggressive-indent
+  :ensure t
+  :config (add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode)
+  (add-to-list 'aggressive-indent-excluded-modes 'markdown-mode))
+
+;; From http://pragmaticemacs.com/emacs/dynamically-filter-directory-listing-with-dired-narrow/
+;;narrow dired to match filter
+(use-package dired-narrow
+  :ensure t
+  :bind (:map dired-mode-map
+              ("/" . dired-narrow)))
+
+;; (use-package dired-ranger
+;;   :ensure t
+;;   :bind (:map dired-mode-map
+;;               ("W" . dired-ranger-copy)
+;;               ("X" . dired-ranger-move)
+;;               ("Y" . dired-ranger-paste)))
+
+(use-package nlinum
+  :ensure t
+  :config
+  (global-nlinum-mode 1)
+  (unless window-system
+	(setq nlinum-format "%d ")))
+
+(use-package biblio
+  :ensure t)
+
+;; ;; volatile highlights - temporarily highlight changes from pasting etc
+;; (use-package volatile-highlights
+;;   :ensure t
+;;   :config
+;;   (volatile-highlights-mode t))
+
+
+;; Use flyspell-correct-ivy
+(use-package flyspell-correct-ivy
+  :ensure t
+  :after flyspell
+  :bind (:map flyspell-mode-map
+              ("s-;" . flyspell-correct-word-generic)
+			  ("C-;" . flyspell-correct-previous-word-generic)))
+
+;; Word count with wc-mode
+
+(use-package wc-mode
+  :ensure t)
+
+;; Cdlatex makes inserting LaTeX easier.
+
+(use-package cdlatex
+  :ensure t)
+
+;; Move-text - move current line or active region up or down with m-arrow key
+
+(use-package move-text
+  :ensure t
+  :config
+  (move-text-default-bindings))
+
+										;flashes cursor when scrolling
+;; (use-package beacon
+;;   :ensure t
+;;   :config
+;;   (beacon-mode 1)
+;;   ;; (setq beacon-color "#666600")
+;;   )
+
+										; deletes all the whitespace when you hit backspace or delete
+(use-package hungry-delete
+  :ensure t
+  :config
+  (global-hungry-delete-mode))
+
+;; Web-mode (from http://cestlaz.github.io)
+(use-package web-mode
+  :ensure t
+  :config
+  (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+  (setq web-mode-engines-alist
+		'(("django"    . "\\.html\\'")))
+  (setq web-mode-ac-sources-alist
+		'(("css" . (ac-source-css-property))
+		  ("html" . (ac-source-words-in-buffer ac-source-abbrev))))
+
+  (setq web-mode-enable-auto-closing t)
+  (setq web-mode-enable-auto-quoting t)) ; this fixes the quote problem I mentioned
+
+(use-package which-key
+  :ensure t
+  :config
+  (which-key-mode))
+
+(use-package sane-term
+  :ensure t
+  :bind (("C-x t" . sane-term)
+         ("C-x T" . sane-term-create)))
+
+;;;;;;;;;;;;;;;
+;; Functions ;;
+;;;;;;;;;;;;;;;
+
+;;; Insert date
+(defun insert-date-string ()
+  "Insert current date yyyymmdd."
+  (interactive)
+  (insert (format-time-string "%Y%m%d")))
+
+(defun insert-standard-date ()
+    "Inserts standard date time string." 
+    (interactive)
+    (insert (format-time-string "%B %e, %Y")))
+
+
+(global-set-key (kbd "<f8>") 'insert-standard-date)
+(global-set-key (kbd "C-c d") 'insert-date-string)
+
+;;; Compact-Uncompact Block
+  ;; Fill-paragraph from Xah Lee (http://ergoemacs.org/emacs/modernization_fill-paragraph.html)
+  (defun rlr/compact-uncompact-block ()
+    "Remove or add line ending chars on current paragraph.
+  This command is similar to a toggle of `fill-paragraph'.
+  When there is a text selection, act on the region."
+    (interactive)
+    ;; This command symbol has a property “'stateIsCompact-p”.
+    (let (currentStateIsCompact (bigFillColumnVal 90002000) (deactivate-mark nil))
+      ;; 90002000 is just random. you can use `most-positive-fixnum'
+      (save-excursion
+        ;; Determine whether the text is currently compact.
+        (setq currentStateIsCompact
+              (if (eq last-command this-command)
+                  (get this-command 'stateIsCompact-p)
+                (if (> (- (line-end-position) (line-beginning-position)) fill-column) t nil) ) )
+        (if (use-region-p)
+            (if currentStateIsCompact
+                (fill-region (region-beginning) (region-end))
+              (let ((fill-column bigFillColumnVal))
+                (fill-region (region-beginning) (region-end))) )
+          (if currentStateIsCompact
+              (fill-paragraph nil)
+            (let ((fill-column bigFillColumnVal))
+              (fill-paragraph nil)) ) )
+        (put this-command 'stateIsCompact-p (if currentStateIsCompact nil t)) ) ) )
+
+;;; Focus Emacs 
+(when (featurep 'ns)
+  (defun ns-raise-emacs ()
+    "Raise Emacs."
+    (ns-do-applescript "tell application \"Emacs\" to activate"))
+
+  (defun ns-raise-emacs-with-frame (frame)
+    "Raise Emacs and select the provided frame."
+    (with-selected-frame frame
+      (when (display-graphic-p)
+        (ns-raise-emacs))))
+
+  (add-hook 'after-make-frame-functions 'ns-raise-emacs-with-frame)
+
+  (when (display-graphic-p)
+    (ns-raise-emacs)))
+
+   
+
+;;; Smart Open Line
+;;    From [[https://github.com/grettke/home/blob/master/.emacs.el#L436][Grant Rettke]].
+(defun rlr/smart-open-line ()
+  (interactive)
+  (move-end-of-line nil)
+  (newline-and-indent))
+(global-set-key (kbd "s-<return>") 'rlr/smart-open-line)
+
+;;; Kill Buffer and Delete File
+;; From [https://github.com/bbatsov/prelude][Emacs Prelude]
+(defun delete-file-and-buffer ()
+  "Kill the current buffer and deletes the file it is visiting."
+  (interactive)
+  (let ((filename (buffer-file-name)))
+    (when filename
+      (if (vc-backend filename)
+          (vc-delete-file filename)
+        (when (y-or-n-p (format "Are you sure you want to delete %s? " filename))
+          (delete-file filename)
+          (message "Deleted file %s" filename)
+          (kill-buffer))))))
+(global-set-key (kbd "C-c D") 'delete-file-and-buffer)
+
+;;; Rename Buffer and File
+(defun rename-buffer-and-file ()
+  "Rename current buffer and if the buffer is visiting a file, rename it too."
+  (interactive)
+  (let ((filename (buffer-file-name)))
+    (if (not (and filename (file-exists-p filename)))
+        (rename-buffer (read-from-minibuffer "New name: " (buffer-name)))
+      (let ((new-name (read-file-name "New name: " filename)))
+        (cond
+         ((vc-backend filename) (vc-rename-file filename new-name))
+         (t
+          (rename-file filename new-name t)
+          (set-visited-file-name new-name t t)))))))
+(global-set-key (kbd "C-c r") 'rename-buffer-and-file)
+
+;;; Open With External App
+(defun open-with (arg)
+  "Open visited file in default external program.
+When in dired mode, open file under the cursor.
+With a prefix ARG always prompt for command to use."
+  (interactive "P")
+  (let* ((current-file-name
+          (if (eq major-mode 'dired-mode)
+              (dired-get-file-for-visit)
+            buffer-file-name))
+         (open (pcase system-type
+                 (`darwin "open")
+                 ((or `gnu `gnu/linux `gnu/kfreebsd) "xdg-open")))
+         (program (if (or arg (not open))
+                      (read-shell-command "Open current file with: ")
+                    open)))
+    (start-process "prelude-open-with-process" nil program current-file-name)))
+(global-set-key (kbd "C-c o") 'open-with)
+
+;;; Switch to Previous Buffer
+(defun prelude-switch-to-previous-buffer ()
+  "Switch to previously open buffer.
+Repeated invocations toggle between the two most recently open buffers."
+  (interactive)
+  (switch-to-buffer (other-buffer (current-buffer) 1)))
+
+(require 'dash)
+
+(defun prelude-kill-other-buffers ()
+  "Kill all buffers but the current one.
+Doesn't mess with special buffers."
+  (interactive)
+  (-each
+   (->> (buffer-list)
+     (-filter #'buffer-file-name)
+     (--remove (eql (current-buffer) it)))
+   #'kill-buffer))
+
+;;; Double Capitals
+;; From  [[http://endlessparentheses.com/fixing-double-capitals-as-you-type.html?source=rss][Endless Parentheses]]
+;; Define function
+(defun dcaps-to-scaps ()
+  "Convert word in DOuble CApitals to Single Capitals."
+  (interactive)
+  (and (= ?w (char-syntax (char-before)))
+       (save-excursion
+         (and (if (called-interactively-p)
+                  (skip-syntax-backward "w")
+                (= -3 (skip-syntax-backward "w")))
+              (let (case-fold-search)
+                (looking-at "\\b[[:upper:]]\\{2\\}[[:lower:]]"))
+              (capitalize-word 1)))))
+
+;; (add-hook 'post-self-insert-hook #'dcaps-to-scaps nil 'local)
+;; Define minor mode
+(define-minor-mode dubcaps-mode
+  "Toggle `dubcaps-mode'.  Converts words in DOuble CApitals to
+Single Capitals as you type."
+  :init-value nil
+  :lighter (" DC")
+  (if dubcaps-mode
+      (add-hook 'post-self-insert-hook #'dcaps-to-scaps nil 'local)
+    (remove-hook 'post-self-insert-hook #'dcaps-to-scaps 'local)))
+;; Add hook to text mode
+(add-hook 'text-mode-hook #'dubcaps-mode)
+
+;;; Byte-Compile Config
+(defun byte-compile-init-dir ()
+  "Byte-compile all your dotfiles."
+  (interactive)
+  (byte-recompile-directory user-emacs-directory 0))
+
+;; join line to next line
+(global-set-key (kbd "M-j")
+            (lambda ()
+                  (interactive)
+                  (join-line -1)))
+
+;; Count words
+(defun rlr-count-words (&optional begin end)
+  "count words between BEGIN and END (region); if no region defined, count words in buffer"
+  (interactive "r")
+  (let ((b (if mark-active begin (point-min)))
+      (e (if mark-active end (point-max))))
+    (message "Word count: %s" (how-many "\\w+" b e))))
+
+(defun swap-windows ()
+  "If you have 2 windows, it swaps them."
+  (interactive)
+  (cond ((/= (count-windows) 2)
+         (message "You need exactly 2 windows to do this."))
+        (t
+         (let* ((w1 (first (window-list)))
+                (w2 (second (window-list)))
+                (b1 (window-buffer w1))
+                (b2 (window-buffer w2))
+                (s1 (window-start w1))
+                (s2 (window-start w2)))
+           (set-window-buffer w1 b2)
+           (set-window-buffer w2 b1)
+           (set-window-start w1 s2)
+           (set-window-start w2 s1))))
+  (other-window 1))
+
+
+;; From http://blog.binchen.org/posts/hello-ivy-mode-bye-helm.html
+
+;; (defun ivy-imenu-get-candidates-from (alist  &optional prefix)
+;;   (cl-loop for elm in alist
+;;            nconc (if (imenu--subalist-p elm)
+;;                        (ivy-imenu-get-candidates-from
+;;                         (cl-loop for (e . v) in (cdr elm) collect
+;;                                  (cons e (if (integerp v) (copy-marker v) v)))
+;;                         (concat prefix (if prefix ".") (car elm)))
+;;                    (and (cdr elm) ; bug in imenu, should not be needed.
+;;                         (setcdr elm (copy-marker (cdr elm))) ; Same as [1].
+;;                         (list (cons (concat prefix (if prefix ".") (car elm))
+;;                                     (copy-marker (cdr elm))))))))
+
+
+;; (defun ivy-imenu-goto ()
+;;   "Go to buffer position"
+;;   (interactive)
+;;   (let ((imenu-auto-rescan t) items)
+;;     (unless (featurep 'imenu)
+;;       (require 'imenu nil t))
+;;     (setq items (imenu--make-index-alist t))
+;;     (ivy-read "imenu items:"
+;;               (ivy-imenu-get-candidates-from (delete (assoc "*Rescan*" items) items))
+;;               :action (lambda (k) (goto-char k)))))
+
+
+;; (defun ivy-bookmark-goto ()
+;;   "Open ANY bookmark"
+;;   (interactive)
+;;   (let (bookmarks filename)
+;;     ;; load bookmarks
+;;     (unless (featurep 'bookmark)
+;;       (require 'bookmark))
+;;     (bookmark-maybe-load-default-file)
+;;     (setq bookmarks (and (boundp 'bookmark-alist) bookmark-alist))
+;;     ;; do the real thing
+;;     (ivy-read "bookmarks:"
+;;               (delq nil (mapcar (lambda (bookmark)
+;;                                   (let (key)
+;;                                     ;; build key which will be displayed
+;;                                     (cond
+;;                                      ((and (assoc 'filename bookmark) (cdr (assoc 'filename bookmark)))
+;;                                       (setq key (format "%s (%s)" (car bookmark) (cdr (assoc 'filename bookmark)))))
+;;                                      ((and (assoc 'location bookmark) (cdr (assoc 'location bookmark)))
+;;                                       ;; bmkp-jump-w3m is from bookmark+
+;;                                       (unless (featurep 'bookmark+)
+;;                                         (require 'bookmark+))
+;;                                       (setq key (format "%s (%s)" (car bookmark) (cdr (assoc 'location bookmark)))))
+;;                                      (t
+;;                                       (setq key (car bookmark))))
+;;                                     ;; re-shape the data so full bookmark be passed to ivy-read:action
+;;                                     (cons key bookmark)))
+;;                                 bookmarks))
+;;               :action (lambda (bookmark)
+;;                         (bookmark-jump bookmark)))
+;;     ))
+
+
+;; Title-case from http://ergoemacs.org/emacs/elisp_title_case_text.html
+
+(defun xah-title-case-region-or-line (φbegin φend)
+  "Title case text between nearest brackets, or current line, or text selection.
+Capitalize first letter of each word, except words like {to, of, the, a, in, or, and, …}. If a word already contains cap letters such as HTTP, URL, they are left as is.
+
+When called in a elisp program, φbegin φend are region boundaries.
+URL `http://ergoemacs.org/emacs/elisp_title_case_text.html'
+Version 2015-05-07"
+  (interactive
+   (if (use-region-p)
+       (list (region-beginning) (region-end))
+     (let (
+           ξp1
+           ξp2
+           (ξskipChars "^\"<>(){}[]“”‘’‹›«»「」『』【】〖〗《》〈〉〔〕"))
+       (progn
+         (skip-chars-backward ξskipChars (line-beginning-position))
+         (setq ξp1 (point))
+         (skip-chars-forward ξskipChars (line-end-position))
+         (setq ξp2 (point)))
+       (list ξp1 ξp2))))
+  (let* (
+         (ξstrPairs [
+                     [" A " " a "]
+                     [" And " " and "]
+                     [" At " " at "]
+                     [" As " " as "]
+                     [" By " " by "]
+                     [" Be " " be "]
+                     [" Into " " into "]
+                     [" In " " in "]
+                     [" Is " " is "]
+                     [" It " " it "]
+                     [" For " " for "]
+                     [" Of " " of "]
+                     [" Or " " or "]
+                     [" On " " on "]
+                     [" Via " " via "]
+                     [" The " " the "]
+                     [" That " " that "]
+                     [" To " " to "]
+                     [" Vs " " vs "]
+                     [" With " " with "]
+                     [" From " " from "]
+                     ["'S " "'s "]
+                     ]))
+    (save-excursion 
+      (save-restriction
+        (narrow-to-region φbegin φend)
+        (upcase-initials-region (point-min) (point-max))
+        (let ((case-fold-search nil))
+          (mapc
+           (lambda (ξx)
+             (goto-char (point-min))
+             (while
+                 (search-forward (aref ξx 0) nil t)
+               (replace-match (aref ξx 1) 'FIXEDCASE 'LITERAL)))
+           ξstrPairs))))))
+
+;; Find non-ascii characters in current buffer
+(defun occur-non-ascii ()
+  "Find any non-ascii characters in the current buffer."
+  (interactive)
+  (occur "[^[:ascii:]]"))
+
+;; Unfill paragraph
+;;; Stefan Monnier <foo at acm.org>. It is the opposite of fill-paragraph    
+(defun unfill-paragraph (&optional region)
+  "Takes a multi-line paragraph and makes it into a single line of text."
+  (interactive (progn (barf-if-buffer-read-only) '(t)))
+  (let ((fill-column (point-max)))
+	(fill-paragraph nil region)))
+
+;; From https://github.com/ocodo/.emacs.d/blob/master/custom/handy-functions.el
+(defun nuke-all-buffers ()
+  "Kill all buffers, leaving *scratch* only."
+  (interactive)
+  (mapc
+   (lambda (buffer)
+     (kill-buffer buffer))
+   (buffer-list))
+  (delete-other-windows))
+
+;; Toggle horizontal and vertical windows
+(defun toggle-window-split ()
+  (interactive)
+  (if (= (count-windows) 2)
+      (let* ((this-win-buffer (window-buffer))
+             (next-win-buffer (window-buffer (next-window)))
+             (this-win-edges (window-edges (selected-window)))
+             (next-win-edges (window-edges (next-window)))
+             (this-win-2nd (not (and (<= (car this-win-edges)
+                                         (car next-win-edges))
+                                     (<= (cadr this-win-edges)
+                                         (cadr next-win-edges)))))
+             (splitter
+              (if (= (car this-win-edges)
+                     (car (window-edges (next-window))))
+                  'split-window-horizontally
+                'split-window-vertically)))
+        (delete-other-windows)
+        (let ((first-win (selected-window)))
+          (funcall splitter)
+          (if this-win-2nd (other-window 1))
+          (set-window-buffer (selected-window) this-win-buffer)
+          (set-window-buffer (next-window) next-win-buffer)
+          (select-window first-win)
+          (if this-win-2nd (other-window 1))))))
+
+;; From http://pragmaticemacs.com/emacs/open-a-recent-directory-in-dired-revisited/
+;; open recent directory, requires ivy (part of swiper)
+;; borrows from http://stackoverflow.com/questions/23328037/in-emacs-how-to-maintain-a-list-of-recent-directories
+(defun bjm/ivy-dired-recent-dirs ()
+  "Present a list of recently used directories and open the selected one in dired"
+  (interactive)
+  (let ((recent-dirs
+         (delete-dups
+          (mapcar (lambda (file)
+                    (if (file-directory-p file) file (file-name-directory file)))
+                  recentf-list))))
+
+    (let ((dir (ivy-read "Directory: "
+                         recent-dirs
+                         :re-builder #'ivy--regex
+                         :sort nil
+                         :initial-input nil)))
+      (dired dir))))
+
+;; From http://endlessparentheses.com/ispell-and-abbrev-the-perfect-auto-correct.html
+(defun endless/ispell-word-then-abbrev (p)
+  "Call `ispell-word', then create an abbrev for it.
+With prefix P, create local abbrev. Otherwise it will
+be global.
+If there's nothing wrong with the word at point, keep
+looking for a typo until the beginning of buffer. You can
+skip typos you don't want to fix with `SPC', and you can
+abort completely with `C-g'."
+  (interactive "P")
+  (let (bef aft)
+    (save-excursion
+      (while (if (setq bef (thing-at-point 'word))
+                 ;; Word was corrected or used quit.
+                 (if (ispell-word nil 'quiet)
+                     nil ; End the loop.
+                   ;; Also end if we reach `bob'.
+                   (not (bobp)))
+               ;; If there's no word at point, keep looking
+               ;; until `bob'.
+               (not (bobp)))
+        (backward-word))
+      (setq aft (thing-at-point 'word)))
+    (if (and aft bef (not (equal aft bef)))
+        (let ((aft (downcase aft))
+              (bef (downcase bef)))
+          (define-abbrev
+            (if p local-abbrev-table global-abbrev-table)
+            bef aft)
+          (message "\"%s\" now expands to \"%s\" %sally"
+                   bef aft (if p "loc" "glob")))
+      (user-error "No typo at or before point"))))
+
+(setq save-abbrevs 'silently)
+(setq-default abbrev-mode t)
+
+;; From Xah Lee, http://ergoemacs.org/emacs/elisp_unicode_replace_invisible_chars.html
+(defun xah-replace-BOM-mark-etc ()
+  "Query replace some invisible Unicode chars.
+The chars to be searched are:
+ ZERO WIDTH NO-BREAK SPACE (codepoint 65279, #xfeff)
+ RIGHT-TO-LEFT MARK (codepoint 8207, #x200f)
+ RIGHT-TO-LEFT OVERRIDE (codepoint 8238, #x202e)
+
+Search begins at cursor position. (respects `narrow-to-region')
+
+This is useful for text copied from twitter or Google Plus, because they often contain BOM mark. See URL `http://xahlee.info/comp/unicode_BOM_byte_orde_mark.html'
+
+URL `http://ergoemacs.org/emacs/elisp_unicode_replace_invisible_chars.html'
+Version 2015-10-25"
+  (interactive)
+  (query-replace-regexp "\u200f\\|\u202e\\|\ufeff" ""))
+
+;; Ispell ignore TeX commands
+(defun flyspell-ignore-tex ()
+  (interactive)
+  (set (make-variable-buffer-local 'ispell-parser) 'tex))
+
+;; Make parent directory when creating new file. From http://mbork.pl/2016-07-25_Making_directories_on_the_fly
+(defun make-parent-directory ()
+  "Make sure the directory of `buffer-file-name' exists."
+  (make-directory (file-name-directory buffer-file-name) t))
+
+(add-hook 'find-file-not-found-functions #'make-parent-directory)
+
+
+	;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Markdown and Pandoc ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; == Markdown ==
+(use-package markdown-mode
+  :ensure t
+  :defer t
+  :mode (("\\.text\\'" . markdown-mode)
+         ("\\.markdown\\'" . markdown-mode)
+         ("\\.md\\'" . markdown-mode))
+  )
+
+;Make it easier to bold and italicize in Markdown Mode
+(add-hook 'markdown-mode-hook
+          (lambda ()
+            (local-set-key (kbd "s-b") 'markdown-insert-bold)
+            (local-set-key (kbd "s-i") 'markdown-insert-italic)))
+
+;; Enable wc-mode
+
+(add-hook 'markdown-mode-hook 'wc-mode)
+
+;; I haven't yet figured out why, but pressing =RET= deletes whitespace at the end of the line. That's useful for writing code, I'm sure, but not for writing Markdown text requiring hard line breaks. This little function just inserts two spaces at the end of the line and moves to the next line. I use it for prayers and poetry that I post on the blog, so it's called "mdpoetry." 
+(fset 'mdpoetry
+      "\C-e  \C-n")
+(global-set-key (kbd "<f9>") 'mdpoetry)
+
+;; Turn on Orgtbl-mode in Markdown-mode EDIT: Orgtble used C-c C-c, which conflicts with some Markdown keybindings.
+;; (add-hook 'markdown-mode-hook 'turn-on-orgtbl)
+
+;; Use Pandoc
+(use-package pandoc-mode
+  :ensure t
+  :config
+  (add-hook 'markdown-mode-hook 'pandoc-mode)
+  (add-hook 'org-mode-hook 'pandoc-mode)
+  (add-hook 'pandoc-mode-hook 'pandoc-load-default-settings))
+
+;; Pandoc Conversion
+;; Converts Markdown files to LaTeX articles and handouts using fish shell functions.
+(defun pandoc-article ()
+  "Convert file to LaTeX article"
+  (interactive)
+  (shell-command (concat "article " (buffer-file-name) " " (file-name-sans-extension buffer-file-name) ".tex"))
+  (find-file (concat (file-name-sans-extension buffer-file-name) ".tex")))
+
+(defun pandoc-beamer ()
+  "Convert file to LaTeX beamer file"
+  (interactive)
+  (shell-command (concat "beamer " (buffer-file-name) " " (file-name-sans-extension buffer-file-name) ".tex"))
+  (find-file (concat (file-name-sans-extension buffer-file-name) ".tex")))
+
+(defun pandoc-slides ()
+  "Convert file to Beamer slides"
+  (interactive)
+  (shell-command (concat "slides " (buffer-file-name) " " (file-name-sans-extension buffer-file-name) ".pdf"))
+  (shell-command (concat "open " (file-name-sans-extension buffer-file-name) ".pdf")))
+
+
+(defun pandoc-obuletter ()
+  "Convert file to LaTeX OBU letter"
+  (interactive)
+  (shell-command (concat "obuletter " (buffer-file-name) " " (file-name-sans-extension buffer-file-name) ".tex"))
+  (find-file (concat (file-name-sans-extension buffer-file-name) ".tex")))
+
+(defun pandoc-pdf ()
+  "Convert file to PDF"
+    (interactive)
+    (shell-command (concat "article " (buffer-file-name) " " (file-name-sans-extension buffer-file-name) ".tex"))
+	(shell-command (concat "mkpdf " (file-name-sans-extension buffer-file-name) ".tex"))
+	(shell-command (concat "open " (file-name-sans-extension buffer-file-name) ".pdf")))
+
+(defun pandoc-handout ()
+  "Convert file to LaTeX tufte-handout"
+    (interactive)
+    (shell-command (concat "handout " (buffer-file-name) " " (file-name-sans-extension buffer-file-name) ".tex"))
+	(find-file (concat (file-name-sans-extension buffer-file-name) ".tex")))
+
+(defun pandoc-docx ()
+  "Convert file to MS Word docx"
+    (interactive)
+    (shell-command (concat "convert " (buffer-file-name) " " (file-name-sans-extension buffer-file-name) ".docx"))
+	(shell-command (concat "open " (file-name-sans-extension buffer-file-name) ".docx")))
+
+(defun pandoc-html ()
+  "Convert file to html"
+    (interactive)
+    (shell-command (concat "convert " (buffer-file-name) " " (file-name-sans-extension buffer-file-name) ".html"))
+	(shell-command (concat "open " (file-name-sans-extension buffer-file-name) ".html")))
+
+(defun pandoc-clean ()
+  (interactive)
+  (shell-command "panclean"))
+
+;;(if (eq system-type 'darwin)
+;;	(use-package markdown-mac-link
+;;	  :ensure t)
+;;  )
+
+;; Ispell ignore TeX 
+(add-hook 'markdown-mode-hook (lambda () (setq ispell-parser 'tex)))
+(add-hook 'markdown-mode-hook 'flyspell-ignore-tex)
+
+	   
+;; Configuration for the eminently useful [[http://orgmode.org/][Org Mode]].
+
+;; Org-mode is for keeping notes, maintaining ToDo lists, doing project
+;; planning, and authoring with a fast and effective plain-text system.
+;; Org Mode can be used as a very simple folding outliner or as a complex
+;; GTD system or tool for reproducible research and literate programming.
+
+;; For more information on org-mode check out [[http://orgmode.org/worg/][worg]], a large Org-mode wiki
+;; which is also implemented using Org-mode and [[http://git-scm.com/][git]].
+
+;; **** Settings
+
+;; set maximum indentation for description lists
+(setq org-list-description-max-indent 5)
+
+;; prevent demoting heading also shifting text inside sections
+(setq org-adapt-indentation nil)
+
+
+;; **** Evil-Org
+
+;; Use evil-org for evil keybindings in org mode.
+
+(use-package evil-org
+  :ensure t)
+
+;; (require 'evil-org)
+
+
+;; **** Use Org Mode for TXT files
+
+;; (add-to-list 'auto-mode-alist '("\\.txt\\'" . org-mode))
+(add-to-list 'auto-mode-alist '("\\.txt\\'" . markdown-mode))
+
+;; **** Archive Settings
+;; Where archived projects and tasks go.
+
+
+(setq org-archive-location "~/Dropbox/Org/archive.org::From %s")
+
+
+;; **** Mobile Settings
+;; Sync orgmode files with Dropbox and iPhone. 
+
+
+;; Set to the location of your Org files on your local system
+(setq org-directory "~/Dropbox/Org")
+;; Set to <your Dropbox root directory>/MobileOrg.
+(setq org-mobile-directory "~/Dropbox/MobileOrg")
+;; Set to the files (or directory of files) you want sync'd
+(setq org-agenda-files (quote ("~/Dropbox/Org")))
+;; Set to the name of the file where new notes will be stored
+(setq org-mobile-inbox-for-pull "~/Dropbox/Org/from-mobile.org")
+
+
+
+
+;; **** Babel Settings
+;; Configure org-mode so that when you edit source code in an indirect buffer (with C-c '), the buffer is opened in the current window. That way, your window organization isn't broken when switching.
+
+
+
+(setq org-src-window-setup 'current-window)
+
+;; **** Exporter Settings and Helpful Packages
+;; HTML and LaTeX exporters are shown by default. We add the Markdown exporter to the menu.
+
+
+;; Autocomplete for orgmode
+;; (require 'org-ac)
+;; (org-ac/config-default)
+
+;; Markdown exporter
+(require 'ox-md)
+
+;; 'rlr-org-article' for export org documents to the LaTex 'article', using
+;; LuaLaTeX and some fancy fonts; requires LuaTeX  (see org-latex-to-pdf-process)
+(add-to-list 'org-latex-classes
+			 '("rlr-org-article"
+			   "\\documentclass[12pt]{article}
+
+\\usepackage{iftex,graphicx,epstopdf,amsmath,amssymb,url}
+\\usepackage{microtype,todonotes}
+\\usepackage[american]{babel}
+\\usepackage[letterpaper,centering]{geometry}
+\\usepackage[sf,sc]{titlesec}
+\\usepackage[parfill]{parskip} % Line between paragraphs
+
+\\usepackage[authordate,url=false,isbn=false,backend=biber]{biblatex-chicago} %Change authordate to notes if desired.
+\\addbibresource{/Users/rlridenour/Dropbox/bibtex/randybib.bib}
+\\clubpenalty = 10000 % Reduce orphans and widows
+\\widowpenalty = 10000
+
+\\usepackage{lualatex-math,luatextra}
+\\usepackage{libertine}
+\\usepackage{unicode-math}
+\\setmathfont[Scale=MatchUppercase]{libertinusmath-regular.otf}
+\\usepackage[unicode=true]{hyperref}
+
+\\title{}
+      [NO-DEFAULT-PACKAGES]
+      [NO-PACKAGES]"
+			   ("\\section{%s}" . "\\section*{%s}")
+			   ("\\subsection{%s}" . "\\subsection*{%s}")
+			   ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+			   ("\\paragraph{%s}" . "\\paragraph*{%s}")
+			   ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+
+(setq org-completion-use-ido t)
+;; (require 'org-special-blocks)
+;; (if window-system (require 'org-mouse))
+
+;; Compatibility with WindMove
+;; Make windmove work in org-mode:
+(add-hook 'org-shiftup-final-hook 'windmove-up)
+(add-hook 'org-shiftleft-final-hook 'windmove-left)
+(add-hook 'org-shiftdown-final-hook 'windmove-down)
+(add-hook 'org-shiftright-final-hook 'windmove-right)
+;; (if window-system (require 'org-mouse))
+
+
+;; **** Use latexmk
+
+
+
+(setq org-latex-to-pdf-process (list "/usr/texbin/latexmk -f -pdf %f"))
+
+
+;; **** Org-Mode Hooks
+;; Make yasnippet work properly with org-mode. 
+
+
+;;  (defun yas/org-very-safe-expand ()
+;;    (let ((yas/fallback-behavior 'return-nil)) (yas/expand)))
+
+(defun yas-org-very-safe-expand ()
+  (let ((yas-fallback-behavior 'return-nil))
+    (and (fboundp 'yas-expand) (yas-expand))))
+
+(add-hook 'org-mode-hook
+          (lambda ()
+            (add-to-list 'org-tab-first-hook
+                         'yas-org-very-safe-expand)
+            ))
+
+
+
+
+(add-hook 'org-mode-hook
+		  (lambda ()
+			(local-set-key "\M-\C-n" 'outline-next-visible-heading)
+			(local-set-key "\M-\C-p" 'outline-previous-visible-heading)
+			(local-set-key "\M-\C-u" 'outline-up-heading)
+			;; table
+			(local-set-key "\M-\C-w" 'org-table-copy-region)
+			(local-set-key "\M-\C-y" 'org-table-paste-rectangle)
+			(local-set-key "\M-\C-l" 'org-table-sort-lines)
+			;; display images
+			(local-set-key "\M-I" 'org-toggle-iimage-in-org)
+			;; yasnippet (using the new org-cycle hooks)
+			;;(make-variable-buffer-local 'yas/trigger-key)
+			;;(setq yas/trigger-key [tab])
+			;;(add-to-list 'org-tab-first-hook 'yas/org-very-safe-expand)
+			;;(define-key yas/keymap [tab] 'yas/next-field)
+			))
+
+
+;; **** Speed keys
+;; Speed commands enable single-letter commands in Org-mode files when the point is at the beginning of a headline, or at the beginning of a code block.
+
+;; See the =org-speed-commands-default= variable for a list of the keys and commands enabled at the beginning of headlines.  All code blocks are available at the beginning of a code block, the following key sequence =C-c C-v h= (bound to =org-babel-describe-bindings=) will display a list of the code blocks commands and their related keys.
+
+
+(setq org-use-speed-commands t)
+
+
+;; **** Code blocks
+;; This activates a number of widely used languages, you are encouraged to activate more languages using the customize interface for the =org-babel-load-languages= variable, or with an elisp form like the one below.  The customize interface of =org-babel-load-languages= contains an up to date list of the currently supported languages.
+
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((emacs-lisp . t)
+   (sh . t)
+   (R . t)
+   (perl . t)
+   (ruby . t)
+   (python . t)
+   (js . t)
+   (haskell . t)))
+
+
+;; The next block makes org-babel aware that a lower-case 'r' in a =src= block header should be processed as R. 
+
+;; #+source: add-r
+
+;; (add-to-list 'org-src-lang-modes
+;; 			 '("r" . ess-mode))
+
+
+;; **** Code block fontification
+
+;; The following displays the contents of code blocks in Org-mode files using the major-mode of the code.  It also changes the behavior of =TAB= to as if it were used in the appropriate major mode.  This means that reading and editing code form inside of your Org-mode files is much more like reading and editing of code using its major mode.
+
+(setq org-src-fontify-natively t)
+(setq org-src-tab-acts-natively t)
+
+
+;; Don't ask for confirmation on every =C-c C-c= code-block compile. 
+
+
+(setq org-confirm-babel-evaluate nil)
+
+
+;; **** Nice Bulleted Lists
+;; (require 'org-bullets)
+;; (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+
+
+
+
+
+;; **** Configure Org-babel
+;; - Add LaTeX to the list of languages Org-babel will recognize.
+
+(require 'ob-latex)
+;; (org-babel-add-interpreter "latex")
+;; (add-to-list 'org-babel-tangle-langs '("latex" "tex"))
+
+;; - Add LaTeX to a list of languages that raise noweb-type errors.
+
+(add-to-list 'org-babel-noweb-error-langs "latex")
+
+
+
+
+
+;; **** Org Capture
+
+;; Use C-c c for Org Capture to ~/Dropbox/notes.org
+
+
+;;(setq org-default-notes-file (concat org-directory "/notes.org"))
+(setq org-capture-templates
+      '(("t" "Todo" entry (file+headline "~/Dropbox/Org/tasks.org" "Tasks")
+		 "* TODO %?\n  %i\n  %a")
+        ("j" "Journal" entry (file+datetree "~/Dropbox/Org/journal.org")
+		 "* %?\nEntered on %U\n  %i\n  %a")))
+(define-key global-map "\C-cc" 'org-capture)
+
+(add-hook 'org-capture-mode-hook 'evil-insert-state)
+
+;; **** Tab doesn't split headings
+
+(setq org-M-RET-may-split-line '((item) (default . t)))
+
+;; **** Reference Links
+
+;; Use Markdown-style reference links in Org Mode. From [[http://endlessparentheses.com/markdown-style-link-ids-in-org-mode.html][Artur Malabarba]]. Links have this format: [[lid:name][link text]] The reference id's have this form: 
+;; #+LINK-ID: name http://www.url.com
+
+
+(org-add-link-type "lid" 'endless/open-id-link 'endless/export-id-link)
+
+(defun endless/open-id-link (path)
+  "Follow an ID link to PATH."
+  (browse-url (endless/find-id-link path)))
+
+(defun endless/export-id-link (path desc format)
+  "Create the export version of an ID link specified by PATH and DESC.
+FORMATs understood are 'latex and 'html."
+  (setq path (endless/find-id-link path))
+  (cond
+   ((eq format 'html) (format "<a href=\"%s\">%s</a>" path desc))
+   ((eq format 'latex) (format "\\href{%s}{%s}" path desc))
+   (t desc)))
+
+(defun endless/find-id-link (id &optional noerror)
+  "Find \"#+LINK-ID: ID\" in current buffer and return the link.
+Unless NOERROR is non-nil, throw an error if link not found."
+  (save-excursion
+    (goto-char (point-min))
+    (let ((case-fold-search t))
+      (when (search-forward-regexp 
+             (format "^#\\+LINK-ID: \\b%s\\b +\\(.*\\) *$" id)
+             nil noerror)
+        (match-string-no-properties 1)))))
+
+;; **** Ispell for Org
+
+;; From [[http://endlessparentheses.com/ispell-and-org-mode.html?source=rss][Endless Parentheses]]
+
+
+(defun endless/org-ispell ()
+  "Configure `ispell-skip-region-alist' for `org-mode'."
+  (make-local-variable 'ispell-skip-region-alist)
+  (add-to-list 'ispell-skip-region-alist '(org-property-drawer-re))
+  (add-to-list 'ispell-skip-region-alist '("~" "~"))
+  (add-to-list 'ispell-skip-region-alist '("=" "="))
+  (add-to-list 'ispell-skip-region-alist '("^#\\+BEGIN_SRC" . "^#\\+END_SRC")))
+(add-hook 'org-mode-hook #'endless/org-ispell)
+
+
+;; tufte-book class for writing classy books
+(require 'ox-latex) 
+(add-to-list 'org-latex-classes
+'("tuftebook"
+"\\documentclass{tufte-book}\n
+\\usepackage{color}
+\\usepackage{amssymb}
+\\usepackage{gensymb}
+\\usepackage{nicefrac}
+\\usepackage{units}"
+("\\section{%s}" . "\\section*{%s}")
+("\\subsection{%s}" . "\\subsection*{%s}")
+("\\paragraph{%s}" . "\\paragraph*{%s}")
+("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+
+;; tufte-handout class for writing classy handouts and papers
+(require 'ox-latex) 
+(add-to-list 'org-latex-classes
+			 '("tuftehandout"
+			   "\\documentclass{tufte-handout}
+\\usepackage{color}
+\\usepackage{amssymb}
+\\usepackage{amsmath}
+\\usepackage{gensymb}
+\\usepackage{nicefrac}
+\\usepackage{units}"
+			   ("\\section{%s}" . "\\section*{%s}")
+			   ("\\subsection{%s}" . "\\subsection*{%s}")
+			   ("\\paragraph{%s}" . "\\paragraph*{%s}")
+			   ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+
+;; Beamer export
+(add-to-list 'org-latex-classes
+             '("beamer"
+               "\\documentclass\[presentation\]\{beamer\}"
+               ("\\section\{%s\}" . "\\section*\{%s\}")
+               ("\\subsection\{%s\}" . "\\subsection*\{%s\}")
+               ("\\subsubsection\{%s\}" . "\\subsubsection*\{%s\}")))
+
+;; Enable wc-mode
+
+(add-hook 'org-mode-hook 'wc-mode)
+
+;; Ignore TeX commands
+
+(add-hook 'org-mode-hook (lambda () (setq ispell-parser 'tex)))
+(add-hook 'org-mode-hook 'flyspell-ignore-tex)
+
+(defun scimax/org-return ()
+  "Add new list or headline "
+  (interactive)
+  (cond
+   ((org-in-item-p)
+    (if (org-element-property :contents-begin (org-element-context))
+        (org-insert-heading)
+      (beginning-of-line)
+      (setf (buffer-substring
+             (line-beginning-position) (line-end-position)) "")
+      (org-return)))
+   ((org-at-heading-p)
+    (if (not (string= "" (org-element-property :title (org-element-context))))
+        (progn (org-end-of-meta-data)
+               (org-insert-heading))
+      (beginning-of-line)
+      (setf (buffer-substring
+             (line-beginning-position) (line-end-position)) "")))
+   ((org-at-table-p)
+    (if (-any?
+         (lambda (x) (not (string= "" x)))
+         (nth
+          (- (org-table-current-dline) 1)
+          (org-table-to-lisp)))
+        (org-return)
+      ;; empty row
+      (beginning-of-line)
+      (setf (buffer-substring
+             (line-beginning-position) (line-end-position)) "")
+      (org-return)))
+   (t
+    (org-return))))
+
+(define-key org-mode-map (kbd "RET")
+  'scimax/org-return)
+
+
+
+;;;;;;;;;;;
+;; LaTex ;;
+;;;;;;;;;;;
+
+(use-package tex-site
+  :ensure auctex)
+
+
+(use-package tex                        ; TeX editing/processing
+  :ensure auctex
+  :defer t
+  :config
+  (setq TeX-parse-self t                     ; Parse documents to provide completion
+                                        ; for packages, etc.
+		TeX-auto-save t                      ; Automatically save style information
+		TeX-electric-sub-and-superscript t   ; Automatically insert braces after
+                                        ; sub- and superscripts in math mode
+		TeX-electric-math '("\\(" . "\\)")
+		;; Don't insert magic quotes right away.
+		TeX-quote-after-quote t
+		;; Don't ask for confirmation when cleaning
+		TeX-clean-confirm nil
+		;; Provide forward and inverse search with SyncTeX
+		TeX-source-correlate-mode t
+		TeX-source-correlate-method 'synctex)
+  (setq-default TeX-master nil          ; Ask for the master file
+                TeX-engine 'luatex      ; Use a modern engine
+                ;; Redundant in 11.88, but keep for older AUCTeX
+                TeX-PDF-mode t)
+
+  ;; Move to chktex
+  (setcar (cdr (assoc "Check" TeX-command-list)) "chktex -v6 %s"))
+;; (use-package auctex-latexmk
+;;   :ensure t
+;;   :config
+;;   (auctex-latexmk-setup))
+
+
+(use-package auctex-latexmk             ; latexmk command for AUCTeX
+  :ensure t
+  :defer t
+  :after latex
+  :config (auctex-latexmk-setup))
+
+(use-package auctex-skim                ; Skim as viewer for AUCTeX
+  :load-path "lisp/"
+  :commands (auctex-skim-select)
+  :after tex
+  :config (auctex-skim-select))
+
+
+
+
+
+
+
+;; **** Italics and Bold
+
+(add-hook 'LaTeX-mode-hook
+		  '(lambda ()
+			 (define-key LaTeX-mode-map (kbd "s-i") (kbd "\C-c \C-f \C-e"))
+			 (define-key LaTeX-mode-map (kbd "s-b") (kbd "\C-c \C-f \C-b"))
+			 )
+		  )
+
+
+
+
+
+;; Start Emacs server
+(server-start)
+
+    ;; Make emacs aware of multi-file projects
+    ;; (setq-default TeX-master nil)
+    
+    ;; Auto-raise Emacs on activation (from Skim, usually)
+    (defun raise-emacs-on-aqua()
+    (shell-command "osascript -e 'tell application \"Emacs\" to activate' "))
+    (add-hook 'server-switch-hook 'raise-emacs-on-aqua)
+
+
+;; **** Local RefTeX Settings
+;; Tell RefTeX where the bibliography files are. 
+
+    ;; Make RefTex able to find my local bib files
+    (setq reftex-bibpath-environment-variables
+    '("/Users/rlridenour/Dropbox/bibtex"))
+
+    ;; Default bibliography
+    (setq reftex-default-bibliography
+    '("/Users/rlridenour/Dropbox/bibtex/randybib.bib"))
+
+;; **** Load Support Packages
+
+;; ***** Load RefTeX
+  (add-hook 'LaTeX-mode-hook 'turn-on-reftex)   ; with AUCTeX LaTeX mode
+  (add-hook 'pandoc-mode-hook 'turn-on-reftex)  ; with Pandoc mode
+  (autoload 'reftex-mode     "reftex" "RefTeX Minor Mode" t)
+  (autoload 'turn-on-reftex  "reftex" "RefTeX Minor Mode" nil)
+  (autoload 'reftex-citation "reftex-cite" "Make citation" nil)
+  (autoload 'reftex-index-phrase-mode "reftex-index" "Phrase mode" t)
+  (add-hook 'LaTeX-mode-hook 'turn-on-reftex)   ; with AUCTeX LaTeX mode
+  (add-hook 'latex-mode-hook 'turn-on-reftex)   ; with Emacs latex mode
+  
+  ;; Make RefTeX faster
+  (setq reftex-enable-partial-scans t)
+  (setq reftex-save-parse-info t)
+  (setq reftex-use-multiple-selection-buffers t)
+  (setq reftex-plug-into-AUCTeX t)
+  
+  ;; Make RefTeX work with Org-Mode
+  ;; use 'C-c (' instead of 'C-c [' because the latter is already
+  ;; defined in orgmode to the add-to-agenda command.
+  (defun org-mode-reftex-setup ()
+    (load-library "reftex") 
+    (and (buffer-file-name)
+    (file-exists-p (buffer-file-name))
+    (reftex-parse-all))
+    (define-key org-mode-map (kbd "C-c (") 'reftex-citation))
+  
+  (add-hook 'org-mode-hook 'org-mode-reftex-setup)
+  
+  ;; RefTeX formats for biblatex (not natbib), and for pandoc
+  (setq reftex-cite-format
+        '(
+          (?\C-m . "\\cite[]{%l}")
+          (?t . "\\textcite{%l}")
+          (?a . "\\autocite[]{%l}")
+          (?p . "\\parencite{%l}")
+          (?f . "\\footcite[][]{%l}")
+          (?F . "\\fullcite[]{%l}")
+          (?P . "[@%l]")
+          (?T . "@%l [p. ]")
+          (?x . "[]{%l}")
+          (?X . "{%l}")
+          ))
+  
+  (setq font-latex-match-reference-keywords
+        '(("cite" "[{")
+          ("cites" "[{}]")
+          ("footcite" "[{")
+          ("footcites" "[{")
+          ("parencite" "[{")
+          ("textcite" "[{")
+          ("fullcite" "[{") 
+          ("citetitle" "[{") 
+          ("citetitles" "[{") 
+          ("headlessfullcite" "[{")))
+  
+  (setq reftex-cite-prompt-optional-args nil)
+  (setq reftex-cite-cleanup-optional-args t)
+  
+
+
+;; ***** Load ebib
+;;     ebib is a bibtex database manager that works inside emacs. It can
+;;     talk to org-mode. See [[http://ebib.sourceforge.net/][the ebib project page]] for more. When Ebib is
+;;     loaded, you can run it with =M-x ebib=.
+  
+;; #+source: ebib-load
+
+;;   (autoload 'ebib "ebib" "Ebib, a BibTeX database manager." t)
+;;   (setq ebib-preload-bib-files 
+;;         '("/Users/kjhealy/Documents/bibs/socbib.bib"))
+;;   (add-hook 'LaTeX-mode-hook #'(lambda ()
+;;           (local-set-key "\C-cb" 'ebib-insert-bibtex-key)))
+
+
+;; **** Configure AucTeX 
+;; ***** Configure Biber
+;; Allow AucTeX to use biber as well as/instead of bibtex.
+
+
+    ;; Biber under AUCTeX
+    (defun TeX-run-Biber (name command file)
+      "Create a process for NAME using COMMAND to format FILE with Biber." 
+     (let ((process (TeX-run-command name command file)))
+        (setq TeX-sentinel-function 'TeX-Biber-sentinel)
+        (if TeX-process-asynchronous
+            process
+          (TeX-synchronous-sentinel name file process))))
+    
+    (defun TeX-Biber-sentinel (process name)
+      "Cleanup TeX output buffer after running Biber."
+      (goto-char (point-max))
+      (cond
+       ;; Check whether Biber reports any warnings or errors.
+       ((re-search-backward (concat
+                             "^(There \\(?:was\\|were\\) \\([0-9]+\\) "
+                             "\\(warnings?\\|error messages?\\))") nil t)
+        ;; Tell the user their number so that she sees whether the
+        ;; situation is getting better or worse.
+        (message (concat "Biber finished with %s %s. "
+                         "Type `%s' to display output.")
+                 (match-string 1) (match-string 2)
+                 (substitute-command-keys
+                  "\\\\[TeX-recenter-output-buffer]")))
+       (t
+        (message (concat "Biber finished successfully. "
+                         "Run LaTeX again to get citations right."))))
+      (setq TeX-command-next TeX-command-default))
+  
+  (eval-after-load "tex"
+    '(add-to-list 'TeX-command-list '("Biber" "biber %s" TeX-run-Biber nil t :help "Run Biber"))
+    )    
+
+
+
+;; ***** Use Biblatex key template by default in bib files
+;; #+source: bibtex-dialect
+ ;; :tangle no
+  ;; (setq bibtex-dialect "BibTeX")
+
+
+;; ***** Use '-' as the separator in auto-generated bibtex keys
+;; We use this (rather than the underscore character) for compatibilty with Pandoc.
+
+;; #+source: bibtex-key-separator
+ ;; :tangle no
+  ;; (setq bibtex-autokey-titleword-separator "_")
+  ;; (setq bibtex-autokey-year-title-separator ":_")
+
+
+;; **** Configure RefTeX
+;; ***** Default Bibliography
+;;     This is important when editing source code in Org-babel, since the
+;;       LaTeX source code block being edited probably doesn't include
+;;       the \bibliography{} command that RefTeX uses to find
+;;       bibliographic database(s). Make certain also that RefTeX has a
+;;       path to the bibliographic databases. This source-code block is
+;;       turned off be default as it should be configured by the user in
+;;       a personal file/directory.
+;; #+srcname: default-bibliography
+;;  :tangle no
+;;   (setq reftex-default-bibliography
+;;         (quote
+;;          ("user.bib" "local.bib")))
+
+(defun tex-clean ()
+  (interactive)
+  (shell-command "latexmk -c"))
+
+(defun tex-clean-all ()
+  (interactive)
+  (shell-command "latexmk -C"))
+
+(use-package ebib
+  :ensure t
+  :init
+  (setq ebib-preload-bib-search-dirs "~/Dropbox/bibtex/randybib.bib"))
+
+;; Beamer
+
+(setq LaTeX-paragraph-commands '("pause" "blpause"))
+
+;; Dim tilde
+(add-hook
+ 'TeX-mode-hook
+ (lambda ()
+   (font-lock-add-keywords
+	nil
+	'(("~" . 'font-latex-sedate-face)))))
+
+;; Lilypond
+(setq load-path (append (list (expand-file-name "~/.emacs.d/lilypond")) load-path))
+(load-file "~/.emacs.d/lilypond/lilypond-init.el")
+(autoload 'LilyPond-mode "lilypond-mode")
+(setq auto-mode-alist
+      (cons '("\\.ly$" . LilyPond-mode) auto-mode-alist))
+
+(add-hook 'LilyPond-mode-hook (lambda () (turn-on-font-lock)))
+
+;; Run latexmk after save.
+;; (add-hook 'after-save-hook
+;; 		  (lambda ()
+;; 			(when (string= major-mode 'latex-mode)
+;; 			  (TeX-run-latexmk
+;; 			   "LaTeX"
+;; 			   (format "latexmk -pdf %s" (buffer-file-name))
+;; 			   (file-name-base (buffer-file-name))))))
+
+;; Hugo Settings
+
+(defun hugo-timestamp ()
+  "Update existing date: timestamp on a Hugo post."
+  (interactive)
+  (save-excursion (
+				   goto-char 1)
+				  (re-search-forward "^date:")
+				  (let ((beg (point)))
+					(end-of-line)
+					(delete-region beg (point)))
+				  (insert (concat " " (format-time-string "\"%Y-%m-%dT%H:%M:%S\"")))))
+
+(defvar hugo-directory "~/Sites/hugo/source/" "Path to Hugo blog.")
+(defvar hugo-posts-dir "content/post/" "Relative path to posts directory.")
+(defvar hugo-post-ext ".md"  "File extension of Hugo posts.")
+(defvar hugo-post-template "---\ntitle: \"%s\"\ndraft: true\ncategories: []\ntags:\n- \ncomments: true\ndate: \nhighlight: true\nmarkup: \"\"\nmath: false\nurl: \"\"\n---\n"
+  "Default template for Hugo posts. %s will be replace by the post title.")
+
+(defun hugo-make-slug (s) "Turn a string into a slug."
+	   (replace-regexp-in-string " " "-"  (downcase (replace-regexp-in-string "[^A-Za-z0-9 ]" "" s))))
+
+(defun hugo-yaml-escape (s) "Escape a string for YAML."
+	   (if (or (string-match ":" s) (string-match "\"" s)) (concat "\"" (replace-regexp-in-string "\"" "\\\\\"" s) "\"") s))
+
+(defun hugo-draft-post (title) "Create a new Hugo blog post."
+	   (interactive "sPost Title: ")
+	   (let ((draft-file (concat hugo-directory hugo-posts-dir
+								 (format-time-string "%Y-%m-%d-")
+								 (hugo-make-slug title)
+								 hugo-post-ext)))
+		 (if (file-exists-p draft-file)
+			 (find-file draft-file)
+		   (find-file draft-file)
+		   (insert (format hugo-post-template (hugo-yaml-escape title))))))
+
+(defun hugo-publish-post ()
+  "Update timestamp and set draft to false."
+  (interactive)
+  (hugo-timestamp)
+  (save-excursion (
+				   goto-char 1)
+				  (re-search-forward "^draft:")
+				  (let ((beg (point)))
+					(end-of-line)
+					(delete-region beg (point)))
+				  (insert " false"))) 
+
+(defmacro with-dir (DIR &rest FORMS)
+  "Execute FORMS in DIR."
+  (let ((orig-dir (gensym)))
+    `(progn (setq ,orig-dir default-directory)
+            (cd ,DIR) ,@FORMS (cd ,orig-dir))))
+
+(defun hugo-deploy ()
+  "Push changes upstream."
+  (interactive)
+  (with-dir hugo-directory
+            (shell-command "git add .")
+            (--> (current-time-string)
+                 (concat "git commit -m \"" it "\"")
+                 (shell-command it))
+            (magit-push-current-to-upstream nil)))
+
+(global-set-key (kbd "C-c h n") 'hugo-draft-post)
+(global-set-key (kbd "C-c h p") 'hugo-publish-post)
+(global-set-key (kbd "C-c h t") 'hugo-timestamp)
+(global-set-key (kbd "C-c h O") (lambda () (interactive) (find-file "~/Sites/hugo/source/")))
+(global-set-key (kbd "C-c h P") (lambda () (interactive) (find-file "~/Sites/hugo/source/content/post/")))
+(provide 'setup-hugo)
+(global-set-key (kbd "C-c h d") 'hugo-deploy)
+
+;; Eww browser for Emacs
+
+;; From http://oremacs.com/2014/12/30/ace-link-eww/
+(use-package ace-link
+  :ensure t
+  :init
+    (ace-link-setup-default))
+
+(defun oleh-eww-hook ()
+  (define-key eww-mode-map "j" 'oww-down)
+  (define-key eww-mode-map "k" 'oww-up)
+  (define-key eww-mode-map "l" 'forward-char)
+  (define-key eww-mode-map "L" 'eww-back-url)
+  (define-key eww-mode-map "h" 'backward-char)
+  (define-key eww-mode-map "v" 'recenter-top-bottom)
+  (define-key eww-mode-map "V" 'eww-view-source)
+  (define-key eww-mode-map "m" 'eww-follow-link)
+  (define-key eww-mode-map "a" 'move-beginning-of-line)
+  (define-key eww-mode-map "e" 'move-end-of-line)
+  (define-key eww-mode-map "o" 'ace-link-eww)
+  (define-key eww-mode-map "f" 'ace-link-eww)
+  (define-key eww-mode-map "y" 'eww))
+(add-hook 'eww-mode-hook 'oleh-eww-hook)
+
+(defun oww-down (arg)
+  (interactive "p")
+  (if (bolp)
+      (progn
+        (forward-paragraph arg)
+        (forward-line 1))
+    (line-move arg)))
+
+(defun oww-up (arg)
+(interactive "p")
+    (if (bolp)
+      (progn
+        (forward-line -1)
+        (backward-paragraph arg)
+        (forward-line 1))
+    (line-move (- arg))))
+
+;;;;;;;;;;;;;;;;;
+;; Keybindings ;;
+;;;;;;;;;;;;;;;;;
+
+(global-unset-key (kbd "C-z"))
+(global-unset-key (kbd "s-p"))
+
+(use-package key-chord
+  :ensure t
+  :defer t
+  :config
+  (key-chord-mode 1))
+
+;; Hydras
+
+;; Hydra-toggle
+(defhydra hydra-toggle (:color blue) 
+  "toggle"
+  ("a" abbrev-mode "abbrev")
+  ("c" column-number-mode "column")
+  ("C" cdlatex-mode "cdlatex")
+  ("d" toggle-debug-on-error "debug")
+  ("e" evil-mode "evil")
+  ("f" auto-fill-mode "fill")
+  ;; ("g" god-mode "god")
+  ("l" nlinum-mode "linum")
+  ("o" olivetti-mode "olivetti")
+  ("r" read-only-mode "read-only") 
+  ("t" toggle-truncate-lines "truncate")
+  ("w" wc-mode "word-count")
+  ("W" whitespace-mode "whitespace")
+  ("q" nil "global"))
+;; (global-set-key (kbd "s-t") 'hydra-toggle/body)
+
+;; Hydra-Blog
+
+     ;; I didn't realize that I could jump to a directory with Hydra. I got the tip from [[http://thewanderingcoder.com/2015/02/shortcuts-to-default-directories/][Sean Miller]].
+
+(defhydra hydra-blog (:color blue)
+"buffer"
+    ("n" jekyll-draft-post "new post")
+    ("p" jekyll-publish-post "publish")
+    ("t" jekyll-timestamp "timestamp")
+    ("P" (find-file "~/Sites/rlridenour.github.io/_posts/") "post directory")
+    ("d" (find-file "~/Sites/rlridenour.github.io/_drafts") "draft directory")
+    ("q" nil))
+;; (global-set-key (kbd "C-c b") 'hydra-blog/body)
+
+(defhydra hydra-markdown (:color blue)
+  ("a" pandoc-article "article")
+  ("b" pandoc-beamer "beamer")
+  ("s" pandoc-slides "slides")
+  ("h" pandoc-handout "handout")
+  ("o" pandoc-obuletter "obu letter")
+  ("d" pandoc-docx "docx")
+  ("w" pandoc-html "html")
+  ("p" pandoc-pdf "pdf")
+  ("t" pandoc-clean "trash non-md files")
+  ("c" tex-clean "clean aux files")
+  ("C" tex-clean-all "clean all")
+  ("1" markdown-insert-header-atx-1 "header 1")
+  ("2" markdown-insert-header-atx-2 "header 2")
+  ("3" markdown-insert-header-atx-3 "header 3")
+  ("4" markdown-insert-header-atx-4 "header 4")
+  ("q" nil))
+;; (global-set-key (kbd "s-p") 'hydra-markdown/body)
+
+(defhydra hydra-locate (:color blue)
+  ("l" avy-goto-line "avy-line")
+  ("L" goto-line "goto-line")
+  ("w" avy-goto-word-1 "goto-word")
+  ("b" ivy-bookmark-goto "bookmarks")
+  ("m" ivy-imenu-goto "imenu")
+  ("q" nil))
+
+(bind-chords
+ ("jh" . prelude-switch-to-previous-buffer)
+ ("hj" . prelude-switch-to-previous-buffer))
+
+(bind-keys
+("s-0" . delete-window)
+("s-1" . delete-other-windows)
+("s-2" . swap-windows)
+("s-3" . split-window-right)
+("s-4" . nuke-all-buffers)
+("s-5" . delete-frame)
+("s-6" . toggle-window-split)
+("S-C-<left>" . shrink-window-horizontally)
+("S-C-<right>" . enlarge-window-horizontally)
+("S-C-<down>" . shrink-window)
+("S-C-<up>" . enlarge-window)
+("C-x c" . save-buffers-kill-emacs)
+("C-x w" . delete-frame)
+;; ("s-." . helm-buffers-list)
+;; ("C-c i" . ivy-imenu-goto)	
+;; ("C-c b" . ivy-bookmark-goto)
+("C-x C-b" . ibuffer)
+("RET" . newline-and-indent)
+("M-/" . hippie-expand)
+("C-+" . text-scale-increase)
+("C--" . text-scale-decrease)
+("C-c C-k" . compile)
+("<s-backspace>" . kill-whole-line)
+("s-t" . hydra-toggle/body)
+("s-p" . hydra-markdown/body)
+("s-l" . hydra-locate/body)
+("C-c f" . hydra-locate/body)
+("C-c k" . prelude-kill-other-buffers)
+("C-c u" . unfill-paragraph)
+("s-d" . bjm/ivy-dired-recent-dirs)
+("C-c v" . counsel-M-x)
+("s-=" . endless/ispell-word-then-abbrev)
+("<f5>" . call-last-kbd-macro))
+
+;; http://apple.stackexchange.com/questions/48043/how-to-ssh-from-ipad-with-external-keyboard-and-emacs
+(if (eq system-type 'gnu/linux)
+	(let ((translations '( 229 [?\M-a]  nil [?\M-b]   231 [?\M-c]  8706 [?\M-d]  nil [?\M-e]
+							   402 [?\M-f]  169 [?\M-g]   729 [?\M-h]   nil [?\M-i]  8710 [?\M-j]
+							   730 [?\M-k]  172 [?\M-l]   181 [?\M-m]   nil [?\M-n]   248 [?\M-o]
+							   960 [?\M-p]  339 [?\M-q]   174 [?\M-r]   223 [?\M-s]  8224 [?\M-t]
+							   nil [?\M-u] 8730 [?\M-v]  8721 [?\M-w]  8776 [?\M-x]   165 [?\M-y]
+							   937 [?\M-z]
+							   197 [?\M-A]  305 [?\M-B]   199 [?\M-C]   206 [?\M-D]   nil [?\M-E]
+							   207 [?\M-F]  733 [?\M-G]   211 [?\M-H]   nil [?\M-I]   212 [?\M-J]
+							   63743 [?\M-K]  210 [?\M-L]   194 [?\M-M]   nil [?\M-N]   216 [?\M-O]
+							   8719 [?\M-P]  338 [?\M-Q]  8240 [?\M-R]   205 [?\M-S]   711 [?\M-T]
+							   nil [?\M-U] 9674 [?\M-V]  8222 [?\M-W]   731 [?\M-X]   193 [?\M-Y]
+							   184 [?\M-Z]
+							   nil [?\M-~]  161 [?\M-1]   162 [?\M-4]   163 [?\M-3]   167 [?\M-6]
+							   170 [?\M-9]  171 [?\M-\\]  175 [?\M-<]   176 [?\M-*]   177 [?\M-+]
+							   182 [?\M-7]  183 [?\M-\(]  186 [?\M-0]   187 [?\M-|]   191 [?\M-\?]
+							   198 [?\M-\"] 230 [?\M-']   247 [?\M-/]   728 [?\M->]  8211 [?\M-\-]
+							   8212 [?\M-_] 8216 [?\M-\]] 8217 [?\M-}]  8218 [?\M-\)] 8220 [?\M-\[]
+							   8221 [?\M-{] 8225 [?\M-&]  8226 [\?M-8]  8249 [?\M-#]  8250 [?\M-$]
+							   8260 [?\M-!] 8364 [\?M-@]  8482 [?\M-2]  8734 [\?M-5]  8800 [?\M-=]
+							   8804 [?\M-,] 8805 [?\M-.] 64257 [?\M-%] 64258 [?\M-^])))
+	  (while translations
+		(let ((key (car translations)) (def (cadr translations)))
+		  (if key
+			  (define-key key-translation-map (make-string 1 key) def)))
+		(setq translations (cddr translations))))
+  )
+
+
+;; I used Vim before Textmate, before Sublime Text, before Emacs... I find the Vim commands much easier to remember, but for various reasons, my mind doesn't work well with modal editing. Anyway, I find editing with Vim very useful under certain circumstances, and Evil-mode is a great way to do that. 
+
+(use-package evil
+  :ensure t
+  :init
+  (progn
+	(use-package evil-leader
+	  :ensure t
+	  :defer t
+	  :init (global-evil-leader-mode)
+	  :config
+	  (progn
+		(evil-leader/set-leader "<SPC>")
+		(evil-leader/set-key
+		  "f" 'swiper
+		  "k" 'kill-this-buffer
+		  "o" 'counsel-find-file
+		  "p" 'hydra-markdown/body
+		  ;; "r" 'helm-mini
+		  "r" 'counsel-recentf
+		  "t" 'hydra-toggle/body
+		  "w" 'save-buffer
+		  "x" 'counsel-M-x
+		  "ci" 'evilnc-comment-or-uncomment-lines
+		  )))
+	;; boot evil by default
+	(evil-mode 1))
+  :config
+  (progn
+	;; This is to make the escape key work (almost) like it does in Vim.
+
+	;; esc quits
+	(defun minibuffer-keyboard-quit ()
+	  "Abort recursive edit.
+In Delete Selection mode, if the mark is active, just deactivate it;
+then it takes a second \\[keyboard-quit] to abort the minibuffer."
+	  (interactive)
+	  (if (and delete-selection-mode transient-mark-mode mark-active)
+		  (setq deactivate-mark  t)
+		(when (get-buffer "*Completions*") (delete-windows-on "*Completions*"))
+		(abort-recursive-edit)))
+	(define-key evil-normal-state-map [escape] 'keyboard-quit)
+	(define-key evil-visual-state-map [escape] 'keyboard-quit)
+	(define-key minibuffer-local-map [escape] 'minibuffer-keyboard-quit)
+	(define-key minibuffer-local-ns-map [escape] 'minibuffer-keyboard-quit)
+	(define-key minibuffer-local-completion-map [escape] 'minibuffer-keyboard-quit)
+	(define-key minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
+	(define-key minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit)
+	(global-set-key [escape] 'evil-exit-emacs-state)
+
+	;; This ensures that the Vim navigation keys navigate by visual lines.
+
+	(define-key evil-motion-state-map "j" #'evil-next-visual-line)
+	(define-key evil-motion-state-map "k" #'evil-previous-visual-line)
+	(define-key evil-motion-state-map "$" #'evil-end-of-visual-line)
+	(define-key evil-motion-state-map "^" #'evil-first-non-blank-of-visual-line)
+	(define-key evil-motion-state-map "0" #'evil-beginning-of-visual-line)
+
+	;; Evil binds =RET=, which is often used in other modes. This unbinds it, but there's a downside. =RET= now splits a line in normal mode, which causes me some aggravation sometimes. I'm not sure how best to fix it.
+
+	(define-key evil-motion-state-map (kbd "RET") nil)
+	(define-key evil-motion-state-map (kbd " ") nil)
+
+	;; This makes most Emacs commands work in insert mode.
+
+	(setcdr evil-insert-state-map nil)
+	(define-key evil-insert-state-map [escape] 'evil-normal-state)
+
+
+
+	;; This makes isearch backward work in Evil.
+
+	(define-key evil-normal-state-map (kbd "C-r") 'isearch-backward)
+
+
+	;; Use jk instead of ESC
+	(key-chord-define evil-normal-state-map "jk" 'evil-force-normal-state)
+	(key-chord-define evil-visual-state-map "jk" 'evil-change-to-previous-state)
+	(key-chord-define evil-insert-state-map "jk" 'evil-normal-state)
+	(key-chord-define evil-replace-state-map "jk" 'evil-normal-state)
+	(key-chord-define evil-normal-state-map "kj" 'evil-force-normal-state)
+	(key-chord-define evil-visual-state-map "kj" 'evil-change-to-previous-state)
+	(key-chord-define evil-insert-state-map "kj" 'evil-normal-state)
+	(key-chord-define evil-replace-state-map "kj" 'evil-normal-state)
+
+	;; h/l wrap around to next lines
+	(setq-default evil-cross-lines t)
+
+	))
+
+;; (evil-mode 0)
+
+;; Having a leader key makes it possible to have some convenient keyboard shortcuts that wouldn't be possible otherwise. I use space as the leader key.
+
+
+
+;; Set initial state for some modes.
+
+(loop for (mode . state) in '(
+							  ;; (inferior-emacs-lisp-mode . emacs)
+                              ;; (pylookup-mode . emacs)
+                              ;; (comint-mode . emacs)
+                              (shell-mode . emacs)
+                              (term-mode . emacs)
+                              ;; (bc-menu-mode . emacs)
+                              ;; (magit-branch-manager-mode-map . emacs)
+                              ;; (rdictcc-buffer-mode . emacs)
+                              (ebib-entry-mode . emacs)
+                              (ebib-index-mode . emacs)
+                              (ebib-log-mode . emacs))
+      do (evil-set-initial-state mode state))
+
+(use-package evil-surround
+  :ensure t
+  :config
+  (global-evil-surround-mode 1))
+
+;;;;;;;;;;;;;;;;;
+;; Programming ;;
+;;;;;;;;;;;;;;;;;
+
+;; Flycheck
+
+(use-package flycheck
+  :ensure t
+  :defer t
+  :config
+  (add-hook 'after-init-hook #'global-flycheck-mode))
+
+;;;;;;;;;;;;
+;; Python ;;
+;;;;;;;;;;;;
+
+(use-package elpy
+  :ensure t
+  :config
+  (elpy-enable))
+
+(use-package py-autopep8
+  :config
+  (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save))
+
+;;;;;;;;;;;;
+;; Racket ;;
+;;;;;;;;;;;;
+
+(use-package racket-mode
+  :ensure t
+  :defer t
+  :mode ("\\.rkt[dl]?\\'" . racket-mode))
+
+;; (use-package geiser
+;; :ensure t)
+
+;;;;;;;;;;;;;;;;;
+;; Common Lisp ;;
+;;;;;;;;;;;;;;;;;
+
+(use-package slime
+  :ensure t
+  :config
+  (setq inferior-lisp-program "/usr/local/bin/sbcl")
+  (setq slime-contribs '(slime-fancy)))
+
+;;;;;;;;;;;
+;; Swift ;;
+;;;;;;;;;;;
+
+(use-package swift-mode
+  :ensure t
+  :defer t)
+
+
+;; Start eshell
+(global-set-key (kbd "C-x m") 'eshell)
+;; Start a new eshell even if one is active
+(global-set-key (kbd "C-x M") (lambda () (interactive) (eshell t)))
+
+
+;;Shell
+(setq multi-term-program "/usr/local/bin/fish")
+
+(defun oleh-term-exec-hook ()
+  (let* ((buff (current-buffer))
+         (proc (get-buffer-process buff)))
+    (set-process-sentinel
+     proc
+     `(lambda (process event)
+        (if (string= event "finished\n")
+            (kill-buffer ,buff))))))
+
+;; From http://oremacs.com/2015/01/01/three-ansi-term-tips/
+(add-hook 'term-exec-hook 'oleh-term-exec-hook)
+(add-hook 'ansi-term-exec-hook 'oleh-term-exec-hook)
+;; Make completion case-insensitive in eshell
+(setq eshell-cmpl-ignore-case t)
+(setq pcomplete-ignore-case t)
+;; Start a regular shell
+(global-set-key (kbd "C-x M-m") 'ansi-term)
+
+(defalias 'e 'find-file)
+(defalias 'eo 'find-file-other-window)
+
+
+(defun eshell-here ()
+  "Opens up a new shell in the directory associated with the
+current buffer's file. The eshell is renamed to match that
+directory to make multiple eshell windows easier."
+  (interactive)
+  (let* ((parent (if (buffer-file-name)
+                     (file-name-directory (buffer-file-name))
+                   default-directory))
+         (height (/ (window-total-height) 3))
+         (name   (car (last (split-string parent "/" t)))))
+    (split-window-vertically (- height))
+    (other-window 1)
+    (eshell "new")
+    (rename-buffer (concat "*eshell: " name "*"))
+
+    (insert (concat "ls"))
+    (eshell-send-input)))
+
+(global-set-key (kbd "C-!") 'eshell-here)
+
+;; (defun eshell/x ()
+;;   (insert "exit")
+;;   (eshell-send-input)
+;;   (delete-window))
+
+
+
+(setq default-directory "~/")
+(put 'dired-find-alternate-file 'disabled nil)
+
+#+end_src
