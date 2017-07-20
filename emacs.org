@@ -21,7 +21,7 @@ First, set the correct user information.
       user-mail-address "rlridenour@gmail.com")
 #+end_src
 
-Some functions require Common Lisp.
+Some functions will require Common Lisp.
 
 #+begin_src emacs-lisp :tangle yes
 (require 'cl)
@@ -29,13 +29,13 @@ Some functions require Common Lisp.
 
 If needed, uncomment these for debugging.
 
-#+begin_src emacs-lisp :tangle yes
-;; (setq debug-on-error t)
-;; (setq debug-on-quit t)
+#+begin_src emacs-lisp :tangle no
+  (setq debug-on-error t)
+  (setq debug-on-quit t)
 #+end_src
 
 
-This loads Use-Package.
+I use John Wiegley's use-package for loading and configuring all required packages.
 
 #+begin_src emacs-lisp :tangle yes
 (require 'package)
@@ -61,7 +61,7 @@ This loads Use-Package.
 #+end_src
 
 
-Set the path variable.
+Set the path variable to match the shell.
 
 #+begin_src emacs-lisp :tangle yes
 (use-package exec-path-from-shell
@@ -69,7 +69,7 @@ Set the path variable.
   :config (exec-path-from-shell-initialize))
 #+end_src
 
-Add Homebrew packages to path
+Add Homebrew packages to the path.
 
 #+begin_src emacs-lisp :tangle yes
 (let ((default-directory "/usr/local/share/emacs/site-lisp/"))
@@ -78,16 +78,16 @@ Add Homebrew packages to path
 
 * Appearance
 
-Turn off splash screen and set major mode to org
+I don't need to see the initial splash screen, nor do I need the comments at the top of the scratch buffer. I write more text than elisp, so set the scratch buffer to org-mode.
 
 #+begin_src emacs-lisp :tangle yes
 (setq inhibit-splash-screen t
       initial-scratch-message nil
-      ;; initial-major-mode 'org-mode
+      initial-major-mode 'org-mode
 	  )
 #+end_src
 
-I like the zenburn theme, but prefer a bit more contrast.
+I really like the subdued colors of the zenburn theme, but I need a bit more contrast.
 
 #+begin_src emacs-lisp :tangle yes
 (use-package hc-zenburn-theme
@@ -96,69 +96,69 @@ I like the zenburn theme, but prefer a bit more contrast.
   )
 #+end_src
 
-Set the default font. The "frame-alist" is necessary to set the font when using emacs daemon and client.
+Set the default font. The "frame-alist" is necessary to set the font when using emacs daemon and client. I find Droid Sans to be a very readable font.
 
 #+begin_src emacs-lisp :tangle yes
   (set-default-font "Droid Sans Mono Slashed-13")
   (setq default-frame-alist '((font . "Droid Sans Mono Slashed-13"))) ;;; set default font for emacs --daemon / emacsclient
 #+end_src
 
-Change background color for selected text.
+
+Change background color for selected text to make it easier to see.
 
 #+begin_src emacs-lisp :tangle yes
-(set-face-attribute 'region nil :background "#666")
+  (set-face-attribute 'region nil :background "#666")
 #+end_src
 
 Turn on syntax highlighting for all buffers
 
 #+begin_src emacs-lisp :tangle yes
-(global-font-lock-mode t)
+  (global-font-lock-mode t)
 #+end_src
 
 
-Highlight the current line.
+Highlight the current line and change the background color.
 
 #+begin_src emacs-lisp :tangle yes
-(global-hl-line-mode 1)
-(set-face-background hl-line-face "gray12")
+  (global-hl-line-mode 1)
+  (set-face-background hl-line-face "gray12")
 #+end_src
 
 
-Match parentheses — especially useful when editing Lisp
+Match parentheses — especially useful when editing Lisp.
 
 #+begin_src emacs-lisp :tangle yes
-(show-paren-mode 1)
+  (show-paren-mode 1)
 #+end_src
 
-Turn off the menu, tool bar, and scroll bar.
+Turn off the tool bar and scroll bar. I need the menu, though.
 
 #+begin_src emacs-lisp :tangle yes
-(scroll-bar-mode -1)
-(tool-bar-mode -1)
-(menu-bar-mode 1)
+  (scroll-bar-mode -1)
+  (tool-bar-mode -1)
 #+end_src
 
-Show line and column numbers in mode line:
+Show line and column numbers in the mode line:
 
 #+begin_src emacs-lisp :tangle yes
-(line-number-mode 1)
-(column-number-mode 1)
-(winner-mode 1)
+  (line-number-mode 1)
+  (column-number-mode 1)
+  (winner-mode 1)
 #+end_src
 
-Hide mouse when typing:
+Hide the mouse pointer when typing. Since I try to avoid using the mouse as much as possible, that's most of the time.
 
 #+begin_src emacs-lisp :tangle yes
-(setq make-pointer-invisible t)
+  (setq make-pointer-invisible t)
 #+end_src
 
 Set tab to four spaces
 
 #+begin_src emacs-lisp :tangle yes
-(setq-default tab-width 4) ; emacs 23.1, 24.2, default to 8
+  (setq-default tab-width 4)
 #+end_src
 
-Show file path in title bar
+Show the file path in title bar, which is very handy when editing different files with the same name.
 
 #+begin_src emacs-lisp :tangle yes
 (setq frame-title-format
@@ -167,7 +167,7 @@ Show file path in title bar
                  "%b"))))
 #+end_src
 
-Show date and time
+Show the date and time in the mode line.
 
 #+begin_src emacs-lisp :tangle yes
 (setq display-time-24hr-format t)
@@ -175,7 +175,7 @@ Show date and time
 (display-time)
 #+end_src
 
-;; Modeline
+Speaking of the modeline, let's make it look a bit better.
 
 #+begin_src emacs-lisp :tangle yes
 (use-package spaceline
@@ -190,22 +190,14 @@ Show date and time
 * System
 
 
-
-Used to use this.
-
-#+begin_src emacs-lisp :tangle yes
-  ;; (use-package validate                   ; Validate options
-  ;; :ensure t)
-#+end_src
-
-Keep custom-set variables separate from configuration file.
+Keep custom-set variables separate from the configuration file.
 
 #+begin_src emacs-lisp :tangle yes
   (setf custom-file "~/.emacs.d/custom.el")
   (load custom-file)
 #+end_src
 
-Set modifier keys in OS X
+Set the modifier keys in OS X
    
 #+begin_src emacs-lisp :tangle yes
   (setq mac-command-modifier 'super)
@@ -213,7 +205,7 @@ Set modifier keys in OS X
   (setq ns-function-modifier 'hyper)
 #+end_src 
 
-Always prefer UTF-8
+Always prefer UTF-8 encoding.
 
 #+begin_src emacs-lisp :tangle yes
   (prefer-coding-system 'utf-8)
@@ -236,16 +228,16 @@ Start TeX input when switching buffers
   ;; (activate-input-method "TeX"))
 #+end_src
 
-Save When Losing Focus
+This will save the file every time the user switches apps. It's handy for ensuring regular saves, but can be annoying when there's a TeX error and latexmk is watching the file.
 
-#+begin_src emacs-lisp :tangle yes
-  ;; (defun save-all ()
-  ;;   (interactive)
-  ;;   (save-some-buffers t))
-  ;; (add-hook 'focus-out-hook 'save-all)
+#+begin_src emacs-lisp :tangle no
+  (defun save-all ()
+    (interactive)
+    (save-some-buffers t))
+  (add-hook 'focus-out-hook 'save-all)
 #+end_src
 
-auto save often
+Auto save often
 save every 20 characters typed (this is the minimum)
 
 #+begin_src emacs-lisp :tangle yes
@@ -296,10 +288,13 @@ Don't make backup files
   ;; (setq make-backup-files nil)
 #+end_src
 
-  ;; Save backups to ~/.saves
+  ;; Save backups and auto-saves to the system temp directory.
 
 #+begin_src emacs-lisp :tangle yes
-  (setq backup-directory-alist `(("." . "~/.saves")))
+    (setq backup-directory-alist
+      `((".*" . ,temporary-file-directory)))
+  (setq auto-save-file-name-transforms
+      `((".*" ,temporary-file-directory t)))
   (setq backup-by-copying t)
   (setq delete-old-versions t
     kept-new-versions 6
@@ -307,7 +302,7 @@ Don't make backup files
     version-control t)
 #+end_src
 
-Spelling
+** Spelling
 
 #+begin_src emacs-lisp :tangle yes
   (setq flyspell-issue-welcome-flag nil)
@@ -334,7 +329,7 @@ Enable flyspell mode for highlighting spelling errors.
                  (flyspell-prog-mode))))
 #+end_src
 
-Use F7 to check current word, M-F7 for next word.
+Use F7 to check the current word, M-F7 for the next word.
 
 #+begin_src emacs-lisp :tangle yes
   (global-set-key (kbd "<f7>") 'ispell-word)
@@ -346,7 +341,7 @@ Use F7 to check current word, M-F7 for next word.
   (global-set-key (kbd "M-<f7>") 'flyspell-check-next-highlighted-word)
 #+end_src
 
-Spell-check with right mouse button.
+Spell-check with the right mouse button, just in case I can't remember to hit F7.
 
 #+begin_src emacs-lisp :tangle yes
   (eval-after-load "flyspell"
