@@ -669,7 +669,7 @@ Start server
 
 * Ivy-Mode
 
-
+[[http://oremacs.com/swiper/][Ivy mode]] by [[https://github.com/abo-abo][Oleh Krehel]] makes a lot of things easier.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package swiper
@@ -733,7 +733,7 @@ Start server
 
 
 
-Yasnippet
+Yasnippet for inserting commonly used bits of text.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package yasnippet
@@ -748,7 +748,7 @@ Yasnippet
 #+end_src
 
 
-avy
+Avy is used for jumping to points on screen. It works well, but I don't think it's any more efficient than isearch.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package avy
@@ -760,7 +760,7 @@ avy
            ("s-/" . avy-goto-char-timer)))
 #+end_src
 
-Ace-Window
+I use Ace-Window a lot for switching between windows and frames.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package  ace-window
@@ -772,7 +772,7 @@ Ace-Window
     (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
 #+end_src
 
-Smex
+Smex makes M-x commands much easier.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package smex
@@ -784,7 +784,7 @@ Smex
     (setq smex-save-file (expand-file-name ".smex-items" user-emacs-directory)))
 #+end_src
 
-Undo-Tree
+Undo in Emacs is very powerful, but with great power comes great confusion. It helps to be able to visualize it with undo-tree.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package undo-tree
@@ -794,7 +794,7 @@ Undo-Tree
            ("s-Z" . undo-tree-redo)))
 #+end_src
 
-Dash
+Dash is required by some other packages and functions.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package dash
@@ -802,7 +802,7 @@ Dash
     :config (dash-enable-font-lock))
 #+end_src
 
-Expand Region
+Expand region is useful for quickly selecting text. Each successive keystroke expands the selected region from word to line to paragraph, etc.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package expand-region
@@ -811,7 +811,7 @@ Expand Region
     :bind* ("C-=" . er/expand-region))
 #+end_src
 
-Magit
+Magit is an interface for Git. If I could keep only one package in Emacs, this might be it.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package magit
@@ -820,7 +820,7 @@ Magit
     :bind ("C-x g" . magit-status))
 #+end_src
 
-Evil-nerd commenter
+Evil-nerd commenter is used for quickly commenting code. It works well both with and without evil-mode.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package evil-nerd-commenter
@@ -828,7 +828,7 @@ Evil-nerd commenter
     :config (evilnc-default-hotkeys))
 #+end_src
 
-Shrink Whitespace
+Shrink Whitespace does exactly what it says for both blank lines and spaces. If the point is on one of several successive blank lines, then one keystroke kills all but one of them. Another keystroke kills that one also.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package shrink-whitespace
@@ -836,7 +836,7 @@ Shrink Whitespace
     :bind ("M-=" . shrink-whitespace))
 #+end_src
 
-Easy Kill
+Easy-kill efficiently marks regions. 
 
 #+begin_src emacs-lisp :tangle yes
   (use-package easy-kill
@@ -844,7 +844,7 @@ Easy Kill
     :bind ([remap kill-ring-save] . easy-kill))
 #+end_src
 
-Zop to char
+Zop to char also marks and acts on regions. 
 
 #+begin_src emacs-lisp :tangle yes
   (use-package zop-to-char
@@ -852,7 +852,7 @@ Zop to char
     :bind ([remap zap-to-char] . zop-to-char))
 #+end_src
 
-Projectile
+Projectile is for project management.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package projectile
@@ -861,14 +861,14 @@ Projectile
     :config (projectile-global-mode))
 #+end_src
 
-Ag
+Ag is for searching using the Silver Searcher. I'm mostly using Ripgrep for searching now, though.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package ag
     :ensure t)
 #+end_src
 
-Company
+Company-mode provides auto-completion suggestions. 
 
 #+begin_src emacs-lisp :tangle yes
   (use-package company
@@ -880,18 +880,18 @@ Company
       (global-company-mode 1)))
 #+end_src
 
-Empos
+[[https://github.com/dimalik/empos][Empos]] searches for journal articles and adds them a bib file. I prefer using Bibdesk.
 
-#+begin_src emacs-lisp :tangle yes
-  ;; (use-package empos
-  ;;   :ensure t
-  ;;   :config
-  ;;   (progn
-  ;; 	(setq empos-available-engines '("arxiv" "crossref")
-  ;; 		  empos-bib-file "/Users/rlridenour/Dropbox/bibtex/empos.bib")))
+#+begin_src emacs-lisp :tangle no
+  (use-package empos
+    :ensure t
+    :config
+    (progn
+  	(setq empos-available-engines '("arxiv" "crossref")
+  		  empos-bib-file "/Users/rlridenour/Dropbox/bibtex/empos.bib")))
 #+end_src
 
-Reveal in Finder
+Reveal in Finder opens a Finder with the current file or folder selected. I use this a lot/
 
 #+begin_src emacs-lisp :tangle yes
   (use-package reveal-in-osx-finder
@@ -899,7 +899,7 @@ Reveal in Finder
     :bind ("C-c z" . reveal-in-osx-finder))
 #+end_src
 
-Smartparens
+Smartparens is used for things that come in pairs, like parentheses, brackets, quotation marks, etc.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package smartparens
@@ -908,14 +908,14 @@ Smartparens
   (smartparens-global-mode t)
 #+end_src
 
-Olivetti
+Olivetti is a mode for writing. It sets the body width to a certain amount (default is 80 characters), then adjusts the margins to keep the text centered on the screen. Olivetti combined with toggle-frame-fullscreen provides a distraction-free writing environment.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package olivetti
     :ensure t)
 #+end_src
 
-Aggresive indent
+Aggresive indent keeps code indented. It occasionally causes some problems, so remember to turn it off when things aren't working right. The settings below turn it on for elisp and off for Markdown.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package aggressive-indent
@@ -924,8 +924,7 @@ Aggresive indent
     (add-to-list 'aggressive-indent-excluded-modes 'markdown-mode))
 #+end_src
 
-From http://pragmaticemacs.com/emacs/dynamically-filter-directory-listing-with-dired-narrow/
-narrow dired to match filter
+A tip from [[http://pragmaticemacs.com/emacs/dynamically-filter-directory-listing-with-dired-narrow/][Pragmatic Emacs]]. In a Dired buffer, type "/" followed by some text, and the items listed will be filtered by that text. For example, "/.md" lists only the files with an "md" extension in the directory. Typing "g" removes the filter. 
 
 #+begin_src emacs-lisp :tangle yes
   (use-package dired-narrow
@@ -934,7 +933,7 @@ narrow dired to match filter
                 ("/" . dired-narrow)))
 #+end_src
 
-Nlinum
+Nlinum fixes some problems with linum (line-numbering). I still need to turn off line numbering for some very large buffers for smooth scrolling.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package nlinum
@@ -945,16 +944,14 @@ Nlinum
       (setq nlinum-format "%d ")))
 #+end_src
 
-Biblio
+Biblio provides database searches for bibtex references.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package biblio
     :ensure t)
 #+end_src
 
-
-
-Use flyspell-correct-ivy
+Flyspell-correct-ivy uses the Ivy interface for spelling suggestions.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package flyspell-correct-ivy
@@ -965,19 +962,14 @@ Use flyspell-correct-ivy
                 ("C-;" . flyspell-correct-previous-word-generic)))
 #+end_src
 
-Word count with wc-mode
+WC-mode provides word count.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package wc-mode
     :ensure t)
 #+end_src
 
-Cdlatex makes inserting LaTeX easier.
 
-#+begin_src emacs-lisp :tangle yes
-  (use-package cdlatex
-    :ensure t)
-#+end_src
 
 Move-text - move current line or active region up or down with m-arrow key
 
@@ -988,7 +980,7 @@ Move-text - move current line or active region up or down with m-arrow key
     (move-text-default-bindings))
 #+end_src
 
-Hungry delete mode deletes all the whitespace when you hit backspace or delete
+Hungry delete mode deletes all the whitespace when you hit backspace or delete. 
 
 #+begin_src emacs-lisp :tangle yes
   (use-package hungry-delete
@@ -997,7 +989,7 @@ Hungry delete mode deletes all the whitespace when you hit backspace or delete
     (global-hungry-delete-mode))
 #+end_src
 
-Web-mode (from http://cestlaz.github.io)
+I use web-mode for editing html.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package web-mode
@@ -1011,10 +1003,10 @@ Web-mode (from http://cestlaz.github.io)
             ("html" . (ac-source-words-in-buffer ac-source-abbrev))))
 
     (setq web-mode-enable-auto-closing t)
-    (setq web-mode-enable-auto-quoting t)) ; this fixes the quote problem I mentioned
+    (setq web-mode-enable-auto-quoting t))
 #+end_src
 
-Which key
+Which-key is a package that shows the options for command completion. For example, type "C-x" and a window pops up with all the commands that begin with "C-x" It's very useful for those times when you're thinking, "I can't remember the keys for that command, but I know it starts with..." 
 
 #+begin_src emacs-lisp :tangle yes
   (use-package which-key
@@ -1023,7 +1015,7 @@ Which key
     (which-key-mode))
 #+end_src
 
-Sane-term
+Sane-term is for opening ansi-term buffers. "C-x t" creates an ansi-term buffer if there isn't one, and switches to the last one otherwise. "C-x T" always creates a new one.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package sane-term
@@ -2144,7 +2136,12 @@ Return adds new heading or list item.
 
 #+end_src
 
+Cdlatex makes inserting LaTeX easier.
 
+#+begin_src emacs-lisp :tangle no
+  (use-package cdlatex
+    :ensure t)
+#+end_src
 
 
 
