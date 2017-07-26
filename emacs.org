@@ -2381,6 +2381,25 @@ Run latexmk after save.
 
 #+end_src
 
+* HTML 
+
+#+begin_src emacs-lisp :tangle yes
+  (use-package emmet-mode
+    :ensure t
+    :diminish (emmet-mode . "ε")
+    :bind* (("C-)" . emmet-next-edit-point)
+            ("C-(" . emmet-prev-edit-point))
+    :commands (emmet-mode
+               emmet-next-edit-point
+               emmet-prev-edit-point)
+    :init
+    (setq emmet-indentation 2)
+    (setq emmet-move-cursor-between-quotes t)
+    :config
+    ;; Auto-start on any markup modes
+    (add-hook 'sgml-mode-hook 'emmet-mode)
+    (add-hook 'web-mode-hook 'emmet-mode))
+#+end_src
 * Hugo Settings
 
 #+begin_src emacs-lisp :tangle yes
