@@ -789,6 +789,7 @@ Undo in Emacs is very powerful, but with great power comes great confusion. It h
 #+begin_src emacs-lisp :tangle yes
   (use-package undo-tree
     :ensure t
+    :diminish undo-tree-mode
     :config (global-undo-tree-mode)
     :bind (("s-z" . undo-tree-undo)
            ("s-Z" . undo-tree-redo)))
@@ -903,7 +904,8 @@ Smartparens is used for things that come in pairs, like parentheses, brackets, q
 
 #+begin_src emacs-lisp :tangle yes
   (use-package smartparens
-    :ensure t)
+    :ensure t
+    :diminish smartparens-mode)
   (require 'smartparens-config)
   (smartparens-global-mode t)
 #+end_src
@@ -985,6 +987,7 @@ Hungry delete mode deletes all the whitespace when you hit backspace or delete.
 #+begin_src emacs-lisp :tangle yes
   (use-package hungry-delete
     :ensure t
+    :diminish hungry-delete-mode
     :config
     (global-hungry-delete-mode))
 #+end_src
@@ -1011,6 +1014,7 @@ Which-key is a package that shows the options for command completion. For exampl
 #+begin_src emacs-lisp :tangle yes
   (use-package which-key
     :ensure t
+    :diminish which-key-mode
     :config
     (which-key-mode))
 #+end_src
@@ -1023,7 +1027,6 @@ Sane-term is for opening ansi-term buffers. "C-x t" creates an ansi-term buffer 
     :bind (("C-x t" . sane-term)
            ("C-x T" . sane-term-create)))
 #+end_src
-
 
 * Functions
 
@@ -1229,7 +1232,7 @@ Define function
     "Toggle `dubcaps-mode'.  Converts words in DOuble CApitals to
   Single Capitals as you type."
     :init-value nil
-    :lighter (" DC")
+    :lighter ("")
     (if dubcaps-mode
         (add-hook 'post-self-insert-hook #'dcaps-to-scaps nil 'local)
       (remove-hook 'post-self-insert-hook #'dcaps-to-scaps 'local)))
@@ -1557,6 +1560,7 @@ Turn on Orgtbl-mode in Markdown-mode EDIT: Orgtble used C-c C-c, which conflicts
 #+begin_src emacs-lisp :tangle yes
   (use-package pandoc-mode
     :ensure t
+    :diminish pandoc-mode
     :config
     (add-hook 'markdown-mode-hook 'pandoc-mode)
     (add-hook 'org-mode-hook 'pandoc-mode)
@@ -3019,4 +3023,19 @@ Start a regular shell
 #+begin_src emacs-lisp :tangle yes
   (setq default-directory "~/")
 
+#+end_src
+
+* Final Steps
+
+
+I don't need to see these minor-modes in the modeline.
+
+#+begin_src emacs-lisp :tangle yes
+  (eval-after-load "flyspell"
+     '(diminish 'flyspell-mode))
+  (diminish 'visual-line-mode)
+  (diminish 'abbrev-mode)
+  (diminish 'auto-revert-mode)
+  (eval-after-load "reftex"
+  '(diminish 'reftex-mode))
 #+end_src
