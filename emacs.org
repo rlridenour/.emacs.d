@@ -1555,6 +1555,14 @@ Turn on Orgtbl-mode in Markdown-mode EDIT: Orgtble used C-c C-c, which conflicts
   ;; (add-hook 'markdown-mode-hook 'turn-on-orgtbl)
 #+end_src
 
+Open files in Marked 2 using this [[https://gist.github.com/rlridenour/ac2031d50eab51d4877f0ef9decf3b96][shell script]].
+
+#+begin_src emacs-lisp :tangle yes
+  (if (eq system-type 'darwin)
+  (setq markdown-open-command "~/bin/mark")
+  )
+#+end_src
+
 ** Pandoc
 
 #+begin_src emacs-lisp :tangle yes
