@@ -99,8 +99,8 @@ I really like the subdued colors of the zenburn theme, but I need a bit more con
 Set the default font. The "frame-alist" is necessary to set the font when using emacs daemon and client. I find Droid Sans to be a very readable font.
 
 #+begin_src emacs-lisp :tangle yes
-  (set-default-font "Inconsolata-13")
-  (setq default-frame-alist '((font . "Inconsolata-13"))) ;;; set default font for emacs --daemon / emacsclient
+  (set-default-font "Droid Sans Mono Slashed-13")
+  (setq default-frame-alist '((font . "Droid Sans Mono Slashed-13"))) ;;; set default font for emacs --daemon / emacsclient
 #+end_src
 
 
