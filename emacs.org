@@ -692,7 +692,7 @@ Start server
      ("<f2> u" . counsel-unicode-char)
      ("C-c g" . counsel-git)
      ("C-c j" . counsel-git-grep)
-     ("C-c a" . counsel-ag)
+     ("C-c s" . counsel-rg)
      ("C-x l" . counsel-locate)
      ("C-S-o" . counsel-rhythmbox)
      ("C-c C-r" . ivy-resume)
@@ -2669,6 +2669,14 @@ I didn't realize that I could jump to a directory with Hydra. I got the tip from
 #+end_src
 
 #+begin_src emacs-lisp :tangle yes
+  (defhydra hydra-org (:color blue)
+    ("a" org-agenda "agenda")
+    ("l" org-store-link "store-link")
+    ("q" nil))
+
+#+end_src
+
+#+begin_src emacs-lisp :tangle yes
   (bind-chords
    ("jh" . prelude-switch-to-previous-buffer)
    ("hj" . prelude-switch-to-previous-buffer))
@@ -2701,6 +2709,7 @@ I didn't realize that I could jump to a directory with Hydra. I got the tip from
   ("C-c C-k" . compile)
   ("<s-backspace>" . kill-whole-line)
   ("s-t" . hydra-toggle/body)
+  ("s-\\" . hydra-org/body)
   ("s-p" . hydra-markdown/body)
   ("s-l" . hydra-locate/body)
   ("C-c f" . hydra-locate/body)
