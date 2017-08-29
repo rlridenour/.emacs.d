@@ -704,6 +704,12 @@ Start server
     (setq ivy-use-virtual-buffers t)
     (setq ivy-height 10)
     (setq ivy-count-format "(%d/%d) ")
+    (setq counsel-find-file-ignore-regexp
+      (concat
+       ;; File names beginning with # or .
+       "\\(?:\\`[#.]\\)"
+       ;; File names ending with # or ~
+       "\\|\\(?:\\`.+?[#~]\\'\\)"))
     :config
     (ivy-mode 1)
     ;; version of ivy-yank-word to yank from start of word
