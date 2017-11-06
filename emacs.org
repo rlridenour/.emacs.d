@@ -143,7 +143,7 @@ Show line and column numbers in the mode line:
 #+begin_src emacs-lisp :tangle yes
   (line-number-mode 1)
   (column-number-mode 1)
-  (winner-mode 1)
+  (winner-mode 0)
 #+end_src
 
 Hide the mouse pointer when typing. Since I try to avoid using the mouse as much as possible, that's most of the time.
