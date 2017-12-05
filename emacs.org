@@ -2362,7 +2362,7 @@ Run latexmk after save.
                     (let ((beg (point)))
                       (end-of-line)
                       (delete-region beg (point)))
-                    (insert (concat " " (format-time-string "\"%Y-%m-%dT%H:%M:%S\"")))))
+                    (insert (concat " " (format-time-string "%Y-%m-%dT%H:%M:%S")))))
 
 #+end_src
 
