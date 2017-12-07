@@ -2061,29 +2061,30 @@ Return adds new heading or list item.
 
     ;; Move to chktex
     (setcar (cdr (assoc "Check" TeX-command-list)) "chktex -v6 %s"))
-  ;; (use-package auctex-latexmk
-  ;;   :ensure t
-  ;;   :config
-  ;;   (auctex-latexmk-setup))
-
 #+end_src
 
 #+begin_src emacs-lisp :tangle yes
   (use-package auctex-latexmk             ; latexmk command for AUCTeX
     :ensure t
-    :defer t
-    :after latex
+    ;; :defer t
+    ;; :after auctex
     :config (auctex-latexmk-setup))
 
 #+end_src
 
-#+begin_src emacs-lisp :tangle yes
-  (use-package auctex-skim                ; Skim as viewer for AUCTeX
+#+begin_src emacs-lisp :tangle no
+  (use-package auctex-skim                ; Skim as viewer for AUCTeX - not working now.
     :load-path "lisp/"
     :commands (auctex-skim-select)
-    :after tex
+    ;; :after tex
     :config (auctex-skim-select))
 
+#+end_src
+
+#+begin_src emacs-lisp :tangle yes
+(setq TeX-view-program-selection '((output-pdf "PDF Viewer")))
+(setq TeX-view-program-list
+     '(("PDF Viewer" "/Applications/Skim.app/Contents/SharedSupport/displayline -b -g %n %o %b")))
 #+end_src
 
 Cdlatex makes inserting LaTeX easier.
