@@ -681,8 +681,10 @@ Yasnippet for inserting commonly used bits of text.
     :init (progn
             ;; (bind-key "SPC" 'yas-expand yas-minor-mode-map)
             (yas-global-mode 1)
-            (yas-reload-all)))
-  ;; (define-key yas-minor-mode-map (kbd "TAB") 'yas-expand)
+            (yas-reload-all)
+            (setq yas-snippet-dirs
+              '("~/.emacs.d/snippets"))))
+  (define-key yas-minor-mode-map (kbd "TAB") 'yas-expand)
 #+end_src
 
 
@@ -1732,7 +1734,7 @@ Make windmove work in org-mode:
 
 Use latexmk
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
 (setq org-latex-to-pdf-process (list "/usr/texbin/latexmk -f -pdf %f"))
 #+end_src
 
@@ -2321,7 +2323,7 @@ Lilypond
 
 Run latexmk after save.
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
 (add-hook 'after-save-hook
 		  (lambda ()
 			(when (string= major-mode 'latex-mode)
