@@ -51,3 +51,7 @@ abbrev_defs
 
 # eww cache
 /url/
+
+# Multiple cursor lists
+mc-lists
+.mc-lists.el

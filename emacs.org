@@ -121,7 +121,7 @@ Highlight the current line and change the background color.
 
 #+begin_src emacs-lisp :tangle yes
   (global-hl-line-mode 1)
-  (set-face-background hl-line-face "gray12")
+  (set-face-background hl-line-face "gray25")
 #+end_src
 
 
@@ -966,6 +966,94 @@ Sane-term is for opening ansi-term buffers. "C-x t" creates an ansi-term buffer 
     :ensure t
     :bind (("C-x t" . sane-term)
            ("C-x T" . sane-term-create)))
+#+end_src
+
+Region-bindings-mode setup from kaushalmodi at https://github.com/kaushalmodi/.emacs.d/blob/master/setup-files/setup-region-bindings-mode.el
+
+#+begin_src emacs-lisp :tangle yes
+(use-package region-bindings-mode
+  :config
+  (progn
+    ;; Do not activate `region-bindings-mode' in Special modes like `dired' and
+    ;; `ibuffer'. Single-key bindings like 'm' are useful in those modes even
+    ;; when a region is selected.
+    (setq region-bindings-mode-disabled-modes '(dired-mode
+                                                ibuffer-mode))
+
+    (region-bindings-mode-enable)
+
+    (defun modi/disable-rbm-deactivate-mark ()
+      "Disable `region-bindings-mode' and deactivate mark."
+      (interactive)
+      (region-bindings-mode -1)
+      (deactivate-mark)
+      (message "Mark deactivated"))
+
+    (bind-keys
+     :map region-bindings-mode-map
+      ("<C-SPC>" . modi/disable-rbm-deactivate-mark))))
+
+#+end_src
+
+Multiple cursors setup - also from kaushalmodi: https://github.com/kaushalmodi/.emacs.d/blob/master/setup-files/setup-multiple-cursors.el
+
+#+begin_src emacs-lisp :tangle yes
+(use-package multiple-cursors
+  :bind (("C-c m" . mc/edit-lines)
+         ("C->" . mc/mark-next-like-this)
+         ("C-<" . mc/mark-previous-like-this)
+         ("C-c C-<" . mc/mark-all-like-this)
+         ("C-S-<mouse-1>" . mc/add-cursor-on-click))
+  :bind (:map region-bindings-mode-map
+         ("a" . mc/mark-all-like-this)
+         ("p" . mc/mark-previous-like-this)
+         ("n" . mc/mark-next-like-this)
+         ("P" . mc/unmark-previous-like-this)
+         ("N" . mc/unmark-next-like-this)
+         ("[" . mc/cycle-backward)
+         ("]" . mc/cycle-forward)
+         ("m" . mc/mark-more-like-this-extended)
+         ("h" . mc-hide-unmatched-lines-mode)
+         ("\\" . mc/vertical-align-with-space)
+         ("#" . mc/insert-numbers) ; use num prefix to set the starting number
+         ("^" . mc/edit-beginnings-of-lines)
+         ("$" . mc/edit-ends-of-lines))
+  :init
+  (progn
+    ;; Temporary hack to get around bug # 28524 in emacs 26+
+    ;; https://debbugs.gnu.org/cgi/bugreport.cgi?bug=28524
+    (setq mc/mode-line
+          `(" mc:" (:eval (format ,(propertize "%-2d" 'face 'font-lock-warning-face)
+                                  (mc/num-cursors)))))
+
+(setq mc/list-file (locate-user-emacs-file "mc-lists"))
+
+    ;; Disable the annoying sluggish matching paren blinks for all cursors
+    ;; when you happen to type a ")" or "}" at all cursor locations.
+    (defvar modi/mc-blink-matching-paren--store nil
+      "Internal variable used to restore the value of `blink-matching-paren'
+after `multiple-cursors-mode' is quit.")
+
+    ;; The `multiple-cursors-mode-enabled-hook' and
+    ;; `multiple-cursors-mode-disabled-hook' are run in the
+    ;; `multiple-cursors-mode' minor mode definition, but they are not declared
+    ;; (not `defvar'd). So do that first before using `add-hook'.
+    (defvar multiple-cursors-mode-enabled-hook nil
+      "Hook that is run after `multiple-cursors-mode' is enabled.")
+    (defvar multiple-cursors-mode-disabled-hook nil
+      "Hook that is run after `multiple-cursors-mode' is disabled.")
+
+    (defun modi/mc-when-enabled ()
+      "Function to be added to `multiple-cursors-mode-enabled-hook'."
+      (setq modi/mc-blink-matching-paren--store blink-matching-paren)
+      (setq blink-matching-paren nil))
+
+    (defun modi/mc-when-disabled ()
+      "Function to be added to `multiple-cursors-mode-disabled-hook'."
+      (setq blink-matching-paren modi/mc-blink-matching-paren--store))
+
+    (add-hook 'multiple-cursors-mode-enabled-hook #'modi/mc-when-enabled)
+    (add-hook 'multiple-cursors-mode-disabled-hook #'modi/mc-when-disabled)))
 #+end_src
 
 * Functions
@@ -2725,7 +2813,7 @@ Having a leader key makes it possible to have some convenient keyboard shortcuts
             "ci" 'evilnc-comment-or-uncomment-lines
             )))
       ;; boot evil by default
-      (evil-mode 1))
+      (evil-mode 0))
     :config
     (progn
       ;; This is to make the escape key work (almost) like it does in Vim.
