@@ -970,7 +970,7 @@ Sane-term is for opening ansi-term buffers. "C-x t" creates an ansi-term buffer 
 
 Region-bindings-mode setup from kaushalmodi at https://github.com/kaushalmodi/.emacs.d/blob/master/setup-files/setup-region-bindings-mode.el
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
 (use-package region-bindings-mode
   :config
   (progn
@@ -997,7 +997,7 @@ Region-bindings-mode setup from kaushalmodi at https://github.com/kaushalmodi/.e
 
 Multiple cursors setup - also from kaushalmodi: https://github.com/kaushalmodi/.emacs.d/blob/master/setup-files/setup-multiple-cursors.el
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
 (use-package multiple-cursors
   :bind (("C-c m" . mc/edit-lines)
          ("C->" . mc/mark-next-like-this)
@@ -2813,7 +2813,7 @@ Having a leader key makes it possible to have some convenient keyboard shortcuts
             "ci" 'evilnc-comment-or-uncomment-lines
             )))
       ;; boot evil by default
-      (evil-mode 0))
+      (evil-mode 1))
     :config
     (progn
       ;; This is to make the escape key work (almost) like it does in Vim.
