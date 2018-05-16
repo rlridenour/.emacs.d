@@ -1771,7 +1771,7 @@ LuaLaTeX and some fancy fonts; requires LuaTeX  (see org-latex-to-pdf-process)
 
 #+begin_src emacs-lisp :tangle yes
   (add-to-list 'org-latex-classes
-               '("rlr-org-article"
+               '("rlr-lua-article"
                  "\\documentclass[12pt]{article}
 
   \\usepackage{iftex,graphicx,epstopdf,amsmath,amssymb,url}
@@ -1801,6 +1801,42 @@ LuaLaTeX and some fancy fonts; requires LuaTeX  (see org-latex-to-pdf-process)
                  ("\\paragraph{%s}" . "\\paragraph*{%s}")
                  ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
 #+end_src
+
+PDFLaTeX export
+
+#+begin_src emacs-lisp :tangle yes
+  (add-to-list 'org-latex-classes
+               '("rlr-pdf-article"
+                 "\\documentclass[12pt]{article}
+
+  \\usepackage{iftex,graphicx,epstopdf,amsmath,amssymb,url}
+  \\usepackage{microtype,todonotes}
+  \\usepackage[american]{babel}
+  \\usepackage[letterpaper,centering]{geometry}
+  \\usepackage[sf,sc]{titlesec}
+  \\usepackage[parfill]{parskip} % Line between paragraphs
+
+  \\usepackage[authordate,url=false,isbn=false,backend=biber]{biblatex-chicago} %Change authordate to notes if desired.
+  \\addbibresource{/Users/rlridenour/Dropbox/bibtex/randybib.bib}
+  \\clubpenalty = 10000 % Reduce orphans and widows
+  \\widowpenalty = 10000
+
+  \\usepackage{libertine}
+  \\usepackage[libertine]{newtxmath}
+  \\usepackage[scaled=0.96]{zi4}
+  \\usepackage[T1]{fontenc}
+  \\usepackage{hyperref}
+
+  \\title{}
+        [NO-DEFAULT-PACKAGES]
+        [NO-PACKAGES]"
+                 ("\\section{%s}" . "\\section*{%s}")
+                 ("\\subsection{%s}" . "\\subsection*{%s}")
+                 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                 ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                 ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+#+end_src
+
 
 #+begin_src emacs-lisp :tangle yes
   (setq org-completion-use-ido t)
