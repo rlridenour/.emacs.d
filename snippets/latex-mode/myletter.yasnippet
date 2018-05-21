@@ -1,0 +1,29 @@
+# -*- mode: snippet -*-
+# contributor: Randy Ridenour <rlridenour@gmail.com>
+# key: myletter
+# group: skeleton
+# name: myletter
+# --
+\documentclass[12pt]{obuletter} % For OBU letterhead
+% \documentclass[12pt]{myletter} % For personal letterhead
+
+
+% Customize variables --- for the entire list, see obuletter.cls and myletter.cls.
+\def\toName{${1:Recipient}}
+\def\toAddress{${2:Street Address}\\\\${3:City}, ${4:State} ${5:ZIP}}
+
+% \date{} % Uncomment to add a particular date.
+
+\begin{document}
+
+\heading
+
+Dear ${6:Recipient},
+
+% Body of letter goes here.
+$0
+
+\signature
+
+
+\end{document}
