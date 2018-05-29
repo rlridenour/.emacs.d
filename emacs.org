@@ -678,6 +678,19 @@ Start server
 
 * Utilities
 
+#+begin_src emacs-lisp :tangle yes
+    (use-package dashboard
+        :ensure t
+        :diminish dashboard-mode
+        :config
+        (setq dashboard-items '((recents  . 10)
+                                (bookmarks . 10)))
+        (dashboard-setup-startup-hook)
+  (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*"))))
+
+  
+#+end_src
+
 
 
 Yasnippet for inserting commonly used bits of text.
@@ -3041,6 +3054,7 @@ Set initial state for some modes.
                                 ;; (rdictcc-buffer-mode . emacs)
                                 (ebib-entry-mode . emacs)
                                 (ebib-index-mode . emacs)
+                                (dashboard-mode . emacs)
                                 (ebib-log-mode . emacs))
         do (evil-set-initial-state mode state))
 
