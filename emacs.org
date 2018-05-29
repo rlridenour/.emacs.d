@@ -187,6 +187,13 @@ Speaking of the modeline, let's make it look a bit better.
 	(setq spaceline-highlight-face-func 'spaceline-highlight-face-evil-state)))
 #+end_src
 
+Use Emacs 26 display-line-numbers mode when possible.
+
+#+begin_src emacs-lisp :tangle yes
+(when (version<= "26.0.50" emacs-version )
+  (global-display-line-numbers-mode))
+#+end_src
+
 * System
 
 
@@ -877,7 +884,7 @@ A tip from [[http://pragmaticemacs.com/emacs/dynamically-filter-directory-listin
 
 Nlinum fixes some problems with linum (line-numbering). I still need to turn off line numbering for some very large buffers for smooth scrolling.
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
   (use-package nlinum
     :ensure t
     :config
@@ -1922,7 +1929,7 @@ This activates a number of widely used languages, you are encouraged to activate
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((emacs-lisp . t)
-     (sh . t)
+     (shell . t)
      (R . t)
      (perl . t)
      (ruby . t)
@@ -2776,7 +2783,7 @@ Hydra-toggle
     ("e" evil-mode "evil")
     ("f" auto-fill-mode "fill")
     ;; ("g" god-mode "god")
-    ("l" nlinum-mode "linum")
+    ("l" display-line-numbers-mode "linum")
     ("o" olivetti-mode "olivetti")
     ("r" read-only-mode "read-only") 
     ("t" toggle-truncate-lines "truncate")
