@@ -1423,7 +1423,7 @@ Stefan Monnier <foo at acm.org>. It is the opposite of fill-paragraph
 
 From https://github.com/ocodo/.emacs.d/blob/master/custom/handy-functions.el
   
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
   (defun nuke-all-buffers ()
     "Kill all buffers, leaving *scratch* only."
     (interactive)
@@ -1432,6 +1432,22 @@ From https://github.com/ocodo/.emacs.d/blob/master/custom/handy-functions.el
        (kill-buffer buffer))
      (buffer-list))
     (delete-other-windows))
+#+end_src
+
+#+begin_src emacs-lisp :tangle yes
+(defun nuke-all-buffers ()
+  "Kill all the open buffers except the current one.
+Leave *scratch*, *dashboard* and *Messages* alone too."
+  (interactive)
+  (mapc
+   (lambda (buffer)
+     (unless (or
+              (string= (buffer-name buffer) "*scratch*")
+              (string= (buffer-name buffer) "*dashboard*")
+              (string= (buffer-name buffer) "*Messages*"))
+       (kill-buffer buffer)))
+   (buffer-list))
+  (delete-other-windows))
 #+end_src
 
 Toggle horizontal and vertical windows
@@ -2974,8 +2990,8 @@ Having a leader key makes it possible to have some convenient keyboard shortcuts
             "x" 'counsel-M-x
             "ci" 'evilnc-comment-or-uncomment-lines
             )))
-      ;; boot evil by default
-      (evil-mode 1))
+      ;; Turn off evil by default
+      (evil-mode 0))
     :config
     (progn
       ;; This is to make the escape key work (almost) like it does in Vim.
