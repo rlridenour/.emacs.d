@@ -467,8 +467,13 @@ From http://oremacs.com/2015/01/01/three-ansi-term-tips/
 Set shell to fish.
 
 #+begin_src emacs-lisp :tangle yes
-  (setq multi-term-program "/usr/local/bin/fish")
-  (setq explicit-shell-file-name "/usr/local/bin/fish")
+  (if (eq system-type 'gnu/linux)
+  (setq multi-term-program "/usr/bin/fish")
+  (setq multi-term-program "/usr/local/bin/fish"))
+
+  (if (eq system-type 'gnu/linux)
+  (setq explicit-shell-file-name "/usr/bin/fish")
+  (setq explicit-shell-file-name "/usr/local/bin/fish"))
 #+end_src
 
 This kills the buffer after closing the terminal.
