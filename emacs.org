@@ -1418,7 +1418,7 @@ Unfill paragraph
 
 Stefan Monnier <foo at acm.org>. It is the opposite of fill-paragraph    
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
   (defun unfill-paragraph (&optional region)
     "Takes a multi-line paragraph and makes it into a single line of text."
     (interactive (progn (barf-if-buffer-read-only) '(t)))
@@ -1582,6 +1582,15 @@ Make parent directory when creating new file. From http://mbork.pl/2016-07-25_Ma
 
   (add-hook 'find-file-not-found-functions #'make-parent-directory)
 #+end_src
+
+Unfill provides the inverse of Emacs' fill commands
+
+#+begin_src emacs-lisp :tangle yes
+(use-package unfill
+   :ensure t
+:bind (("s-j" . unfill-paragraph)))
+#+end_src
+
 
 * Markdown and Pandoc
 
