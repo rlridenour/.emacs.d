@@ -78,6 +78,7 @@ Add Homebrew packages to the path.
   (normal-top-level-add-subdirs-to-load-path))
 #+end_src
 
+
 * Appearance
 
 I don't need to see the initial splash screen, nor do I need the comments at the top of the scratch buffer. I write more text than elisp, so set the scratch buffer to org-mode.
@@ -1590,7 +1591,6 @@ Unfill provides the inverse of Emacs' fill commands
    :ensure t
 :bind (("s-j" . unfill-paragraph)))
 #+end_src
-
 
 * Markdown and Pandoc
 
