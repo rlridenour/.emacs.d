@@ -55,3 +55,6 @@ abbrev_defs
 # Multiple cursor lists
 mc-lists
 .mc-lists.el
+
+# Desktop
+SessionDesktop.el

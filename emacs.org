@@ -715,6 +715,12 @@ Yasnippet for inserting commonly used bits of text.
   (define-key yas-minor-mode-map (kbd "TAB") 'yas-expand)
 #+end_src
 
+#+begin_src emacs-lisp :tangle yes
+(use-package yasnippet-snippets
+  :after yasnippet
+  :ensure t
+  :config (yasnippet-snippets-initialize))
+#+end_src
 
 Avy is used for jumping to points on screen. It works well, but I don't think it's any more efficient than isearch.
 
