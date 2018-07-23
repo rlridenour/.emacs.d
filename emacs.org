@@ -78,7 +78,6 @@ Add Homebrew packages to the path.
   (normal-top-level-add-subdirs-to-load-path))
 #+end_src
 
-
 * Appearance
 
 I don't need to see the initial splash screen, nor do I need the comments at the top of the scratch buffer. I write more text than elisp, so set the scratch buffer to org-mode.
@@ -1091,6 +1090,32 @@ after `multiple-cursors-mode' is quit.")
 #+end_src
 
 * Functions
+
+Window management, from https://www.bytedude.com/useful-emacs-shortcuts/
+
+#+begin_src emacs-lisp :tangle yes
+(defun delete-window-balance ()
+  "Delete window and rebalance the remaining ones."
+  (interactive)
+  (delete-window)
+  (balance-windows))
+
+(defun split-window-below-focus ()
+  "Split window horizontally and move focus to other window."
+  (interactive)
+  (split-window-below)
+  (balance-windows)
+  (other-window 1))
+ 
+(defun split-window-right-focus ()
+  "Split window vertically and move focus to other window."
+  (interactive)
+  (split-window-right)
+  (balance-windows)
+  (other-window 1))
+#+end_src
+
+
 
 Wraps text in an emacs-lisp code block. Used for converting my init files to org files.
 
@@ -2803,8 +2828,6 @@ From http://oremacs.com/2014/12/30/ace-link-eww/
 
 * Keybindings
 
-
-
 #+begin_src emacs-lisp :tangle yes
   (global-unset-key (kbd "C-z"))
   (global-unset-key (kbd "s-p"))
@@ -2912,11 +2935,11 @@ I didn't realize that I could jump to a directory with Hydra. I got the tip from
 
 #+begin_src emacs-lisp :tangle yes
   (bind-keys
-  ("s-0" . delete-window)
-  ("s-1" . delete-other-windows)
-  ("s-2" . swap-windows)
-  ("s-3" . split-window-right)
-  ("s-4" . nuke-all-buffers)
+  ("C-0" . delete-window-balance)
+  ("C-1" . delete-other-windows)
+  ("C-2" . split-window-below-focus)
+  ("C-3" . split-window-right-focus)
+  ("C-4" . nuke-all-buffers)
   ("s-5" . delete-frame)
   ("s-6" . toggle-window-split)
   ("S-C-<left>" . shrink-window-horizontally)
