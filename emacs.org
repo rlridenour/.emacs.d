@@ -1089,7 +1089,7 @@ after `multiple-cursors-mode' is quit.")
     (add-hook 'multiple-cursors-mode-disabled-hook #'modi/mc-when-disabled)))
 #+end_src
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
 (use-package pdf-tools
  :pin manual ;; manually update
  :config
