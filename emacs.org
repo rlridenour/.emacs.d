@@ -1918,6 +1918,10 @@ PDFLaTeX export
   \\clubpenalty = 10000 % Reduce orphans and widows
   \\widowpenalty = 10000
 
+  \\providecommand{\\tightlist}{%
+  \\setlength{\\itemsep}{0pt}\\setlength{\\parskip}{0pt}}
+  % \\def\\tightlist{} % Comment out for tighter spacing in lists.
+
   \\usepackage{libertine}
   \\usepackage[libertine]{newtxmath}
   \\usepackage[scaled=0.96]{zi4}
