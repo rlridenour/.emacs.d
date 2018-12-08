@@ -1283,7 +1283,7 @@ Open With External App
 
 Open files from dired from [[https://jblevins.org/log/dired-open][Jason Blevins]]
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
 ;; Open files in dired mode using 'open' in OS X
 (eval-after-load "dired"
   '(progn
