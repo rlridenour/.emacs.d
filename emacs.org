@@ -1660,7 +1660,8 @@ Unfill provides the inverse of Emacs' fill commands
     :mode (("\\.text\\'" . markdown-mode)
            ("\\.markdown\\'" . markdown-mode)
            ("\\.md\\'" . markdown-mode))
-    )
+    :config
+    (setq markdown-indent-on-enter 'indent-and-new-item))
 #+end_src
 
 Make it easier to bold and italicize in Markdown Mode
