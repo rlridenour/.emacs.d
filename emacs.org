@@ -794,12 +794,19 @@ Magit is an interface for Git. If I could keep only one package in Emacs, this m
     :bind ("C-x g" . magit-status))
 #+end_src
 
-Evil-nerd commenter is used for quickly commenting code. It works well both with and without evil-mode.
 
 #+begin_src emacs-lisp :tangle yes
-  (use-package evil-nerd-commenter
-    :ensure t
-    :config (evilnc-default-hotkeys))
+  (use-package ahg
+  :ensure t)
+#+end_src
+
+
+  Evil-nerd commenter is used for quickly commenting code. It works well both with and without evil-mode.
+
+  ,#+begin_src emacs-lisp :tangle yes
+    (use-package evil-nerd-commenter
+      :ensure t
+      :config (evilnc-default-hotkeys))
 #+end_src
 
 Shrink Whitespace does exactly what it says for both blank lines and spaces. If the point is on one of several successive blank lines, then one keystroke kills all but one of them. Another keystroke kills that one also.
@@ -2677,7 +2684,7 @@ Lilypond
 
 Run latexmk after save.
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
   (add-hook 'after-save-hook
             (lambda ()
               (when (string= major-mode 'latex-mode)
