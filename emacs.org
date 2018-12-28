@@ -803,7 +803,7 @@ Magit is an interface for Git. If I could keep only one package in Emacs, this m
 
   Evil-nerd commenter is used for quickly commenting code. It works well both with and without evil-mode.
 
-  ,#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle yes
     (use-package evil-nerd-commenter
       :ensure t
       :config (evilnc-default-hotkeys))
