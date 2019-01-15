@@ -1666,7 +1666,8 @@ Unfill provides the inverse of Emacs' fill commands
     :defer t
     :mode (("\\.text\\'" . markdown-mode)
            ("\\.markdown\\'" . markdown-mode)
-           ("\\.md\\'" . markdown-mode))
+           ("\\.md\\'" . markdown-mode)
+           ("\\.Rmd\\'" . markdown-mode))
     :config
     (setq markdown-indent-on-enter 'indent-and-new-item))
 #+end_src
