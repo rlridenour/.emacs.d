@@ -1816,7 +1816,7 @@ Evil-Org
 
 Use evil-org for evil keybindings in org mode.
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
   (use-package evil-org
     :ensure t)
 #+end_src
@@ -2117,7 +2117,7 @@ Use C-c c for Org Capture to ~/Dropbox/notes.org
            "* %?\nEntered on %U\n  %i\n  %a")))
   (define-key global-map "\C-cc" 'org-capture)
 
-  (add-hook 'org-capture-mode-hook 'evil-insert-state)
+  ;; (add-hook 'org-capture-mode-hook 'evil-insert-state)
 
 #+end_src
 Tab doesn't split headings
@@ -3062,7 +3062,7 @@ I used Vim before Textmate, before Sublime Text, before Emacs... I find the Vim 
 
 Having a leader key makes it possible to have some convenient keyboard shortcuts that wouldn't be possible otherwise. I use space as the leader key.
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
   (use-package evil
     :ensure t
     :init
@@ -3155,24 +3155,25 @@ Having a leader key makes it possible to have some convenient keyboard shortcuts
 Set initial state for some modes.
 
 #+begin_src emacs-lisp :tangle yes
-  (loop for (mode . state) in '(
-                                ;; (inferior-emacs-lisp-mode . emacs)
-                                ;; (pylookup-mode . emacs)
-                                ;; (comint-mode . emacs)
-                                (shell-mode . emacs)
-                                (term-mode . emacs)
-                                ;; (bc-menu-mode . emacs)
-                                ;; (magit-branch-manager-mode-map . emacs)
-                                ;; (rdictcc-buffer-mode . emacs)
-                                (ebib-entry-mode . emacs)
-                                (ebib-index-mode . emacs)
-                                (dashboard-mode . emacs)
-                                (ebib-log-mode . emacs))
-        do (evil-set-initial-state mode state))
+    (loop for (mode . state) in '(
+                                  ;; (inferior-emacs-lisp-mode . emacs)
+                                  ;; (pylookup-mode . emacs)
+                                  ;; (comint-mode . emacs)
+                                  (shell-mode . emacs)
+                                  (term-mode . emacs)
+                                  ;; (bc-menu-mode . emacs)
+                                  ;; (magit-branch-manager-mode-map . emacs)
+                                  ;; (rdictcc-buffer-mode . emacs)
+                                  (ebib-entry-mode . emacs)
+                                  (ebib-index-mode . emacs)
+                                  (dashboard-mode . emacs)
+                                  (ebib-log-mode . emacs))
+          ;; do (evil-set-initial-state mode state)
+  )
 
 #+end_src
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
   (use-package evil-surround
     :ensure t
     :config
