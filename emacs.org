@@ -91,12 +91,20 @@ I don't need to see the initial splash screen, nor do I need the comments at the
 
 I really like the subdued colors of the zenburn theme, but I need a bit more contrast.
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
 (use-package hc-zenburn-theme
   :ensure t
   :config (load-theme 'hc-zenburn t)
   )
 #+end_src
+
+#+begin_src emacs-lisp :tangle yes
+(use-package color-theme-sanityinc-tomorrow
+  :ensure t
+  :config (load-theme 'sanityinc-tomorrow-eighties t)
+  )
+#+end_src
+
 
 Set the default font. The "frame-alist" is necessary to set the font when using emacs daemon and client. I find Droid Sans to be a very readable font.
 
