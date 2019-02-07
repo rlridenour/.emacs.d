@@ -866,8 +866,13 @@ Company-mode provides auto-completion suggestions.
     :config
     (progn
       (setq company-tooltip-limit 20)
-      (setq company-idle-delay 5)
+      (setq company-idle-delay 1)
       (global-company-mode 1)))
+
+(use-package company-auctex
+:ensure t
+:config
+(company-auctex-init))
 #+end_src
 
 [[https://github.com/dimalik/empos][Empos]] searches for journal articles and adds them a bib file. I prefer using Bibdesk.
