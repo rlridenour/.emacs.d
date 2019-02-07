@@ -2892,7 +2892,12 @@ From http://oremacs.com/2014/12/30/ace-link-eww/
 
 #+begin_src emacs-lisp :tangle yes
   (global-unset-key (kbd "C-z"))
-  (global-unset-key (kbd "s-p"))
+ (global-unset-key (kbd "s-p"))
+(global-unset-key (kbd "s-m"))
+
+
+
+
 
 #+end_src
 
@@ -2905,7 +2910,7 @@ From http://oremacs.com/2014/12/30/ace-link-eww/
 
 #+end_src
 
-Hydras
+** Hydras
 
 Hydra-toggle
 
@@ -2934,49 +2939,56 @@ Hydra-Blog
 
 I didn't realize that I could jump to a directory with Hydra. I got the tip from [[http://thewanderingcoder.com/2015/02/shortcuts-to-default-directories/][Sean Miller]].
 
+
 #+begin_src emacs-lisp :tangle yes
-  (defhydra hydra-blog (:color blue)
-  "buffer"
-      ("n" jekyll-draft-post "new post")
-      ("p" jekyll-publish-post "publish")
-      ("t" jekyll-timestamp "timestamp")
-      ("P" (find-file "~/Sites/rlridenour.github.io/_posts/") "post directory")
-      ("d" (find-file "~/Sites/rlridenour.github.io/_drafts") "draft directory")
+    (major-mode-hydra-bind markdown-mode "Format"
+      ("h" markdown-insert-header-dwim "header") 
+      ("1" markdown-insert-header-atx-1 "h1")
+      ("2" markdown-insert-header-atx-2 "h2")
+      ("3" markdown-insert-header-atx-3 "h3")
+      ("4" markdown-insert-header-atx-4 "h4")    
+      ("s" markdown-insert-bold "bold")
+      ("e" markdown-insert-italic "italic")
+      ("b" markdown-insert-blockquote "quote")
+      ("p" markdown-insert-pre "pre")
+      ("c" markdown-insert-code "code"))
+
+  (major-mode-hydra-bind markdown-mode "Other"
+      ("l" markdown-promote "promote")
+      ("r" markdown-demote "demote")
+      ("d" markdown-move-down "move down")
+      ("u" markdown-move-up "move up")  
+      ("L" markdown-insert-link "link")
+      ("U" markdown-insert-uri "url")
+      ("F" markdown-insert-footnote "footnote")
+      ("W" markdown-insert-wiki-link "wiki")
+      ("R" markdown-insert-reference-link-dwim "r-link")
+      ("n" markdown-cleanup-list-numbers "clean-lists")
+      ("C" markdown-complete-bufer "complete"))
+
+  (major-mode-hydra-bind markdown-mode "Pandoc"
+        ("A" pandoc-article "article")
+        ("B" pandoc-beamer "beamer")
+        ("S" pandoc-slides "slides")
+        ("H" pandoc-handout "handout")
+        ("O" pandoc-obuletter "obu letter")
+        ("D" pandoc-docx "docx")
+        ("H" pandoc-html "html")
+        ("P" pandoc-pdf "pdf")
+        ("t" pandoc-clean "trash non-md")
+        ;; ("c" tex-clean "clean aux")
+        ;; ("C" tex-clean-all "clean all")
+        ("q" nil))
+#+end_src
+
+#+begin_src emacs-lisp :tangle yes
+(defhydra hydra-locate (:color blue)
+      ("l" avy-goto-line "avy-line")
+      ("L" goto-line "goto-line")
+      ("w" avy-goto-word-1 "goto-word")
+      ("b" ivy-bookmark-goto "bookmarks")
+      ("m" ivy-imenu-goto "imenu")
       ("q" nil))
-  ;; (global-set-key (kbd "C-c b") 'hydra-blog/body)
-
-#+end_src
-
-#+begin_src emacs-lisp :tangle yes
-  (defhydra hydra-markdown (:color blue)
-    ("a" pandoc-article "article")
-    ("b" pandoc-beamer "beamer")
-    ("s" pandoc-slides "slides")
-    ("h" pandoc-handout "handout")
-    ("o" pandoc-obuletter "obu letter")
-    ("d" pandoc-docx "docx")
-    ("w" pandoc-html "html")
-    ("p" pandoc-pdf "pdf")
-    ("t" pandoc-clean "trash non-md files")
-    ("c" tex-clean "clean aux files")
-    ("C" tex-clean-all "clean all")
-    ("1" markdown-insert-header-atx-1 "header 1")
-    ("2" markdown-insert-header-atx-2 "header 2")
-    ("3" markdown-insert-header-atx-3 "header 3")
-    ("4" markdown-insert-header-atx-4 "header 4")
-    ("q" nil))
-  ;; (global-set-key (kbd "s-p") 'hydra-markdown/body)
-
-#+end_src
-
-#+begin_src emacs-lisp :tangle yes
-  (defhydra hydra-locate (:color blue)
-    ("l" avy-goto-line "avy-line")
-    ("L" goto-line "goto-line")
-    ("w" avy-goto-word-1 "goto-word")
-    ("b" ivy-bookmark-goto "bookmarks")
-    ("m" ivy-imenu-goto "imenu")
-    ("q" nil))
 
 #+end_src
 
@@ -3427,6 +3439,11 @@ Start a regular shell
 #+begin_src emacs-lisp :tangle yes
 (use-package ivy-hydra
 :ensure t)
+
+(use-package major-mode-hydra
+:ensure t
+  :bind
+  ("s-m" . major-mode-hydra))
 #+end_src
 
 * Final Steps
