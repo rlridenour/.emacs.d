@@ -2917,6 +2917,17 @@ From http://oremacs.com/2014/12/30/ace-link-eww/
 
 ** Hydras
 
+#+begin_src emacs-lisp :tangle yes
+(use-package ivy-hydra
+:ensure t)
+
+(use-package major-mode-hydra
+:ensure t
+  :bind
+  ("s-m" . major-mode-hydra))
+#+end_src
+
+
 Hydra-toggle
 
 #+begin_src emacs-lisp :tangle yes
@@ -3441,15 +3452,6 @@ Start a regular shell
     )
 #+end_src
 
-#+begin_src emacs-lisp :tangle yes
-(use-package ivy-hydra
-:ensure t)
-
-(use-package major-mode-hydra
-:ensure t
-  :bind
-  ("s-m" . major-mode-hydra))
-#+end_src
 
 * Final Steps
 
