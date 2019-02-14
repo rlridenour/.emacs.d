@@ -319,6 +319,12 @@ Don't make backup files
     version-control t)
 #+end_src
 
+Use spotlight for locate.
+
+#+begin_src emacs-lisp :tangle no
+(setq locate-command "mdfind")
+#+end_src
+
 ** Spelling
 
 #+begin_src emacs-lisp :tangle yes
@@ -1109,6 +1115,8 @@ after `multiple-cursors-mode' is quit.")
     (add-hook 'multiple-cursors-mode-enabled-hook #'modi/mc-when-enabled)
     (add-hook 'multiple-cursors-mode-disabled-hook #'modi/mc-when-disabled)))
 #+end_src
+
+#+RESULTS:
 
 #+begin_src emacs-lisp :tangle no
 (use-package pdf-tools
@@ -3450,6 +3458,12 @@ Start a regular shell
     ;; bind it to M-j
     (define-key ivy-minibuffer-map (kbd "M-j") 'bjm/ivy-yank-whole-word)
     )
+#+end_src
+
+#+begin_src emacs-lisp :tangle no
+(use-package spotlight
+:ensure t
+)
 #+end_src
 
 
