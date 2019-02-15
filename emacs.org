@@ -321,7 +321,7 @@ Don't make backup files
 
 Use spotlight for locate.
 
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp :tangle yes
 (setq locate-command "mdfind")
 #+end_src
 
@@ -3011,7 +3011,7 @@ I didn't realize that I could jump to a directory with Hydra. I got the tip from
       ("L" goto-line "goto-line")
       ("w" avy-goto-word-1 "goto-word")
       ("b" ivy-bookmark-goto "bookmarks")
-      ("m" ivy-imenu-goto "imenu")
+      ("m" counsel-imenu "imenu")
       ("q" nil))
 
 #+end_src
@@ -3418,7 +3418,7 @@ Start a regular shell
      ("C-c g" . counsel-git)
      ("C-c j" . counsel-git-grep)
      ("C-c s" . counsel-rg)
-     ("C-x l" . counsel-locate)
+     ("C-x l" . locate)
      ("C-S-o" . counsel-rhythmbox)
      ("C-c C-r" . ivy-resume)
      ("M-y" . counsel-yank-pop)
