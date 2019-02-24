@@ -1,0 +1,24 @@
+# -*- mode: snippet -*-
+# contributor: Randy Ridenour <rlridenour@gmail.com>
+# key: setup
+# name: setup
+# --
+
+\setuppapersize{letter}
+
+\definefontfamily [linux] [serif] [Linux Libertine O]
+\definefontfamily [linux] [sans]  [Linux Biolinum O]
+\definefontfamily [linux] [mono]  [Linux Libertine Mono]
+\definefontfamily [linux] [math]  [Linux Libertine O]
+\setupbodyfont[linux]
+
+\setuppagenumbering[location={footer,middle}]
+
+\setuphead[section][style=\ssc]
+\setupwhitespace[medium]
+
+\starttext
+
+$0
+
+\stoptext
