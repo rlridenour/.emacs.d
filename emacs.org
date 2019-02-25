@@ -2716,121 +2716,144 @@ Run latexmk after save.
                  (format "latexmk -pdf %s" (buffer-file-name))
                  (file-name-base (buffer-file-name))))))
 
+  
   ;; Revert PDF after compilation has finished
   (add-hook 'TeX-after-compilation-finished-functions #'TeX-revert-document-buffer)
+#+end_src
+
+Compile ConTeXt on save.
+
+#+begin_src emacs-lisp :tangle yes
+  (add-hook 'after-save-hook
+            (lambda ()
+              (when (string= major-mode 'context-mode)
+                (TeX-command-menu "ConTeXt Full"))))
 #+end_src
 
 ** ConTeXt
 
 #+begin_src emacs-lisp :tangle yes
-;;; Useful AUCTeX setup for ConTeXt (for your .emacs)
-;;; Sanjoy Mahajan (sanjoy@mrao.cam.ac.uk), 2006-04-20.  No copyright.
-;;;
-;;; With recent AUCTeX (11.50 or later), editing ConTeXt files should
-;;; just work, but I use the following elisp as well.
+  ;;; Useful AUCTeX setup for ConTeXt (for your .emacs)
+  ;;; Sanjoy Mahajan (sanjoy@mrao.cam.ac.uk), 2006-04-20.  No copyright.
+  ;;;
+  ;;; With recent AUCTeX (11.50 or later), editing ConTeXt files should
+  ;;; just work, but I use the following elisp as well.
 
-; the AUCTeX manual recommends these settings
-(setq TeX-parse-self t)			; Enable parse on load.
-(setq TeX-auto-save t)			; Enable parse on save.
+  ; the AUCTeX manual recommends these settings
 
-; for outline views (hide/show sections, chapters, etc.)
-(add-hook 'TeX-mode-hook '(lambda () (TeX-fold-mode 1)))
-(add-hook 'TeX-mode-hook '(lambda () (outline-minor-mode 1)))
-; make PDF by default (can toggle with C-c C-t C-p
-(add-hook 'TeX-mode-hook '(lambda () (TeX-PDF-mode 1)))
-; these math abbrevs (` as prefix char) are also useful in TeX/ConTeXt files
-(require 'latex)			; defines LaTeX-math-mode
-(add-hook 'TeX-mode-hook 'LaTeX-math-mode)
-; Emacs help for \label, \ref, \cite.  Normally used only with
-; LaTeX-mode but also useful with plain TeX + eplain and with ConTeXt, so:
-(setq reftex-plug-into-AUCTeX t)
-(add-hook 'TeX-mode-hook 'reftex-mode)
-
-(defun insert-balanced (left right)
-  "Insert a left, right delmiter pair and be poised to type inside them."
-  (interactive)
-  (insert left)
-  (save-excursion
-    (insert right)))
-
-; When start-context-math() is bound to $:
-; Typing one $ gets you $$ with the insertion point between them.
-; Typing a second $ turns the $$ into ConTeXt's form for displayed math:
-;
-;   \placeformula\startformula
-;   [blank line with insertion point at beginning]
-;   \stopformula
-;
-; Delete the \placeformula if you don't want equations numbered automatically.
-
-(defun start-context-math ()
-  (interactive)
-  (let* ((start (max (point-min) (- (point) 1)))
-	 (stop  (min (point-max) (+ (point) 1))))
-    ; if in the middle of a $$, turn inline math into context display math
-    (if (equal "$$" (buffer-substring-no-properties start stop))
-	(progn
-	  (delete-region start stop)	;get rid of the $$
-	  ; delete preceding spaces, if any
-	  (while (and (< (point-min) (point))
-		      (equal (buffer-substring-no-properties (- (point) 1)
-							     (point))
-			     " "))
-	    (backward-delete-char 1))
-	  ; delete a preceding newline, if any
-	  (if (equal (buffer-substring-no-properties (- (point) 1)
-						     (point))
-		     "\n")
-	    (backward-delete-char 1))
-	  ; ConTeXt's display math with automatic equation numbering
-	  (insert "\n\\placeformula\\startformula\n")
-	  (save-excursion (insert "\n\\stopformula")))
-      ; else: just doing inline math
-      (insert-balanced ?\$ ?\$))))
-
-; automatically insert right delimiter for $, {, [, and ( and be
-; poised to type inside them.
-(add-hook 'TeX-mode-hook
-	  '(lambda ()
-	     (local-set-key "$" 
-			    '(lambda ()
-			       (interactive)
-			       (insert-balanced ?\$ ?\$)))
-	     (local-set-key "{"
-			    '(lambda ()
-			       (interactive)
-			       (insert-balanced ?\{ ?\})))
-	     (local-set-key "["
-			    '(lambda ()
-			       (interactive)
-			       (insert-balanced ?\[ ?\])))
-	     (local-set-key "("
-			    '(lambda ()
-			       (interactive)
-			       (insert-balanced ?\( ?\))))))
-
-; For ConTeXt mode, inserting two $ signs needs to behave specially
+  (setq ConTeXt-Mark-version "IV")    ; Set version to Mark IV
 (add-hook 'ConTeXt-mode-hook
-	  '(lambda ()
-	     (local-set-key "$" 'start-context-math)))
+          (lambda()
+            (setq TeX-command-default "ConTeXt Full")))
 
-; The TeX-format-list from AUCTeX's tex.el (v11.82) with a few more
-; ConTeXt-specific patterns.  I've submitted it to the AUCTeX lists,
-; so later versions should have them automatically and you won't need
-; this regexp mess in your .emacs
-;
-(setq TeX-format-list
-  '(("JLATEX" japanese-latex-mode
-     "\\\\\\(documentstyle\\|documentclass\\)[^%\n]*{\\(j[s-]?\\|t\\)\\(article\\|report\\|book\\|slides\\)")
-    ("JTEX" japanese-plain-tex-mode
-     "-- string likely in Japanese TeX --")
-    ("AMSTEX" ams-tex-mode
-     "\\\\document\\b")
-    ("CONTEXT" context-mode
-     "\\(\\\\\\(start\\(text\\|project\\|environment\\|product\\|typing\\|component\\|tekst\\)\\)\\|%.*?interface=\\)")
-    ("LATEX" latex-mode
-     "\\\\\\(begin\\|section\\|chapter\\|documentstyle\\|documentclass\\)\\b")
-    ("TEX" plain-tex-mode ".")))
+(add-to-list 'auto-mode-alist '("\\.mkiv\\'" . ConTeXt-mode))
+(add-to-list 'auto-mode-alist '("\\.mkvi\\'" . ConTeXt-mode))
+(with-eval-after-load "context"
+  (add-to-list 'TeX-file-extensions "mkvi" t)
+  (add-to-list 'TeX-file-extensions "mkiv" t))
+
+
+  (setq TeX-parse-self t)			; Enable parse on load.
+  (setq TeX-auto-save t)			; Enable parse on save.
+
+  ; for outline views (hide/show sections, chapters, etc.)
+  (add-hook 'TeX-mode-hook '(lambda () (TeX-fold-mode 1)))
+  (add-hook 'TeX-mode-hook '(lambda () (outline-minor-mode 1)))
+  ; make PDF by default (can toggle with C-c C-t C-p
+  (add-hook 'TeX-mode-hook '(lambda () (TeX-PDF-mode 1)))
+  ; these math abbrevs (` as prefix char) are also useful in TeX/ConTeXt files
+  (require 'latex)			; defines LaTeX-math-mode
+  (add-hook 'TeX-mode-hook 'LaTeX-math-mode)
+  ; Emacs help for \label, \ref, \cite.  Normally used only with
+  ; LaTeX-mode but also useful with plain TeX + eplain and with ConTeXt, so:
+  (setq reftex-plug-into-AUCTeX t)
+  (add-hook 'TeX-mode-hook 'reftex-mode)
+
+  (defun insert-balanced (left right)
+    "Insert a left, right delmiter pair and be poised to type inside them."
+    (interactive)
+    (insert left)
+    (save-excursion
+      (insert right)))
+
+  ; When start-context-math() is bound to $:
+  ; Typing one $ gets you $$ with the insertion point between them.
+  ; Typing a second $ turns the $$ into ConTeXt's form for displayed math:
+  ;
+  ;   \placeformula\startformula
+  ;   [blank line with insertion point at beginning]
+  ;   \stopformula
+  ;
+  ; Delete the \placeformula if you don't want equations numbered automatically.
+
+  (defun start-context-math ()
+    (interactive)
+    (let* ((start (max (point-min) (- (point) 1)))
+       (stop  (min (point-max) (+ (point) 1))))
+      ; if in the middle of a $$, turn inline math into context display math
+      (if (equal "$$" (buffer-substring-no-properties start stop))
+      (progn
+        (delete-region start stop)	;get rid of the $$
+        ; delete preceding spaces, if any
+        (while (and (< (point-min) (point))
+                (equal (buffer-substring-no-properties (- (point) 1)
+                                   (point))
+                   " "))
+          (backward-delete-char 1))
+        ; delete a preceding newline, if any
+        (if (equal (buffer-substring-no-properties (- (point) 1)
+                               (point))
+               "\n")
+          (backward-delete-char 1))
+        ; ConTeXt's display math with automatic equation numbering
+        (insert "\n\\placeformula\\startformula\n")
+        (save-excursion (insert "\n\\stopformula")))
+        ; else: just doing inline math
+        (insert-balanced ?\$ ?\$))))
+
+  ; automatically insert right delimiter for $, {, [, and ( and be
+  ; poised to type inside them.
+  (add-hook 'TeX-mode-hook
+        '(lambda ()
+           (local-set-key "$" 
+                  '(lambda ()
+                     (interactive)
+                     (insert-balanced ?\$ ?\$)))
+           (local-set-key "{"
+                  '(lambda ()
+                     (interactive)
+                     (insert-balanced ?\{ ?\})))
+           (local-set-key "["
+                  '(lambda ()
+                     (interactive)
+                     (insert-balanced ?\[ ?\])))
+           (local-set-key "("
+                  '(lambda ()
+                     (interactive)
+                     (insert-balanced ?\( ?\))))))
+
+  ; For ConTeXt mode, inserting two $ signs needs to behave specially
+  (add-hook 'ConTeXt-mode-hook
+        '(lambda ()
+           (local-set-key "$" 'start-context-math)))
+
+  ; The TeX-format-list from AUCTeX's tex.el (v11.82) with a few more
+  ; ConTeXt-specific patterns.  I've submitted it to the AUCTeX lists,
+  ; so later versions should have them automatically and you won't need
+  ; this regexp mess in your .emacs
+  ;
+  (setq TeX-format-list
+    '(("JLATEX" japanese-latex-mode
+       "\\\\\\(documentstyle\\|documentclass\\)[^%\n]*{\\(j[s-]?\\|t\\)\\(article\\|report\\|book\\|slides\\)")
+      ("JTEX" japanese-plain-tex-mode
+       "-- string likely in Japanese TeX --")
+      ("AMSTEX" ams-tex-mode
+       "\\\\document\\b")
+      ("CONTEXT" context-mode
+       "\\(\\\\\\(start\\(text\\|project\\|environment\\|product\\|typing\\|component\\|tekst\\)\\)\\|%.*?interface=\\)")
+      ("LATEX" latex-mode
+       "\\\\\\(begin\\|section\\|chapter\\|documentstyle\\|documentclass\\)\\b")
+      ("TEX" plain-tex-mode ".")))
 #+end_src
 
 * HTML 
@@ -3072,50 +3095,52 @@ Hydra-toggle
 
 #+end_src
 
-Hydra-Blog
 
-I didn't realize that I could jump to a directory with Hydra. I got the tip from [[http://thewanderingcoder.com/2015/02/shortcuts-to-default-directories/][Sean Miller]].
-
+Major-mode Hydras
 
 #+begin_src emacs-lisp :tangle yes
-    (major-mode-hydra-bind markdown-mode "Format"
-      ("h" markdown-insert-header-dwim "header") 
-      ("1" markdown-insert-header-atx-1 "h1")
-      ("2" markdown-insert-header-atx-2 "h2")
-      ("3" markdown-insert-header-atx-3 "h3")
-      ("4" markdown-insert-header-atx-4 "h4")    
-      ("s" markdown-insert-bold "bold")
-      ("e" markdown-insert-italic "italic")
-      ("b" markdown-insert-blockquote "quote")
-      ("p" markdown-insert-pre "pre")
-      ("c" markdown-insert-code "code"))
+      (major-mode-hydra-bind markdown-mode "Format"
+        ("h" markdown-insert-header-dwim "header") 
+        ("1" markdown-insert-header-atx-1 "h1")
+        ("2" markdown-insert-header-atx-2 "h2")
+        ("3" markdown-insert-header-atx-3 "h3")
+        ("4" markdown-insert-header-atx-4 "h4")    
+        ("s" markdown-insert-bold "bold")
+        ("e" markdown-insert-italic "italic")
+        ("b" markdown-insert-blockquote "quote")
+        ("p" markdown-insert-pre "pre")
+        ("c" markdown-insert-code "code"))
 
-  (major-mode-hydra-bind markdown-mode "Other"
-      ("l" markdown-promote "promote")
-      ("r" markdown-demote "demote")
-      ("d" markdown-move-down "move down")
-      ("u" markdown-move-up "move up")  
-      ("L" markdown-insert-link "link")
-      ("U" markdown-insert-uri "url")
-      ("F" markdown-insert-footnote "footnote")
-      ("W" markdown-insert-wiki-link "wiki")
-      ("R" markdown-insert-reference-link-dwim "r-link")
-      ("n" markdown-cleanup-list-numbers "clean-lists")
-      ("C" markdown-complete-bufer "complete"))
+    (major-mode-hydra-bind markdown-mode "Other"
+        ("l" markdown-promote "promote")
+        ("r" markdown-demote "demote")
+        ("d" markdown-move-down "move down")
+        ("u" markdown-move-up "move up")  
+        ("L" markdown-insert-link "link")
+        ("U" markdown-insert-uri "url")
+        ("F" markdown-insert-footnote "footnote")
+        ("W" markdown-insert-wiki-link "wiki")
+        ("R" markdown-insert-reference-link-dwim "r-link")
+        ("n" markdown-cleanup-list-numbers "clean-lists")
+        ("C" markdown-complete-bufer "complete"))
 
-  (major-mode-hydra-bind markdown-mode "Pandoc"
-        ("A" pandoc-article "article")
-        ("B" pandoc-beamer "beamer")
-        ("S" pandoc-slides "slides")
-        ("H" pandoc-handout "handout")
-        ("O" pandoc-obuletter "obu letter")
-        ("D" pandoc-docx "docx")
-        ("H" pandoc-html "html")
-        ("P" pandoc-pdf "pdf")
-        ("t" pandoc-clean "trash non-md")
-        ;; ("c" tex-clean "clean aux")
-        ;; ("C" tex-clean-all "clean all")
-        ("q" nil))
+    (major-mode-hydra-bind markdown-mode "Pandoc"
+          ("A" pandoc-article "article")
+          ("B" pandoc-beamer "beamer")
+          ("S" pandoc-slides "slides")
+          ("H" pandoc-handout "handout")
+          ("O" pandoc-obuletter "obu letter")
+          ("D" pandoc-docx "docx")
+          ("H" pandoc-html "html")
+          ("P" pandoc-pdf "pdf")
+          ("t" pandoc-clean "trash non-md")
+
+          ("q" nil))
+
+    (major-mode-hydra-bind latex-mode "Clean"
+          ("c" tex-clean "clean aux")
+          ("C" tex-clean-all "clean all")
+          ("q" nil))
 #+end_src
 
 #+begin_src emacs-lisp :tangle yes
@@ -3183,161 +3208,9 @@ I didn't realize that I could jump to a directory with Hydra. I got the tip from
 
 #+end_src
 
-http://apple.stackexchange.com/questions/48043/how-to-ssh-from-ipad-with-external-keyboard-and-emacs
-
-#+begin_src emacs-lisp :tangle yes
-  (if (eq system-type 'gnu/linux)
-      (let ((translations '( 229 [?\M-a]  nil [?\M-b]   231 [?\M-c]  8706 [?\M-d]  nil [?\M-e]
-                                 402 [?\M-f]  169 [?\M-g]   729 [?\M-h]   nil [?\M-i]  8710 [?\M-j]
-                                 730 [?\M-k]  172 [?\M-l]   181 [?\M-m]   nil [?\M-n]   248 [?\M-o]
-                                 960 [?\M-p]  339 [?\M-q]   174 [?\M-r]   223 [?\M-s]  8224 [?\M-t]
-                                 nil [?\M-u] 8730 [?\M-v]  8721 [?\M-w]  8776 [?\M-x]   165 [?\M-y]
-                                 937 [?\M-z]
-                                 197 [?\M-A]  305 [?\M-B]   199 [?\M-C]   206 [?\M-D]   nil [?\M-E]
-                                 207 [?\M-F]  733 [?\M-G]   211 [?\M-H]   nil [?\M-I]   212 [?\M-J]
-                                 63743 [?\M-K]  210 [?\M-L]   194 [?\M-M]   nil [?\M-N]   216 [?\M-O]
-                                 8719 [?\M-P]  338 [?\M-Q]  8240 [?\M-R]   205 [?\M-S]   711 [?\M-T]
-                                 nil [?\M-U] 9674 [?\M-V]  8222 [?\M-W]   731 [?\M-X]   193 [?\M-Y]
-                                 184 [?\M-Z]
-                                 nil [?\M-~]  161 [?\M-1]   162 [?\M-4]   163 [?\M-3]   167 [?\M-6]
-                                 170 [?\M-9]  171 [?\M-\\]  175 [?\M-<]   176 [?\M-*]   177 [?\M-+]
-                                 182 [?\M-7]  183 [?\M-\(]  186 [?\M-0]   187 [?\M-|]   191 [?\M-\?]
-                                 198 [?\M-\"] 230 [?\M-']   247 [?\M-/]   728 [?\M->]  8211 [?\M-\-]
-                                 8212 [?\M-_] 8216 [?\M-\]] 8217 [?\M-}]  8218 [?\M-\)] 8220 [?\M-\[]
-                                 8221 [?\M-{] 8225 [?\M-&]  8226 [\?M-8]  8249 [?\M-#]  8250 [?\M-$]
-                                 8260 [?\M-!] 8364 [\?M-@]  8482 [?\M-2]  8734 [\?M-5]  8800 [?\M-=]
-                                 8804 [?\M-,] 8805 [?\M-.] 64257 [?\M-%] 64258 [?\M-^])))
-        (while translations
-          (let ((key (car translations)) (def (cadr translations)))
-            (if key
-                (define-key key-translation-map (make-string 1 key) def)))
-          (setq translations (cddr translations))))
-    )
-
-#+end_src
-
-I used Vim before Textmate, before Sublime Text, before Emacs... I find the Vim commands much easier to remember, but for various reasons, my mind doesn't work well with modal editing. Anyway, I find editing with Vim very useful under certain circumstances, and Evil-mode is a great way to do that.
-
-Having a leader key makes it possible to have some convenient keyboard shortcuts that wouldn't be possible otherwise. I use space as the leader key.
-
-#+begin_src emacs-lisp :tangle no
-  (use-package evil
-    :ensure t
-    :init
-    (progn
-      (use-package evil-leader
-        :ensure t
-        :defer t
-        :init (global-evil-leader-mode)
-        :config
-        (progn
-          (evil-leader/set-leader "<SPC>")
-          (evil-leader/set-key
-            "f" 'swiper
-            "k" 'kill-this-buffer
-            "o" 'counsel-find-file
-            "p" 'hydra-markdown/body
-            ;; "r" 'helm-mini
-            "r" 'counsel-recentf
-            "t" 'hydra-toggle/body
-            "w" 'save-buffer
-            "x" 'counsel-M-x
-            "ci" 'evilnc-comment-or-uncomment-lines
-            )))
-      ;; Turn off evil by default
-      (evil-mode 0))
-    :config
-    (progn
-      ;; This is to make the escape key work (almost) like it does in Vim.
-
-      ;; esc quits
-      (defun minibuffer-keyboard-quit ()
-        "Abort recursive edit.
-  In Delete Selection mode, if the mark is active, just deactivate it;
-  then it takes a second \\[keyboard-quit] to abort the minibuffer."
-        (interactive)
-        (if (and delete-selection-mode transient-mark-mode mark-active)
-            (setq deactivate-mark  t)
-          (when (get-buffer "*Completions*") (delete-windows-on "*Completions*"))
-          (abort-recursive-edit)))
-      (define-key evil-normal-state-map [escape] 'keyboard-quit)
-      (define-key evil-visual-state-map [escape] 'keyboard-quit)
-      (define-key minibuffer-local-map [escape] 'minibuffer-keyboard-quit)
-      (define-key minibuffer-local-ns-map [escape] 'minibuffer-keyboard-quit)
-      (define-key minibuffer-local-completion-map [escape] 'minibuffer-keyboard-quit)
-      (define-key minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
-      (define-key minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit)
-      (global-set-key [escape] 'evil-exit-emacs-state)
-
-      ;; This ensures that the Vim navigation keys navigate by visual lines.
-
-      (define-key evil-motion-state-map "j" #'evil-next-visual-line)
-      (define-key evil-motion-state-map "k" #'evil-previous-visual-line)
-      (define-key evil-motion-state-map "$" #'evil-end-of-visual-line)
-      (define-key evil-motion-state-map "^" #'evil-first-non-blank-of-visual-line)
-      (define-key evil-motion-state-map "0" #'evil-beginning-of-visual-line)
-
-      ;; Evil binds =RET=, which is often used in other modes. This unbinds it, but there's a downside. =RET= now splits a line in normal mode, which causes me some aggravation sometimes. I'm not sure how best to fix it.
-
-      (define-key evil-motion-state-map (kbd "RET") nil)
-      (define-key evil-motion-state-map (kbd " ") nil)
-
-      ;; This makes most Emacs commands work in insert mode.
-
-      (setcdr evil-insert-state-map nil)
-      (define-key evil-insert-state-map [escape] 'evil-normal-state)
 
 
 
-      ;; This makes isearch backward work in Evil.
-
-      (define-key evil-normal-state-map (kbd "C-r") 'isearch-backward)
-
-
-      ;; Use jk instead of ESC
-      (key-chord-define evil-normal-state-map "jk" 'evil-force-normal-state)
-      (key-chord-define evil-visual-state-map "jk" 'evil-change-to-previous-state)
-      (key-chord-define evil-insert-state-map "jk" 'evil-normal-state)
-      (key-chord-define evil-replace-state-map "jk" 'evil-normal-state)
-      (key-chord-define evil-normal-state-map "kj" 'evil-force-normal-state)
-      (key-chord-define evil-visual-state-map "kj" 'evil-change-to-previous-state)
-      (key-chord-define evil-insert-state-map "kj" 'evil-normal-state)
-      (key-chord-define evil-replace-state-map "kj" 'evil-normal-state)
-
-      ;; h/l wrap around to next lines
-      (setq-default evil-cross-lines t)
-
-      ))
-#+end_src
-
-Set initial state for some modes.
-
-#+begin_src emacs-lisp :tangle yes
-    (loop for (mode . state) in '(
-                                  ;; (inferior-emacs-lisp-mode . emacs)
-                                  ;; (pylookup-mode . emacs)
-                                  ;; (comint-mode . emacs)
-                                  (shell-mode . emacs)
-                                  (term-mode . emacs)
-                                  ;; (bc-menu-mode . emacs)
-                                  ;; (magit-branch-manager-mode-map . emacs)
-                                  ;; (rdictcc-buffer-mode . emacs)
-                                  (ebib-entry-mode . emacs)
-                                  (ebib-index-mode . emacs)
-                                  (dashboard-mode . emacs)
-                                  (ebib-log-mode . emacs))
-          ;; do (evil-set-initial-state mode state)
-  )
-
-#+end_src
-
-#+begin_src emacs-lisp :tangle no
-  (use-package evil-surround
-    :ensure t
-    :config
-    (global-evil-surround-mode 1))
-
-#+end_src
 
 * Programming
 
