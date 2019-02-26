@@ -4,13 +4,20 @@
 # name: setup
 # --
 
+\setupinteraction[state=start,  % make hyperlinks active, etc.
+  title={${1:Title}},
+  % subtitle={${2:Subtitle}},
+  author={${3:Randy Ridenour}},
+  keyword={${4:Keywords}}]
+  
 \setuppapersize{letter}
 
-\definefontfamily [linux] [serif] [Linux Libertine O]
-\definefontfamily [linux] [sans]  [Linux Biolinum O]
-\definefontfamily [linux] [mono]  [Linux Libertine Mono]
-\definefontfamily [linux] [math]  [Linux Libertine O]
-\setupbodyfont[linux]
+
+\definefontfamily [libertinus] [serif] [Libertinus Serif]
+\definefontfamily [libertinus] [sans]  [Libertinus Sans]
+\definefontfamily [libertinus] [mono]  [Libertinus Mono]
+\definefontfamily [libertinus] [math]  [Libertinus Math]
+\setupbodyfont[libertinus]
 
 \setuppagenumbering[location={footer,middle}]
 
