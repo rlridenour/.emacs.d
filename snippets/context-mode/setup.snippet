@@ -2,15 +2,16 @@
 # contributor: Randy Ridenour <rlridenour@gmail.com>
 # key: setup
 # name: setup
+# group: setup
 # --
 
-\setupinteraction[state=start,  % make hyperlinks active, etc.
+\setupinteraction[state=start,  % make hyperlinks active, define metadata
   title={${1:Title}},
   % subtitle={${2:Subtitle}},
   author={${3:Randy Ridenour}},
   keyword={${4:Keywords}}]
   
-\setuppapersize{letter}
+\setuppapersize[letter]
 
 
 \definefontfamily [libertinus] [serif] [Libertinus Serif]
@@ -21,7 +22,7 @@
 
 \setuppagenumbering[location={footer,middle}]
 
-\setuphead[section][style=\ssc]
+\setuphead[section][style=\ss\sc]
 \setupwhitespace[medium]
 
 \starttext
