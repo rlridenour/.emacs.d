@@ -1132,6 +1132,17 @@ after `multiple-cursors-mode' is quit.")
  (define-key pdf-view-mode-map (kbd "C-s") 'isearch-forward))
 #+end_src
 
+#+begin_src emacs-lisp :tangle yes
+
+(use-package nswbuff
+:ensure t
+:bind (("M-`" . nswbuff-switch-to-previous-buffer)
+       ("M-S-`" . nswbuff-switch-to-next-buffer))
+)
+#+end_src
+
+
+
 * Functions
 
 Window management, from https://www.bytedude.com/useful-emacs-shortcuts/
