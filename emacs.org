@@ -3463,6 +3463,20 @@ Start a regular shell
 )
 #+end_src
 
+Use prescient.el
+
+#+begin_src emacs-lisp :tangle yes
+(use-package prescient
+:ensure t)
+(use-package ivy-prescient
+:ensure t
+:config
+(ivy-prescient-mode t))
+(use-package company-prescient
+:ensure t
+:config
+(company-prescient-mode t))
+#+end_src
 
 * Final Steps
 
