@@ -935,6 +935,14 @@ A tip from [[http://pragmaticemacs.com/emacs/dynamically-filter-directory-listin
                 ("/" . dired-narrow)))
 #+end_src
 
+
+#+begin_src emacs-lisp :tangle yes
+(use-package dired-subtree
+:ensure t
+:bind (:map dired-mode-map
+            ("<tab>" . dired-subtree-toggle)))
+#+end_src
+
 Nlinum fixes some problems with linum (line-numbering). I still need to turn off line numbering for some very large buffers for smooth scrolling.
 
 #+begin_src emacs-lisp :tangle no
