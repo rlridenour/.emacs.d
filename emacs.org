@@ -3486,6 +3486,12 @@ Use prescient.el
 (company-prescient-mode t))
 #+end_src
 
+Replace i-search with swiper-isearch.
+
+#+begin_src emacs-lisp :tangle yes
+(global-set-key (kbd "C-s") 'swiper-isearch)
+#+end_src
+
 * Final Steps
 
 
