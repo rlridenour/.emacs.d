@@ -2752,127 +2752,127 @@ Compile ConTeXt on save.
 ** ConTeXt
 
 #+begin_src emacs-lisp :tangle yes
-  ;;; Useful AUCTeX setup for ConTeXt (for your .emacs)
-  ;;; Sanjoy Mahajan (sanjoy@mrao.cam.ac.uk), 2006-04-20.  No copyright.
-  ;;;
-  ;;; With recent AUCTeX (11.50 or later), editing ConTeXt files should
-  ;;; just work, but I use the following elisp as well.
+    ;;; Useful AUCTeX setup for ConTeXt (for your .emacs)
+    ;;; Sanjoy Mahajan (sanjoy@mrao.cam.ac.uk), 2006-04-20.  No copyright.
+    ;;;
+    ;;; With recent AUCTeX (11.50 or later), editing ConTeXt files should
+    ;;; just work, but I use the following elisp as well.
 
-  ; the AUCTeX manual recommends these settings
+    ; the AUCTeX manual recommends these settings
 
-  (setq ConTeXt-Mark-version "IV")    ; Set version to Mark IV
-(add-hook 'ConTeXt-mode-hook
-          (lambda()
-            (setq TeX-command-default "ConTeXt Full")))
-
-(add-to-list 'auto-mode-alist '("\\.mkiv\\'" . ConTeXt-mode))
-(add-to-list 'auto-mode-alist '("\\.mkvi\\'" . ConTeXt-mode))
-(with-eval-after-load "context"
-  (add-to-list 'TeX-file-extensions "mkvi" t)
-  (add-to-list 'TeX-file-extensions "mkiv" t))
-
-
-  (setq TeX-parse-self t)			; Enable parse on load.
-  (setq TeX-auto-save t)			; Enable parse on save.
-
-  ; for outline views (hide/show sections, chapters, etc.)
-  (add-hook 'TeX-mode-hook '(lambda () (TeX-fold-mode 1)))
-  (add-hook 'TeX-mode-hook '(lambda () (outline-minor-mode 1)))
-  ; make PDF by default (can toggle with C-c C-t C-p
-  (add-hook 'TeX-mode-hook '(lambda () (TeX-PDF-mode 1)))
-  ; these math abbrevs (` as prefix char) are also useful in TeX/ConTeXt files
-  (require 'latex)			; defines LaTeX-math-mode
-  (add-hook 'TeX-mode-hook 'LaTeX-math-mode)
-  ; Emacs help for \label, \ref, \cite.  Normally used only with
-  ; LaTeX-mode but also useful with plain TeX + eplain and with ConTeXt, so:
-  (setq reftex-plug-into-AUCTeX t)
-  (add-hook 'TeX-mode-hook 'reftex-mode)
-
-  (defun insert-balanced (left right)
-    "Insert a left, right delmiter pair and be poised to type inside them."
-    (interactive)
-    (insert left)
-    (save-excursion
-      (insert right)))
-
-  ; When start-context-math() is bound to $:
-  ; Typing one $ gets you $$ with the insertion point between them.
-  ; Typing a second $ turns the $$ into ConTeXt's form for displayed math:
-  ;
-  ;   \placeformula\startformula
-  ;   [blank line with insertion point at beginning]
-  ;   \stopformula
-  ;
-  ; Delete the \placeformula if you don't want equations numbered automatically.
-
-  (defun start-context-math ()
-    (interactive)
-    (let* ((start (max (point-min) (- (point) 1)))
-       (stop  (min (point-max) (+ (point) 1))))
-      ; if in the middle of a $$, turn inline math into context display math
-      (if (equal "$$" (buffer-substring-no-properties start stop))
-      (progn
-        (delete-region start stop)	;get rid of the $$
-        ; delete preceding spaces, if any
-        (while (and (< (point-min) (point))
-                (equal (buffer-substring-no-properties (- (point) 1)
-                                   (point))
-                   " "))
-          (backward-delete-char 1))
-        ; delete a preceding newline, if any
-        (if (equal (buffer-substring-no-properties (- (point) 1)
-                               (point))
-               "\n")
-          (backward-delete-char 1))
-        ; ConTeXt's display math with automatic equation numbering
-        (insert "\n\\placeformula\\startformula\n")
-        (save-excursion (insert "\n\\stopformula")))
-        ; else: just doing inline math
-        (insert-balanced ?\$ ?\$))))
-
-  ; automatically insert right delimiter for $, {, [, and ( and be
-  ; poised to type inside them.
-  (add-hook 'TeX-mode-hook
-        '(lambda ()
-           (local-set-key "$" 
-                  '(lambda ()
-                     (interactive)
-                     (insert-balanced ?\$ ?\$)))
-           (local-set-key "{"
-                  '(lambda ()
-                     (interactive)
-                     (insert-balanced ?\{ ?\})))
-           (local-set-key "["
-                  '(lambda ()
-                     (interactive)
-                     (insert-balanced ?\[ ?\])))
-           (local-set-key "("
-                  '(lambda ()
-                     (interactive)
-                     (insert-balanced ?\( ?\))))))
-
-  ; For ConTeXt mode, inserting two $ signs needs to behave specially
+    (setq ConTeXt-Mark-version "IV")    ; Set version to Mark IV
   (add-hook 'ConTeXt-mode-hook
-        '(lambda ()
-           (local-set-key "$" 'start-context-math)))
+            (lambda()
+              (setq TeX-command-default "ConTeXt Full")))
 
-  ; The TeX-format-list from AUCTeX's tex.el (v11.82) with a few more
-  ; ConTeXt-specific patterns.  I've submitted it to the AUCTeX lists,
-  ; so later versions should have them automatically and you won't need
-  ; this regexp mess in your .emacs
-  ;
-  (setq TeX-format-list
-    '(("JLATEX" japanese-latex-mode
-       "\\\\\\(documentstyle\\|documentclass\\)[^%\n]*{\\(j[s-]?\\|t\\)\\(article\\|report\\|book\\|slides\\)")
-      ("JTEX" japanese-plain-tex-mode
-       "-- string likely in Japanese TeX --")
-      ("AMSTEX" ams-tex-mode
-       "\\\\document\\b")
-      ("CONTEXT" context-mode
-       "\\(\\\\\\(start\\(text\\|project\\|environment\\|product\\|typing\\|component\\|tekst\\)\\)\\|%.*?interface=\\)")
-      ("LATEX" latex-mode
-       "\\\\\\(begin\\|section\\|chapter\\|documentstyle\\|documentclass\\)\\b")
-      ("TEX" plain-tex-mode ".")))
+  (add-to-list 'auto-mode-alist '("\\.mkiv\\'" . ConTeXt-mode))
+  (add-to-list 'auto-mode-alist '("\\.mkvi\\'" . ConTeXt-mode))
+  (with-eval-after-load "context"
+    (add-to-list 'TeX-file-extensions "mkvi" t)
+    (add-to-list 'TeX-file-extensions "mkiv" t))
+
+
+    (setq TeX-parse-self t)			; Enable parse on load.
+    (setq TeX-auto-save t)			; Enable parse on save.
+
+    ; for outline views (hide/show sections, chapters, etc.)
+    (add-hook 'TeX-mode-hook '(lambda () (TeX-fold-mode 1)))
+    (add-hook 'TeX-mode-hook '(lambda () (outline-minor-mode 1)))
+    ; make PDF by default (can toggle with C-c C-t C-p
+    (add-hook 'TeX-mode-hook '(lambda () (TeX-PDF-mode 1)))
+    ; these math abbrevs (` as prefix char) are also useful in TeX/ConTeXt files
+    (require 'latex)			; defines LaTeX-math-mode
+    (add-hook 'TeX-mode-hook 'LaTeX-math-mode)
+    ; Emacs help for \label, \ref, \cite.  Normally used only with
+    ; LaTeX-mode but also useful with plain TeX + eplain and with ConTeXt, so:
+    (setq reftex-plug-into-AUCTeX t)
+    (add-hook 'TeX-mode-hook 'reftex-mode)
+
+    ;; (defun insert-balanced (left right)
+    ;;   "Insert a left, right delmiter pair and be poised to type inside them."
+    ;;   (interactive)
+    ;;   (insert left)
+    ;;   (save-excursion
+    ;;     (insert right)))
+
+    ; When start-context-math() is bound to $:
+    ; Typing one $ gets you $$ with the insertion point between them.
+    ; Typing a second $ turns the $$ into ConTeXt's form for displayed math:
+    ;
+    ;   \placeformula\startformula
+    ;   [blank line with insertion point at beginning]
+    ;   \stopformula
+    ;
+    ; Delete the \placeformula if you don't want equations numbered automatically.
+
+    ;; (defun start-context-math ()
+    ;;   (interactive)
+    ;;   (let* ((start (max (point-min) (- (point) 1)))
+    ;;      (stop  (min (point-max) (+ (point) 1))))
+    ;;     ; if in the middle of a $$, turn inline math into context display math
+    ;;     (if (equal "$$" (buffer-substring-no-properties start stop))
+    ;;     (progn
+    ;;       (delete-region start stop)	;get rid of the $$
+    ;;       ; delete preceding spaces, if any
+    ;;       (while (and (< (point-min) (point))
+    ;;               (equal (buffer-substring-no-properties (- (point) 1)
+    ;;                                  (point))
+    ;;                  " "))
+    ;;         (backward-delete-char 1))
+    ;;       ; delete a preceding newline, if any
+    ;;       (if (equal (buffer-substring-no-properties (- (point) 1)
+    ;;                              (point))
+    ;;              "\n")
+    ;;         (backward-delete-char 1))
+    ;;       ; ConTeXt's display math with automatic equation numbering
+    ;;       (insert "\n\\placeformula\\startformula\n")
+    ;;       (save-excursion (insert "\n\\stopformula")))
+    ;;       ; else: just doing inline math
+    ;;       (insert-balanced ?\$ ?\$))))
+
+    ;; ; automatically insert right delimiter for $, {, [, and ( and be
+    ;; ; poised to type inside them.
+    ;; (add-hook 'TeX-mode-hook
+    ;;       '(lambda ()
+    ;;          (local-set-key "$" 
+    ;;                 '(lambda ()
+    ;;                    (interactive)
+    ;;                    (insert-balanced ?\$ ?\$)))
+    ;;          (local-set-key "{"
+    ;;                 '(lambda ()
+    ;;                    (interactive)
+    ;;                    (insert-balanced ?\{ ?\})))
+    ;;          (local-set-key "["
+    ;;                 '(lambda ()
+    ;;                    (interactive)
+    ;;                    (insert-balanced ?\[ ?\])))
+    ;;          (local-set-key "("
+    ;;                 '(lambda ()
+    ;;                    (interactive)
+    ;;                    (insert-balanced ?\( ?\))))))
+
+    ;; ; For ConTeXt mode, inserting two $ signs needs to behave specially
+    ;; (add-hook 'ConTeXt-mode-hook
+    ;;       '(lambda ()
+    ;;          (local-set-key "$" 'start-context-math)))
+
+    ;; ; The TeX-format-list from AUCTeX's tex.el (v11.82) with a few more
+    ;; ; ConTeXt-specific patterns.  I've submitted it to the AUCTeX lists,
+    ; so later versions should have them automatically and you won't need
+    ; this regexp mess in your .emacs
+    ;
+    (setq TeX-format-list
+      '(("JLATEX" japanese-latex-mode
+         "\\\\\\(documentstyle\\|documentclass\\)[^%\n]*{\\(j[s-]?\\|t\\)\\(article\\|report\\|book\\|slides\\)")
+        ("JTEX" japanese-plain-tex-mode
+         "-- string likely in Japanese TeX --")
+        ("AMSTEX" ams-tex-mode
+         "\\\\document\\b")
+        ("CONTEXT" context-mode
+         "\\(\\\\\\(start\\(text\\|project\\|environment\\|product\\|typing\\|component\\|tekst\\)\\)\\|%.*?interface=\\)")
+        ("LATEX" latex-mode
+         "\\\\\\(begin\\|section\\|chapter\\|documentstyle\\|documentclass\\)\\b")
+        ("TEX" plain-tex-mode ".")))
 #+end_src
 
 * HTML 
