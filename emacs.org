@@ -1149,6 +1149,16 @@ after `multiple-cursors-mode' is quit.")
 )
 #+end_src
 
+Use anzu for search and replace.
+
+#+begin_src emacs-lisp :tangle yes
+(use-package anzu
+  :ensure t
+  :bind (("M-%" . anzu-query-replace)
+         ("C-M-%" . anzu-query-replace-regexp))
+  :config
+  (global-anzu-mode))
+#+end_src
 
 
 * Functions
