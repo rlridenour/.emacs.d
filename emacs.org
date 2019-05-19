@@ -44,6 +44,7 @@ I use John Wiegley's use-package for loading and configuring all required packag
                '("melpa" . "http://melpa.org/packages/")
   '("org" . "https://orgmode.org/elpa/"))
 
+(add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/") t)
 
   (package-initialize)
 
@@ -1943,7 +1944,7 @@ LuaLaTeX and some fancy fonts; requires LuaTeX  (see org-latex-to-pdf-process)
                '("rlr-lua-article"
                  "\\documentclass[12pt]{article}
 
-  \\usepackage{iftex,graphicx,epstopdf,amsmath,amssymb,url}
+  \\usepackage{iftex,graphicx,epstopdf,amsmath,amssymb,url,ulem}
   \\usepackage{microtype,todonotes}
   \\usepackage[american]{babel}
   \\usepackage[letterpaper,centering]{geometry}
@@ -1978,7 +1979,7 @@ PDFLaTeX export
                '("rlr-pdf-article"
                  "\\documentclass[12pt]{article}
 
-  \\usepackage{iftex,graphicx,epstopdf,amsmath,amssymb,url}
+  \\usepackage{iftex,graphicx,epstopdf,amsmath,amssymb,url,ulem}
   \\usepackage{microtype,todonotes}
   \\usepackage[american]{babel}
   \\usepackage[letterpaper,centering]{geometry}
