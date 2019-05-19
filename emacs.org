@@ -1944,7 +1944,8 @@ LuaLaTeX and some fancy fonts; requires LuaTeX  (see org-latex-to-pdf-process)
                '("rlr-lua-article"
                  "\\documentclass[12pt]{article}
 
-  \\usepackage{iftex,graphicx,epstopdf,amsmath,amssymb,url,ulem}
+  \\usepackage{iftex,graphicx,epstopdf,amsmath,amssymb,url}
+  \\usepackage[normalem]{ulem}
   \\usepackage{microtype,todonotes}
   \\usepackage[american]{babel}
   \\usepackage[letterpaper,centering]{geometry}
@@ -1979,7 +1980,8 @@ PDFLaTeX export
                '("rlr-pdf-article"
                  "\\documentclass[12pt]{article}
 
-  \\usepackage{iftex,graphicx,epstopdf,amsmath,amssymb,url,ulem}
+  \\usepackage{iftex,graphicx,epstopdf,amsmath,amssymb,url}
+  \\usepackage[normalem]{ulem}
   \\usepackage{microtype,todonotes}
   \\usepackage[american]{babel}
   \\usepackage[letterpaper,centering]{geometry}
