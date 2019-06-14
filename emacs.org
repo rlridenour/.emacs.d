@@ -55,11 +55,11 @@ I use John Wiegley's use-package for loading and configuring all required packag
 
   (eval-when-compile
     (require 'use-package))
+  (setq use-package-always-ensure t)
   (require 'diminish)
   (require 'bind-key)
 
   (use-package use-package-chords
-    :ensure t
     :config (key-chord-mode 1))
 #+end_src
 
@@ -68,7 +68,6 @@ Set the path variable to match the shell.
 
 #+begin_src emacs-lisp :tangle yes
 (use-package exec-path-from-shell
-  :ensure t
   :config (exec-path-from-shell-initialize))
 #+end_src
 
@@ -92,17 +91,21 @@ I don't need to see the initial splash screen, nor do I need the comments at the
 
 I really like the subdued colors of the zenburn theme, but I need a bit more contrast.
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
 (use-package hc-zenburn-theme
-  :ensure t
   :config (load-theme 'hc-zenburn t)
+  )
+#+end_src
+
+#+begin_src emacs-lisp :tangle yes
+(use-package gruvbox-theme
+    :config (load-theme 'gruvbox-dark-soft t)
   )
 #+end_src
 
 #+begin_src emacs-lisp :tangle no
 (use-package color-theme-sanityinc-tomorrow
-  :ensure t
-  :config (load-theme 'sanityinc-tomorrow-eighties t)
+    :config (load-theme 'sanityinc-tomorrow-eighties t)
   )
 #+end_src
 
@@ -132,9 +135,8 @@ Highlight the current line and change the background color.
 
 #+begin_src emacs-lisp :tangle yes
   (global-hl-line-mode 1)
-  (set-face-background hl-line-face "gray25")
+  (set-face-background hl-line-face "gray20")
 #+end_src
-
 
 Match parentheses — especially useful when editing Lisp.
 
@@ -190,8 +192,7 @@ Speaking of the modeline, let's make it look a bit better.
 
 #+begin_src emacs-lisp :tangle yes
 (use-package spaceline
-  :ensure t
-  :config
+    :config
   (progn
 	(require 'spaceline-config)
 	(spaceline-spacemacs-theme)
@@ -700,8 +701,7 @@ Start server
 
 #+begin_src emacs-lisp :tangle yes
     (use-package dashboard
-        :ensure t
-        :diminish dashboard-mode
+                :diminish dashboard-mode
         :config
         (setq dashboard-items '((recents  . 10)
                                 (bookmarks . 10)))
@@ -717,8 +717,7 @@ Yasnippet for inserting commonly used bits of text.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package yasnippet
-    :ensure t
-    :defer t
+        :defer t
     :diminish yas-minor-mode
     :init (progn
             ;; (bind-key "SPC" 'yas-expand yas-minor-mode-map)
@@ -732,16 +731,14 @@ Yasnippet for inserting commonly used bits of text.
 #+begin_src emacs-lisp :tangle yes
 (use-package yasnippet-snippets
   :after yasnippet
-  :ensure t
-  :config (yasnippet-snippets-initialize))
+    :config (yasnippet-snippets-initialize))
 #+end_src
 
 Avy is used for jumping to points on screen. It works well, but I don't think it's any more efficient than isearch.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package avy
-    :ensure t
-    :bind (("M-g l" . avy-goto-line)
+        :bind (("M-g l" . avy-goto-line)
            ;; ("s-l" . avy-goto-line)
            ("M-g w" . avy-goto-word-1)
            ("M-g M-g" . avy-goto-char-2)
@@ -764,8 +761,7 @@ Smex makes M-x commands much easier.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package smex
-    :ensure t
-    :bind (([remap execute-extended-command] . smex)
+        :bind (([remap execute-extended-command] . smex)
            ("s-P" . smex))
     :config
     (smex-initialize)
@@ -776,8 +772,7 @@ Undo in Emacs is very powerful, but with great power comes great confusion. It h
 
 #+begin_src emacs-lisp :tangle yes
   (use-package undo-tree
-    :ensure t
-    :diminish undo-tree-mode
+        :diminish undo-tree-mode
     :config (global-undo-tree-mode)
     :bind (("s-z" . undo-tree-undo)
            ("s-Z" . undo-tree-redo)))
@@ -787,16 +782,14 @@ Dash is required by some other packages and functions.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package dash
-    :ensure t
-    :config (dash-enable-font-lock))
+        :config (dash-enable-font-lock))
 #+end_src
 
 Expand region is useful for quickly selecting text. Each successive keystroke expands the selected region from word to line to paragraph, etc.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package expand-region
-    :ensure t
-    :commands (er/mark-symbol)
+        :commands (er/mark-symbol)
     :bind* ("C-=" . er/expand-region))
 #+end_src
 
@@ -804,8 +797,7 @@ Magit is an interface for Git. If I could keep only one package in Emacs, this m
 
 #+begin_src emacs-lisp :tangle yes
   (use-package magit
-    :ensure t
-    :defer t
+        :defer t
     :bind ("C-x g" . magit-status))
 #+end_src
 
@@ -820,40 +812,35 @@ Magit is an interface for Git. If I could keep only one package in Emacs, this m
 
 #+begin_src emacs-lisp :tangle yes
     (use-package evil-nerd-commenter
-      :ensure t
-      :config (evilnc-default-hotkeys))
+            :config (evilnc-default-hotkeys))
 #+end_src
 
 Shrink Whitespace does exactly what it says for both blank lines and spaces. If the point is on one of several successive blank lines, then one keystroke kills all but one of them. Another keystroke kills that one also.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package shrink-whitespace
-    :ensure t
-    :bind ("M-=" . shrink-whitespace))
+        :bind ("M-=" . shrink-whitespace))
 #+end_src
 
 Easy-kill efficiently marks regions. 
 
 #+begin_src emacs-lisp :tangle yes
   (use-package easy-kill
-    :ensure t
-    :bind ([remap kill-ring-save] . easy-kill))
+        :bind ([remap kill-ring-save] . easy-kill))
 #+end_src
 
 Zop to char also marks and acts on regions. 
 
 #+begin_src emacs-lisp :tangle yes
   (use-package zop-to-char
-    :ensure t
-    :bind ([remap zap-to-char] . zop-to-char))
+        :bind ([remap zap-to-char] . zop-to-char))
 #+end_src
 
 Projectile is for project management.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package projectile
-    :ensure t
-    :diminish projectile-mode
+        :diminish projectile-mode
     :config (projectile-global-mode))
 #+end_src
 
@@ -868,8 +855,7 @@ Company-mode provides auto-completion suggestions.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package company
-    :ensure t
-    :diminish company-mode
+        :diminish company-mode
     :config
     (progn
       (setq company-tooltip-limit 20)
@@ -877,7 +863,6 @@ Company-mode provides auto-completion suggestions.
       (global-company-mode 1)))
 
 (use-package company-auctex
-:ensure t
 :config
 (company-auctex-init))
 #+end_src
@@ -886,8 +871,7 @@ Company-mode provides auto-completion suggestions.
 
 #+begin_src emacs-lisp :tangle no
   (use-package empos
-    :ensure t
-    :config
+        :config
     (progn
   	(setq empos-available-engines '("arxiv" "crossref")
   		  empos-bib-file "/Users/rlridenour/Dropbox/bibtex/empos.bib")))
@@ -897,16 +881,14 @@ Reveal in Finder opens a Finder with the current file or folder selected. I use 
 
 #+begin_src emacs-lisp :tangle yes
   (use-package reveal-in-osx-finder
-    :ensure t
-    :bind ("C-c z" . reveal-in-osx-finder))
+        :bind ("C-c z" . reveal-in-osx-finder))
 #+end_src
 
 Smartparens is used for things that come in pairs, like parentheses, brackets, quotation marks, etc.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package smartparens
-    :ensure t
-    :diminish smartparens-mode)
+        :diminish smartparens-mode)
   (require 'smartparens-config)
   (smartparens-global-mode t)
 #+end_src
@@ -922,8 +904,7 @@ Aggresive indent keeps code indented. It occasionally causes some problems, so r
 
 #+begin_src emacs-lisp :tangle yes
   (use-package aggressive-indent
-    :ensure t
-    :config (add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode)
+        :config (add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode)
     (add-to-list 'aggressive-indent-excluded-modes 'markdown-mode))
 #+end_src
 
@@ -931,15 +912,13 @@ A tip from [[http://pragmaticemacs.com/emacs/dynamically-filter-directory-listin
 
 #+begin_src emacs-lisp :tangle yes
   (use-package dired-narrow
-    :ensure t
-    :bind (:map dired-mode-map
+        :bind (:map dired-mode-map
                 ("/" . dired-narrow)))
 #+end_src
 
 
 #+begin_src emacs-lisp :tangle yes
 (use-package dired-subtree
-:ensure t
 :bind (:map dired-mode-map
             ("<tab>" . dired-subtree-toggle)))
 #+end_src
@@ -948,8 +927,7 @@ Nlinum fixes some problems with linum (line-numbering). I still need to turn off
 
 #+begin_src emacs-lisp :tangle no
   (use-package nlinum
-    :ensure t
-    :config
+        :config
     (global-nlinum-mode 1)
     (unless window-system
       (setq nlinum-format "%d ")))
@@ -966,8 +944,7 @@ Flyspell-correct-ivy uses the Ivy interface for spelling suggestions.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package flyspell-correct-ivy
-    :ensure t
-    :after flyspell
+        :after flyspell
     :bind (:map flyspell-mode-map
                 ("s-;" . flyspell-correct-word-generic)
                 ("C-;" . flyspell-correct-previous-word-generic)))
@@ -986,8 +963,7 @@ Move-text - move current line or active region up or down with m-arrow key
 
 #+begin_src emacs-lisp :tangle yes
   (use-package move-text
-    :ensure t
-    :config
+        :config
     (move-text-default-bindings))
 #+end_src
 
@@ -995,8 +971,7 @@ Hungry delete mode deletes all the whitespace when you hit backspace or delete.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package hungry-delete
-    :ensure t
-    :diminish hungry-delete-mode
+        :diminish hungry-delete-mode
     :config
     (global-hungry-delete-mode))
 #+end_src
@@ -1005,8 +980,7 @@ I use web-mode for editing html.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package web-mode
-    :ensure t
-    :config
+        :config
     (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
     (setq web-mode-engines-alist
           '(("django"    . "\\.html\\'")))
@@ -1022,8 +996,7 @@ Which-key is a package that shows the options for command completion. For exampl
 
 #+begin_src emacs-lisp :tangle yes
   (use-package which-key
-    :ensure t
-    :diminish which-key-mode
+        :diminish which-key-mode
     :config
     (which-key-mode))
 #+end_src
@@ -1032,8 +1005,7 @@ Sane-term is for opening ansi-term buffers. "C-x t" creates an ansi-term buffer 
 
 #+begin_src emacs-lisp :tangle yes
   (use-package sane-term
-    :ensure t
-    :bind (("C-x t" . sane-term)
+        :bind (("C-x t" . sane-term)
            ("C-x T" . sane-term-create)))
 #+end_src
 
@@ -1144,7 +1116,6 @@ after `multiple-cursors-mode' is quit.")
 #+begin_src emacs-lisp :tangle yes
 
 (use-package nswbuff
-:ensure t
 :bind (("M-`" . nswbuff-switch-to-previous-buffer)
        ("M-S-`" . nswbuff-switch-to-next-buffer))
 )
@@ -1154,8 +1125,7 @@ Use anzu for search and replace.
 
 #+begin_src emacs-lisp :tangle yes
 (use-package anzu
-  :ensure t
-  :bind (("M-%" . anzu-query-replace)
+    :bind (("M-%" . anzu-query-replace)
          ("C-M-%" . anzu-query-replace-regexp))
   :config
   (global-anzu-mode))
@@ -1704,8 +1674,7 @@ Unfill provides the inverse of Emacs' fill commands
 
 #+begin_src emacs-lisp :tangle yes
 (use-package unfill
-   :ensure t
-:bind (("s-j" . unfill-paragraph)))
+   :bind (("s-j" . unfill-paragraph)))
 #+end_src
 
 * Markdown and Pandoc
@@ -1714,8 +1683,7 @@ Unfill provides the inverse of Emacs' fill commands
 
 #+begin_src emacs-lisp :tangle yes
   (use-package markdown-mode
-    :ensure t
-    :defer t
+        :defer t
     :mode (("\\.text\\'" . markdown-mode)
            ("\\.markdown\\'" . markdown-mode)
            ("\\.md\\'" . markdown-mode)
@@ -1765,8 +1733,7 @@ Open files in Marked 2 using this [[https://gist.github.com/rlridenour/ac2031d50
 
 #+begin_src emacs-lisp :tangle yes
   (use-package pandoc-mode
-    :ensure t
-    :diminish pandoc-mode
+        :diminish pandoc-mode
     :config
     (add-hook 'markdown-mode-hook 'pandoc-mode)
     (add-hook 'org-mode-hook 'pandoc-mode)
@@ -2471,8 +2438,7 @@ Return adds new heading or list item.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package auctex-latexmk             ; latexmk command for AUCTeX
-    :ensure t
-    ;; :defer t
+        ;; :defer t
     ;; :after auctex
     :config (auctex-latexmk-setup))
 
@@ -2699,8 +2665,7 @@ Allow AucTeX to use biber as well as/instead of bibtex.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package ebib
-    :ensure t
-    :init
+        :init
     (setq ebib-preload-bib-search-dirs "~/Dropbox/bibtex/randybib.bib"))
 
 #+end_src
@@ -2892,8 +2857,7 @@ Compile ConTeXt on save.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package emmet-mode
-    :ensure t
-    :diminish (emmet-mode . "ε")
+        :diminish (emmet-mode . "ε")
     :bind* (("C-)" . emmet-next-edit-point)
             ("C-(" . emmet-prev-edit-point))
     :commands (emmet-mode
@@ -3024,8 +2988,7 @@ From http://oremacs.com/2014/12/30/ace-link-eww/
 
 #+begin_src emacs-lisp :tangle yes
   (use-package ace-link
-    :ensure t
-    :init
+        :init
       (ace-link-setup-default))
 
 #+end_src
@@ -3084,8 +3047,7 @@ From http://oremacs.com/2014/12/30/ace-link-eww/
 
 #+begin_src emacs-lisp :tangle yes
   (use-package key-chord
-    :ensure t
-    :defer t
+        :defer t
     :config
     (key-chord-mode 1))
 
@@ -3098,7 +3060,6 @@ From http://oremacs.com/2014/12/30/ace-link-eww/
 :ensure t)
 
 (use-package major-mode-hydra
-:ensure t
   :bind
   ("s-m" . major-mode-hydra))
 #+end_src
@@ -3251,8 +3212,7 @@ Flycheck
 
 #+begin_src emacs-lisp :tangle yes
   (use-package flycheck
-    :ensure t
-    :defer t
+        :defer t
     :config
     (add-hook 'after-init-hook #'global-flycheck-mode))
 
@@ -3262,8 +3222,7 @@ Python ;;
 
 #+begin_src emacs-lisp :tangle no
   (use-package elpy
-    :ensure t
-    :config
+        :config
     (elpy-enable))
 
 #+end_src
@@ -3279,8 +3238,7 @@ Racket ;;
 
 #+begin_src emacs-lisp :tangle yes
   (use-package racket-mode
-    :ensure t
-    :defer t
+        :defer t
     :mode ("\\.rkt[dl]?\\'" . racket-mode))
 
 #+end_src
@@ -3295,8 +3253,7 @@ Common Lisp
 
 #+begin_src emacs-lisp :tangle yes
   (use-package slime
-    :ensure t
-    :config
+        :config
     (setq inferior-lisp-program "/usr/local/bin/sbcl")
     (setq slime-contribs '(slime-fancy)))
 
@@ -3306,8 +3263,7 @@ Swift
 
 #+begin_src emacs-lisp :tangle yes
   (use-package swift-mode
-    :ensure t
-    :defer t)
+        :defer t)
 
 #+end_src
 
@@ -3416,8 +3372,7 @@ Start a regular shell
 
 #+begin_src emacs-lisp :tangle yes
   (use-package swiper
-    :ensure t
-    :diminish ivy-mode
+        :diminish ivy-mode
     :bind
     (("s-r" . counsel-recentf)
      ;; ("C-s" . swiper)
@@ -3480,7 +3435,6 @@ Start a regular shell
 
 #+begin_src emacs-lisp :tangle no
 (use-package spotlight
-:ensure t
 )
 #+end_src
 
@@ -3490,11 +3444,9 @@ Use prescient.el
 (use-package prescient
 :ensure t)
 (use-package ivy-prescient
-:ensure t
 :config
 (ivy-prescient-mode t))
 (use-package company-prescient
-:ensure t
 :config
 (company-prescient-mode t))
 #+end_src
@@ -3502,7 +3454,7 @@ Use prescient.el
 Replace i-search with swiper-isearch.
 
 #+begin_src emacs-lisp :tangle yes
-(global-set-key (kbd "C-s") 'swiper-isearch)
+(global-set-key (kbd "s-1") 'swiper-isearch)
 #+end_src
 
 * Final Steps
