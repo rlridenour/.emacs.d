@@ -626,8 +626,6 @@ Start server
                                 (bookmarks . 10)))
         (dashboard-setup-startup-hook)
   (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*"))))
-
-  
 #+end_src
 
 
@@ -720,14 +718,14 @@ Magit is an interface for Git. If I could keep only one package in Emacs, this m
     :bind ("C-x g" . magit-status))
 #+end_src
 
+This is for Mercurial.
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
   (use-package ahg
   :ensure t)
 #+end_src
 
-
-  Evil-nerd commenter is used for quickly commenting code. It works well both with and without evil-mode.
+Evil-nerd commenter is used for quickly commenting code. It works well both with and without evil-mode.
 
 #+begin_src emacs-lisp :tangle yes
     (use-package evil-nerd-commenter
@@ -763,13 +761,6 @@ Projectile is for project management.
     :config (projectile-global-mode))
 #+end_src
 
-Ag is for searching using the Silver Searcher. I'm mostly using Ripgrep for searching now, though.
-
-#+begin_src emacs-lisp :tangle yes
-  (use-package ag
-    :ensure t)
-#+end_src
-
 Company-mode provides auto-completion suggestions. 
 
 #+begin_src emacs-lisp :tangle yes
@@ -796,7 +787,7 @@ Company-mode provides auto-completion suggestions.
   		  empos-bib-file "/Users/rlridenour/Dropbox/bibtex/empos.bib")))
 #+end_src
 
-Reveal in Finder opens a Finder with the current file or folder selected. I use this a lot/
+Reveal in Finder opens a Finder with the current file or folder selected. I use this a lot.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package reveal-in-osx-finder
@@ -842,16 +833,6 @@ A tip from [[http://pragmaticemacs.com/emacs/dynamically-filter-directory-listin
             ("<tab>" . dired-subtree-toggle)))
 #+end_src
 
-Nlinum fixes some problems with linum (line-numbering). I still need to turn off line numbering for some very large buffers for smooth scrolling.
-
-#+begin_src emacs-lisp :tangle no
-  (use-package nlinum
-        :config
-    (global-nlinum-mode 1)
-    (unless window-system
-      (setq nlinum-format "%d ")))
-#+end_src
-
 Biblio provides database searches for bibtex references.
 
 #+begin_src emacs-lisp :tangle yes
@@ -875,8 +856,6 @@ WC-mode provides word count.
   (use-package wc-mode
     :ensure t)
 #+end_src
-
-
 
 Move-text - move current line or active region up or down with m-arrow key
 
@@ -928,34 +907,7 @@ Sane-term is for opening ansi-term buffers. "C-x t" creates an ansi-term buffer 
            ("C-x T" . sane-term-create)))
 #+end_src
 
-Region-bindings-mode setup from kaushalmodi at https://github.com/kaushalmodi/.emacs.d/blob/master/setup-files/setup-region-bindings-mode.el
-
-#+begin_src emacs-lisp :tangle no
-(use-package region-bindings-mode
-  :config
-  (progn
-    ;; Do not activate `region-bindings-mode' in Special modes like `dired' and
-    ;; `ibuffer'. Single-key bindings like 'm' are useful in those modes even
-    ;; when a region is selected.
-    (setq region-bindings-mode-disabled-modes '(dired-mode
-                                                ibuffer-mode))
-
-    (region-bindings-mode-enable)
-
-    (defun modi/disable-rbm-deactivate-mark ()
-      "Disable `region-bindings-mode' and deactivate mark."
-      (interactive)
-      (region-bindings-mode -1)
-      (deactivate-mark)
-      (message "Mark deactivated"))
-
-    (bind-keys
-     :map region-bindings-mode-map
-      ("<C-SPC>" . modi/disable-rbm-deactivate-mark))))
-
-#+end_src
-
-Multiple cursors setup - also from kaushalmodi: https://github.com/kaushalmodi/.emacs.d/blob/master/setup-files/setup-multiple-cursors.el
+Multiple cursors setup from kaushalmodi: https://github.com/kaushalmodi/.emacs.d/blob/master/setup-files/setup-multiple-cursors.el
 
 #+begin_src emacs-lisp :tangle no
 (use-package multiple-cursors
@@ -1033,7 +985,6 @@ after `multiple-cursors-mode' is quit.")
 #+end_src
 
 #+begin_src emacs-lisp :tangle yes
-
 (use-package nswbuff
 :bind (("M-`" . nswbuff-switch-to-previous-buffer)
        ("M-S-`" . nswbuff-switch-to-next-buffer))
