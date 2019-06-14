@@ -9,6 +9,8 @@ auto-save-list
 tramp
 .\#*
 transient/
+.last-package-update-day
+emacs-old.org
 
 # Org-mode
 .org-id-locations
