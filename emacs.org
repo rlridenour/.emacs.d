@@ -59,6 +59,12 @@ I use John Wiegley's use-package for loading and configuring all required packag
   (require 'diminish)
   (require 'bind-key)
 
+(use-package auto-package-update
+  :config
+  (setq auto-package-update-delete-old-versions t)
+  (setq auto-package-update-hide-results t)
+  (auto-package-update-maybe))
+
   (use-package use-package-chords
     :config (key-chord-mode 1))
 #+end_src
@@ -234,30 +240,22 @@ Always prefer UTF-8 encoding.
   (setq default-buffer-file-coding-system 'utf-8)
 #+end_src
 
-Use TeX to input special characters
+Use TeX to input special characters. Activated later for text, markdown, and org modes.
 
 #+begin_src emacs-lisp :tangle yes
-  (setq default-input-method 'TeX)
-#+end_src
-
-Start TeX input when switching buffers
-
-#+begin_src emacs-lisp :tangle yes
-  ;; (defadvice switch-to-buffer (after activate-input-method activate)
-  ;; (activate-input-method "TeX"))
+(setq default-input-method 'TeX)
 #+end_src
 
 This will save the file every time the user switches apps. It's handy for ensuring regular saves, but can be annoying when there's a TeX error and latexmk is watching the file.
 
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp :tangle yes
   (defun save-all ()
     (interactive)
     (save-some-buffers t))
   (add-hook 'focus-out-hook 'save-all)
 #+end_src
 
-Auto save often
-save every 20 characters typed (this is the minimum)
+Auto save often — save every 20 characters typed (this is the minimum)
 
 #+begin_src emacs-lisp :tangle yes
   (setq auto-save-interval 20)
@@ -299,15 +297,7 @@ Use tab for indentation and completion. From http://emacsredux.com/blog/2016/01/
   (setq-default tab-always-indent 'complete)
 #+end_src
 
-Backup files
-
-Don't make backup files
-
-#+begin_src emacs-lisp :tangle yes
-  ;; (setq make-backup-files nil)
-#+end_src
-
-  ;; Save backups and auto-saves to the system temp directory.
+Save backups and auto-saves to the system temp directory.
 
 #+begin_src emacs-lisp :tangle yes
     (setq backup-directory-alist
@@ -366,15 +356,6 @@ Use F7 to check the current word, M-F7 for the next word.
   (global-set-key (kbd "M-<f7>") 'flyspell-check-next-highlighted-word)
 #+end_src
 
-Spell-check with the right mouse button, just in case I can't remember to hit F7.
-
-#+begin_src emacs-lisp :tangle yes
-  (eval-after-load "flyspell"
-    '(progn
-       (define-key flyspell-mouse-map [down-mouse-3] #'flyspell-correct-word)
-       (define-key flyspell-mouse-map [mouse-3] #'undefined)))
-#+end_src
-
 Find aspell and hunspell automatically
 
 #+begin_src emacs-lisp :tangle yes
@@ -402,7 +383,6 @@ Store personal dictionary in Dropbox to sync between machines.
   (setq ispell-personal-dictionary "/Users/rlridenour/Dropbox/emacs/ridenour-ispell-dictionary ")
 #+end_src
 
-
 Hide various file types, mostly LaTeX auxiliary files, in Dired.
 
 #+begin_src emacs-lisp :tangle yes
@@ -413,6 +393,8 @@ Hide various file types, mostly LaTeX auxiliary files, in Dired.
   (setq-default dired-omit-extensions '("fdb_latexmk" "aux" "bbl" "blg" "fls" "glo" "idx" "ilg" "ind" "ist" "log" "out" "gz" "bcf" "run.xml"  "DS_Store"))
   (setq dired-dwim-target t)
 #+end_src
+
+** Abbreviations and Bookmarks
 
 Load Abbreviations
 
@@ -427,9 +409,7 @@ Bookmarks
   (bookmark-bmenu-list)
 #+end_src
 
-
-
-Recent Files
+** Recent Files
 
 #+begin_src emacs-lisp :tangle yes
   (require 'recentf)
@@ -445,7 +425,7 @@ Don't ask for confirmation to kill processes when exiting Emacs. Credit to [[htt
     (cl-flet ((process-list ())) ad-do-it))
 #+end_src
 
-ibuffer
+** ibuffer
 
 Don't ask for unnecessary confirmations
 
@@ -462,7 +442,7 @@ Auto-update buffer list
            (ibuffer-switch-to-saved-filter-groups "home")))
 #+end_src
 
-Isearch
+** Isearch
 
 From Xah Lee, http://ergoemacs.org/emacs/emacs_isearch_by_arrow_keys.html
 
@@ -476,7 +456,7 @@ From Xah Lee, http://ergoemacs.org/emacs/emacs_isearch_by_arrow_keys.html
     )
 #+end_src
 
-Shell
+** Shell
 
 From http://oremacs.com/2015/01/01/three-ansi-term-tips/
 
@@ -519,6 +499,23 @@ Make completion case-insensitive in eshell
   (setq eshell-cmpl-ignore-case t)
   (setq pcomplete-ignore-case t)
 #+end_src
+
+Start eshell
+
+#+begin_src emacs-lisp :tangle yes
+  (global-set-key (kbd "C-x m") (lambda () (interactive) (eshell t)))
+  ;; Start a new eshell even if one is active
+  (global-set-key (kbd "C-x M") (lambda () (interactive) (eshell t)))
+#+end_src
+
+Start a regular shell
+
+#+begin_src emacs-lisp :tangle yes
+  (global-set-key (kbd "C-x M-m") 'shell)
+#+end_src
+
+
+** Misc
 
 Kill contents of scratch buffer, not the buffer itself. From [[http://emacswiki.org/emacs/RecreateScratchBuffer][TN]].
 
@@ -568,89 +565,12 @@ This flashes the mode-line (from http://www.stefanom.org/prettify-my-emacs-symbo
          ring-bell-function 'my-terminal-visible-bell)
 #+end_src
 
-Start eshell
-
-#+begin_src emacs-lisp :tangle yes
-  (global-set-key (kbd "C-x m") (lambda () (interactive) (eshell t)))
-  ;; Start a new eshell even if one is active
-  (global-set-key (kbd "C-x M") (lambda () (interactive) (eshell t)))
-#+end_src
-
-Start a regular shell
-
-#+begin_src emacs-lisp :tangle yes
-  (global-set-key (kbd "C-x M-m") 'shell)
-#+end_src
-
-CUA mode for rectangle editing
-Sometimes very useful (but we don't use the core cua keys.)
+CUA mode only for rectangle editing. 
 
 #+begin_src emacs-lisp :tangle yes
   (setq cua-enable-cua-keys nil)
   (cua-mode)
 #+end_src
-
-To start a rectangle, use [C-return] and extend it using the normal
-movement keys (up, down, left, right, home, end, C-home,
-C-end). Once the rectangle has the desired size, you can cut or
-copy it using C-w and M-w, and you can
-subsequently insert it - as a rectangle - using C-y.  So
-the only new command you need to know to work with cua-mode
-rectangles is C-return!
-
-Normally, when you paste a rectangle using C-v (C-y), each line of
-the rectangle is inserted into the existing lines in the buffer.
-If overwrite-mode is active when you paste a rectangle, it is
-inserted as normal (multi-line) text.
-
-And there's more: If you want to extend or reduce the size of the
-rectangle in one of the other corners of the rectangle, just use
-[return] to move the cursor to the "next" corner.  Or you can use
-the [M-up], [M-down], [M-left], and [M-right] keys to move the
-entire rectangle overlay (but not the contents) in the given
-direction.
-
-[C-return] cancels the rectangle
-[C-space] activates the region bounded by the rectangle
-
-cua-mode's rectangle support also includes all the normal rectangle
-functions with easy access:
-
-[M-a] aligns all words at the left edge of the rectangle
-[M-b] fills the rectangle with blanks (tabs and spaces)
-[M-c] closes the rectangle by removing all blanks at the left edge
-      of the rectangle
-[M-f] fills the rectangle with a single character (prompt)
-[M-i] increases the first number found on each line of the rectangle
-      by the amount given by the numeric prefix argument (default 1)
-      It recognizes 0x... as hexadecimal numbers
-[M-k] kills the rectangle as normal multi-line text (for paste)
-[M-l] downcases the rectangle
-[M-m] copies the rectangle as normal multi-line text (for paste)
-[M-n] fills each line of the rectangle with increasing numbers using
-      a supplied format string (prompt)
-[M-o] opens the rectangle by moving the highlighted text to the
-      right of the rectangle and filling the rectangle with blanks.
-[M-p] toggles virtual straight rectangle edges
-[M-P] inserts tabs and spaces (padding) to make real straight edges
-[M-q] performs text filling on the rectangle
-[M-r] replaces REGEXP (prompt) by STRING (prompt) in rectangle
-[M-R] reverse the lines in the rectangle
-[M-s] fills each line of the rectangle with the same STRING (prompt)
-[M-t] performs text fill of the rectangle with TEXT (prompt)
-[M-u] upcases the rectangle
-[M-|] runs shell command on rectangle
-[M-'] restricts rectangle to lines with CHAR (prompt) at left column
-[M-/] restricts rectangle to lines matching REGEXP (prompt)
-[C-?] Shows a brief list of the above commands.
-
-[M-C-up] and [M-C-down] scrolls the lines INSIDE the rectangle up
-and down; lines scrolled outside the top or bottom of the rectangle
-are lost, but can be recovered using [C-z].
-
-
-
-
 
 Turn off debugging and set default directory
 
@@ -662,7 +582,6 @@ Turn off debugging and set default directory
 Convert tabs to spaces
 
 #+begin_src emacs-lisp :tangle yes
-  (setq tab-width 4)
   (setq-default indent-tabs-mode nil)
 #+end_src
 
@@ -679,7 +598,7 @@ Garbage collection from http://bling.github.io/blog/2016/01/18/why-are-you-chang
   (add-hook 'minibuffer-exit-hook #'my-minibuffer-exit-hook)
 #+end_src
 
-overwrite selected text
+Overwrite selected text
 
 #+begin_src emacs-lisp :tangle yes
   (delete-selection-mode t)
@@ -1130,7 +1049,6 @@ Use anzu for search and replace.
   :config
   (global-anzu-mode))
 #+end_src
-
 
 * Functions
 
@@ -2397,8 +2315,25 @@ Return adds new heading or list item.
         (org-return)))))
     (define-key org-mode-map (kbd "RET")
       'scimax/org-return)
-
 #+end_src
+
+Use TeX input method for text, markdown, and org files.
+
+#+begin_src emacs-lisp :tangle no
+(add-hook 'text-mode-hook 'toggle-input-method)
+(add-hook 'markdown-mode-hook 'toggle-input-method)
+(add-hook 'org-mode-hook 'toggle-input-method)
+#+end_src
+
+#+begin_src emacs-lisp :tangle yes
+(defun activate-default-input-method ()
+  (interactive)
+  (activate-input-method default-input-method))
+(add-hook 'text-mode-hook 'activate-default-input-method)
+(add-hook 'markdown-mode-hook 'activate-default-input-method)
+(add-hook 'org-mode-hook 'activate-default-input-method)
+#+end_src
+
 
 * LaTex
 
