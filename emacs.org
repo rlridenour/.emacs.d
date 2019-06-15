@@ -1122,7 +1122,7 @@ From [[https://github.com/grettke/home/blob/master/.emacs.el#L436][Grant Rettke]
 #+end_src
 
 Kill Buffer and Delete File
-From [https://github.com/bbatsov/prelude][Emacs Prelude]
+From [[https://github.com/bbatsov/prelude][Emacs Prelude]]
 
 #+begin_src emacs-lisp :tangle yes
   (defun delete-file-and-buffer ()
@@ -1202,7 +1202,7 @@ Switch to Previous Buffer
 
 #+end_src
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
   (require 'dash)
 #+end_src
 
@@ -1383,17 +1383,6 @@ Stefan Monnier <foo at acm.org>. It is the opposite of fill-paragraph
 #+end_src
 
 From https://github.com/ocodo/.emacs.d/blob/master/custom/handy-functions.el
-  
-#+begin_src emacs-lisp :tangle no
-  (defun nuke-all-buffers ()
-    "Kill all buffers, leaving *scratch* only."
-    (interactive)
-    (mapc
-     (lambda (buffer)
-       (kill-buffer buffer))
-     (buffer-list))
-    (delete-other-windows))
-#+end_src
 
 #+begin_src emacs-lisp :tangle yes
 (defun nuke-all-buffers ()
@@ -1445,7 +1434,7 @@ open recent directory, requires ivy (part of swiper)
 borrows from http://stackoverflow.com/questions/23328037/in-emacs-how-to-maintain-a-list-of-recent-directories
 
 #+begin_src emacs-lisp :tangle yes
-  (defun bjm/ivy-dired-recent-dirs ()
+  (defun rlr/ivy-dired-recent-dirs ()
     "Present a list of recently used directories and open the selected one in dired"
     (interactive)
     (let ((recent-dirs
@@ -1504,7 +1493,7 @@ From http://endlessparentheses.com/ispell-and-abbrev-the-perfect-auto-correct.ht
 From Xah Lee, http://ergoemacs.org/emacs/elisp_unicode_replace_invisible_chars.html
 
 #+begin_src emacs-lisp :tangle yes
-  (defun xah-replace-BOM-mark-etc ()
+  (defun rlr-replace-BOM-mark-etc ()
     "Query replace some invisible Unicode chars.
   The chars to be searched are:
    ZERO WIDTH NO-BREAK SPACE (codepoint 65279, #xfeff)
@@ -1535,8 +1524,7 @@ Make parent directory when creating new file. From http://mbork.pl/2016-07-25_Ma
   (defun make-parent-directory ()
     "Make sure the directory of `buffer-file-name' exists."
     (make-directory (file-name-directory buffer-file-name) t))
-
-  (add-hook 'find-file-not-found-functions #'make-parent-directory)
+    (add-hook 'find-file-not-found-functions #'make-parent-directory)
 #+end_src
 
 Unfill provides the inverse of Emacs' fill commands
