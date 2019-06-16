@@ -1558,24 +1558,10 @@ Make it easier to bold and italicize in Markdown Mode
               (local-set-key (kbd "s-i") 'markdown-insert-italic)))
 #+end_src
 
-Enable wc-mode
+Enable wc-mode for word count.
 
 #+begin_src emacs-lisp :tangle yes
   (add-hook 'markdown-mode-hook 'wc-mode)
-#+end_src
-
-I haven't yet figured out why, but pressing =RET= deletes whitespace at the end of the line. That's useful for writing code, I'm sure, but not for writing Markdown text requiring hard line breaks. This little function just inserts two spaces at the end of the line and moves to the next line. I use it for prayers and poetry that I post on the blog, so it's called "mdpoetry." 
-
-#+begin_src emacs-lisp :tangle yes
-  (fset 'mdpoetry
-        "\C-e  \C-n")
-  (global-set-key (kbd "<f9>") 'mdpoetry)
-#+end_src
-
-Turn on Orgtbl-mode in Markdown-mode EDIT: Orgtble used C-c C-c, which conflicts with some Markdown keybindings.
-
-#+begin_src emacs-lisp :tangle yes
-  ;; (add-hook 'markdown-mode-hook 'turn-on-orgtbl)
 #+end_src
 
 Open files in Marked 2 using this [[https://gist.github.com/rlridenour/ac2031d50eab51d4877f0ef9decf3b96][shell script]].
@@ -1657,14 +1643,6 @@ Converts Markdown files to LaTeX articles and handouts using fish shell function
     (shell-command "panclean"))
 #+end_src
 
-Markdown Mac Link
-
-#+begin_src emacs-lisp :tangle yes
-  ;;(if (eq system-type 'darwin)
-  ;;	(use-package markdown-mac-link
-  ;;	  :ensure t)
-  ;;  )
-#+end_src
 
 Ispell ignore TeX 
 
@@ -1687,16 +1665,6 @@ prevent demoting heading also shifting text inside sections
   (setq org-adapt-indentation nil)
 #+end_src
 
-
-Evil-Org
-
-Use evil-org for evil keybindings in org mode.
-
-#+begin_src emacs-lisp :tangle no
-  (use-package evil-org
-    :ensure t)
-#+end_src
-
 Use Org Mode for TXT files
 
 #+begin_src emacs-lisp :tangle yes
@@ -1704,20 +1672,17 @@ Use Org Mode for TXT files
   (add-to-list 'auto-mode-alist '("\\.txt\\'" . markdown-mode))
 #+end_src
 
-Archive Settings
+** Archive Settings
 
 Where archived projects and tasks go.
-
 
 #+begin_src emacs-lisp :tangle yes
   (setq org-archive-location "~/Dropbox/Org/archive.org::From %s")
 #+end_src
 
-
-Mobile Settings
+** Mobile Settings
 
 Sync orgmode files with Dropbox and iPhone. 
-
 
 #+begin_src emacs-lisp :tangle yes
   ;; Set to the location of your Org files on your local system
@@ -1730,10 +1695,7 @@ Sync orgmode files with Dropbox and iPhone.
   (setq org-mobile-inbox-for-pull "~/Dropbox/org/from-mobile.org")
 #+end_src
 
-
-
-
-Babel Settings
+** Babel Settings
 
 Configure org-mode so that when you edit source code in an indirect buffer (with C-c '), the buffer is opened in the current window. That way, your window organization isn't broken when switching.
 
@@ -1741,16 +1703,16 @@ Configure org-mode so that when you edit source code in an indirect buffer (with
   (setq org-src-window-setup 'current-window)
 #+end_src
 
-Exporter Settings and Helpful Packages
+** Exporter Settings and Helpful Packages
 
-HTML and LaTeX exporters are shown by default. We add the Markdown exporter to the menu.
+HTML and LaTeX exporters are shown by default. Add the Markdown exporter to the menu.
 
 
 Autocomplete for orgmode
 
 #+begin_src emacs-lisp :tangle yes
-  ;; (require 'org-ac)
-  ;; (org-ac/config-default)
+  (use-package org-ac
+:config (org-ac/config-default))
 #+end_src
 
 Markdown exporter
@@ -1958,9 +1920,6 @@ Nice Bulleted Lists
 
 #+end_src
 
-
-
-
 Configure Org-babel
 Add LaTeX to the list of languages Org-babel will recognize.
 
@@ -1975,16 +1934,11 @@ Add LaTeX to a list of languages that raise noweb-type errors.
 
 #+begin_src emacs-lisp :tangle yes
   (add-to-list 'org-babel-noweb-error-langs "latex")
-
 #+end_src
-
-
-
 
 Org Capture
 
 Use C-c c for Org Capture to ~/Dropbox/notes.org
-
 
 #+begin_src emacs-lisp :tangle yes
   ;;(setq org-default-notes-file (concat org-directory "/notes.org"))
@@ -1994,15 +1948,12 @@ Use C-c c for Org Capture to ~/Dropbox/notes.org
           ("j" "Journal" entry (file+datetree "~/Dropbox/org/journal.org")
            "* %?\nEntered on %U\n  %i\n  %a")))
   (define-key global-map "\C-cc" 'org-capture)
-
-  ;; (add-hook 'org-capture-mode-hook 'evil-insert-state)
-
 #+end_src
+
 Tab doesn't split headings
 
 #+begin_src emacs-lisp :tangle yes
   (setq org-M-RET-may-split-line '((item) (default . t)))
-
 #+end_src
 
 Reference Links
@@ -2114,44 +2065,6 @@ Ignore TeX commands
 #+end_src
 
 Return adds new heading or list item.
-
-#+begin_src emacs-lisp :tangle no
-  ;; (defun scimax/org-return ()
-  ;;   "Add new list or headline "
-  ;;   (interactive)
-  ;;   (cond
-  ;;    ((org-in-item-p)
-  ;;     (if (org-element-property :contents-begin (org-element-context))
-  ;;         (org-insert-heading)
-  ;;       (beginning-of-line)
-  ;;       (setf (buffer-substring
-  ;;              (line-beginning-position) (line-end-position)) "")
-  ;;       (org-return)))
-  ;;    ((org-at-heading-p)
-  ;;     (if (not (string= "" (org-element-property :title (org-element-context))))
-  ;;         (progn (org-end-of-meta-data)
-  ;;                (org-insert-heading))
-  ;;       (beginning-of-line)
-  ;;       (setf (buffer-substring
-  ;;              (line-beginning-position) (line-end-position)) "")))
-  ;;    ((org-at-table-p)
-  ;;     (if (-any?
-  ;;          (lambda (x) (not (string= "" x)))
-  ;;          (nth
-  ;;           (- (org-table-current-dline) 1)
-  ;;           (org-table-to-lisp)))
-  ;;         (org-return)
-  ;;       ;; empty row
-  ;;       (beginning-of-line)
-  ;;       (setf (buffer-substring
-  ;;              (line-beginning-position) (line-end-position)) "")
-  ;;       (org-return)))
-  ;;    (t
-  ;;     (org-return))))
-
-  ;; (define-key org-mode-map (kbd "RET")
-  ;;   'scimax/org-return)
-#+end_src
 
 #+begin_src emacs-lisp :tangle yes
   ;; * A better return
