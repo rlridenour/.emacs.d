@@ -111,13 +111,19 @@ I really like the subdued colors of the zenburn theme, but I need a bit more con
 (use-package color-theme-sanityinc-tomorrow)
 #+end_src
 
+Install poet theme.
+
+#+begin_src emacs-lisp :tangle yes
+(use-package poet-theme)
+#+end_src
+
 Use theme-looper to change themes.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package theme-looper
 :bind ("s-0" . theme-looper-select-theme)
   :config
-(theme-looper-set-favorite-themes '(hc-zenburn gruvbox-dark-soft gruvbox-light-soft sanityinc-tomorrow-night sanityinc-tomorrow-eighties))
+(theme-looper-set-favorite-themes '(hc-zenburn gruvbox-dark-soft gruvbox-light-soft sanityinc-tomorrow-night sanityinc-tomorrow-eighties poet poet-dark-monochrome poet-dark poet-monochrome))
 )
 #+end_src
 
