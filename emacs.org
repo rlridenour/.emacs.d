@@ -14,7 +14,7 @@
 (org-babel-load-file (exdpand-file-name "emacs.org" user-emacs-directory))
 #+end_src
 
-First, set the correct user information.
+Set the correct user information.
 
 #+begin_src emacs-lisp :tangle yes
 (setq user-full-name "Randy Ridenour"
@@ -38,35 +38,38 @@ If needed, uncomment these for debugging.
 I use John Wiegley's use-package for loading and configuring all required packages.
 
 #+begin_src emacs-lisp :tangle yes
-  (require 'package)
-  (setq package-enable-at-startup nil)
-  (add-to-list 'package-archives
-               '("melpa" . "http://melpa.org/packages/")
-  '("org" . "https://orgmode.org/elpa/"))
+    (require 'package)
+    (setq package-enable-at-startup nil)
+    (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
+    (add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/") t)
 
-(add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/") t)
+    (package-initialize)
 
-  (package-initialize)
+    ;; Bootstrap `use-package'
+    (unless (package-installed-p 'use-package)
+      (package-refresh-contents)
+      (package-install 'use-package))
 
-  ;; Bootstrap `use-package'
-  (unless (package-installed-p 'use-package)
-    (package-refresh-contents)
-    (package-install 'use-package))
+    (eval-when-compile
+      (require 'use-package))
+    (setq use-package-always-ensure t)
+    (require 'diminish)
+    (require 'bind-key)
 
-  (eval-when-compile
-    (require 'use-package))
-  (setq use-package-always-ensure t)
-  (require 'diminish)
-  (require 'bind-key)
+  ;; Automatically update packages
+  (use-package auto-package-update
+    :config
+    (setq auto-package-update-delete-old-versions t)
+    (setq auto-package-update-hide-results t)
+    (auto-package-update-maybe))
 
-(use-package auto-package-update
-  :config
-  (setq auto-package-update-delete-old-versions t)
-  (setq auto-package-update-hide-results t)
-  (auto-package-update-maybe))
+  ;; Allow key chords in use-package bindings.
+    (use-package use-package-chords
+      :config (key-chord-mode 1))
 
-  (use-package use-package-chords
-    :config (key-chord-mode 1))
+  ;;  Ensure that system utilities required by various packages are installed.
+  (use-package use-package-ensure-system-package
+    :ensure t)
 #+end_src
 
 
@@ -111,12 +114,6 @@ I really like the subdued colors of the zenburn theme, but I need a bit more con
 (use-package color-theme-sanityinc-tomorrow)
 #+end_src
 
-Install poet theme.
-
-#+begin_src emacs-lisp :tangle yes
-(use-package poet-theme)
-#+end_src
-
 Use theme-looper to change themes.
 
 #+begin_src emacs-lisp :tangle yes
@@ -126,7 +123,6 @@ Use theme-looper to change themes.
 (theme-looper-set-favorite-themes '(hc-zenburn gruvbox-dark-soft gruvbox-light-soft sanityinc-tomorrow-night sanityinc-tomorrow-eighties poet poet-dark-monochrome poet-dark poet-monochrome))
 )
 #+end_src
-
 
 Set the default font. The "frame-alist" is necessary to set the font when using emacs daemon and client. I find Droid Sans to be a very readable font.
 
@@ -637,7 +633,9 @@ Start server
         (setq dashboard-items '((recents  . 10)
                                 (bookmarks . 10)))
         (dashboard-setup-startup-hook)
-  (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*"))))
+  (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
+(add-to-list 'dashboard-items '(agenda) t)
+(setq show-week-agenda-p t))
 #+end_src
 
 
@@ -655,12 +653,6 @@ Yasnippet for inserting commonly used bits of text.
             (setq yas-snippet-dirs
               '("~/.emacs.d/snippets"))))
   (define-key yas-minor-mode-map (kbd "TAB") 'yas-expand)
-#+end_src
-
-#+begin_src emacs-lisp :tangle yes
-(use-package yasnippet-snippets
-  :after yasnippet
-    :config (yasnippet-snippets-initialize))
 #+end_src
 
 Avy is used for jumping to points on screen. It works well, but I don't think it's any more efficient than isearch.
@@ -730,13 +722,6 @@ Magit is an interface for Git. If I could keep only one package in Emacs, this m
     :bind ("C-x g" . magit-status))
 #+end_src
 
-This is for Mercurial.
-
-#+begin_src emacs-lisp :tangle no
-  (use-package ahg
-  :ensure t)
-#+end_src
-
 Evil-nerd commenter is used for quickly commenting code. It works well both with and without evil-mode.
 
 #+begin_src emacs-lisp :tangle yes
@@ -749,13 +734,6 @@ Shrink Whitespace does exactly what it says for both blank lines and spaces. If 
 #+begin_src emacs-lisp :tangle yes
   (use-package shrink-whitespace
         :bind ("M-=" . shrink-whitespace))
-#+end_src
-
-Easy-kill efficiently marks regions. 
-
-#+begin_src emacs-lisp :tangle yes
-  (use-package easy-kill
-        :bind ([remap kill-ring-save] . easy-kill))
 #+end_src
 
 Zop to char also marks and acts on regions. 
@@ -787,16 +765,6 @@ Company-mode provides auto-completion suggestions.
 (use-package company-auctex
 :config
 (company-auctex-init))
-#+end_src
-
-[[https://github.com/dimalik/empos][Empos]] searches for journal articles and adds them a bib file. I prefer using Bibdesk.
-
-#+begin_src emacs-lisp :tangle no
-  (use-package empos
-        :config
-    (progn
-  	(setq empos-available-engines '("arxiv" "crossref")
-  		  empos-bib-file "/Users/rlridenour/Dropbox/bibtex/empos.bib")))
 #+end_src
 
 Reveal in Finder opens a Finder with the current file or folder selected. I use this a lot.
@@ -837,7 +805,6 @@ A tip from [[http://pragmaticemacs.com/emacs/dynamically-filter-directory-listin
         :bind (:map dired-mode-map
                 ("/" . dired-narrow)))
 #+end_src
-
 
 #+begin_src emacs-lisp :tangle yes
 (use-package dired-subtree
@@ -980,7 +947,7 @@ after `multiple-cursors-mode' is quit.")
     (add-hook 'multiple-cursors-mode-disabled-hook #'modi/mc-when-disabled)))
 #+end_src
 
-#+RESULTS:
+Settings for PDF-tools. I might start using this again.
 
 #+begin_src emacs-lisp :tangle no
 (use-package pdf-tools
@@ -1050,7 +1017,6 @@ Wraps text in an emacs-lisp code block. Used for converting my init files to org
     (save-excursion
       (goto-char end) (newline) (insert "#+end_src")
       (goto-char start) (insert "#+begin_src emacs-lisp :tangle yes") (newline)))
-(global-set-key (kbd "<f6>") 'wrap-src)
 #+end_src
 
 Inserting dates.
@@ -1214,10 +1180,6 @@ Switch to Previous Buffer
 
 #+end_src
 
-#+begin_src emacs-lisp :tangle no
-  (require 'dash)
-#+end_src
-
 Kill other buffers
 
 #+begin_src emacs-lisp :tangle yes
@@ -1232,9 +1194,7 @@ Kill other buffers
      #'kill-buffer))
 #+end_src
 
-
-From  [[http://endlessparentheses.com/fixing-double-capitals-as-you-type.html?source=rss][Endless Parentheses]]
-Define function
+From  [[http://endlessparentheses.com/fixing-double-capitals-as-you-type.html?source=rss][Endless Parentheses]], fix double capital mistakes.
 
 #+begin_src emacs-lisp :tangle yes
   (defun dcaps-to-scaps ()
@@ -1665,19 +1625,19 @@ Ispell ignore TeX
 
 * Org Mode
 
-set maximum indentation for description lists
+Set maximum indentation for description lists.
 
 #+begin_src emacs-lisp :tangle yes
   (setq org-list-description-max-indent 5)
 #+end_src
 
-prevent demoting heading also shifting text inside sections
+Prevent demoting heading also shifting text inside sections.
 
 #+begin_src emacs-lisp :tangle yes
   (setq org-adapt-indentation nil)
 #+end_src
 
-Use Org Mode for TXT files
+Use Org Mode for TXT files.
 
 #+begin_src emacs-lisp :tangle yes
   ;; (add-to-list 'auto-mode-alist '("\\.txt\\'" . org-mode))
@@ -1718,7 +1678,6 @@ Configure org-mode so that when you edit source code in an indirect buffer (with
 ** Exporter Settings and Helpful Packages
 
 HTML and LaTeX exporters are shown by default. Add the Markdown exporter to the menu.
-
 
 Autocomplete for orgmode
 
@@ -1877,18 +1836,6 @@ Make yasnippet work properly with org-mode.
               ))
 #+end_src
 
-
-Speed keys
-
-Speed commands enable single-letter commands in Org-mode files when the point is at the beginning of a headline, or at the beginning of a code block.
-
-See the =org-speed-commands-default= variable for a list of the keys and commands enabled at the beginning of headlines.  All code blocks are available at the beginning of a code block, the following key sequence =C-c C-v h= (bound to =org-babel-describe-bindings=) will display a list of the code blocks commands and their related keys.
-
-#+begin_src emacs-lisp :tangle yes
-  (setq org-use-speed-commands t)
-
-#+end_src
-
 Code blocks
 This activates a number of widely used languages, you are encouraged to activate more languages using the customize interface for the =org-babel-load-languages= variable, or with an elisp form like the one below.  The customize interface of =org-babel-load-languages= contains an up to date list of the currently supported languages.
 
@@ -1903,7 +1850,6 @@ This activates a number of widely used languages, you are encouraged to activate
      (python . t)
      (js . t)
      (haskell . t)))
-
 #+end_src
 
 Code block fontification
@@ -1913,7 +1859,6 @@ The following displays the contents of code blocks in Org-mode files using the m
 #+begin_src emacs-lisp :tangle yes
   (setq org-src-fontify-natively t)
   (setq org-src-tab-acts-natively t)
-
 #+end_src
 
 Don't ask for confirmation on every =C-c C-c= code-block compile. 
@@ -1939,7 +1884,6 @@ Add LaTeX to the list of languages Org-babel will recognize.
   (require 'ob-latex)
   ;; (org-babel-add-interpreter "latex")
   ;; (add-to-list 'org-babel-tangle-langs '("latex" "tex"))
-
 #+end_src
 
 Add LaTeX to a list of languages that raise noweb-type errors.
@@ -1970,9 +1914,9 @@ Tab doesn't split headings
 
 Reference Links
 
-Use Markdown-style reference links in Org Mode. From [[http://endlessparentheses.com/markdown-style-link-ids-in-org-mode.html][Artur Malabarba]]. Links have this format: [[lid:name][link text]] The reference id's have this form: 
-#+LINK-ID: name http://www.url.com
+Use Markdown-style reference links in Org Mode. From [[http://endlessparentheses.com/markdown-style-link-ids-in-org-mode.html][Artur Malabarba]]. Links have this format:
 
+~[[lid:name][link text]]~ The reference id's have this form: ~#+LINK-ID: name http://www.url.com~
 
 #+begin_src emacs-lisp :tangle yes
   (org-add-link-type "lid" 'endless/open-id-link 'endless/export-id-link)
@@ -2019,7 +1963,7 @@ From [[http://endlessparentheses.com/ispell-and-org-mode.html?source=rss][Endles
 
 #+end_src
 
-tufte-book class for writing classy books
+Tufte-book class for writing classy books
 
 #+begin_src emacs-lisp :tangle yes
   (require 'ox-latex) 
@@ -2053,15 +1997,24 @@ tufte-book class for writing classy books
                  ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
 
   ;; Beamer export
-  (add-to-list 'org-latex-classes
-               '("beamer"
-                 "\\documentclass\[presentation\]\{beamer\}"
-                 ("\\section\{%s\}" . "\\section*\{%s\}")
-                 ("\\subsection\{%s\}" . "\\subsection*\{%s\}")
-                 ("\\subsubsection\{%s\}" . "\\subsubsection*\{%s\}")))
+(eval-after-load "ox-latex"
+
+  ;; update the list of LaTeX classes and associated header (encoding, etc.)
+  ;; and structure
+  '(add-to-list 'org-latex-classes
+                `("beamer"
+                  ,(concat "\\documentclass[presentation]{beamer}\n"
+                           "[DEFAULT-PACKAGES]"
+                           "[PACKAGES]"
+                           "[EXTRA]\n")
+                  ("\\section{%s}" . "\\section*{%s}")
+                  ("\\subsection{%s}" . "\\subsection*{%s}")
+                  ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))))
+
+(setq org-latex-listings t)
 #+end_src
 
-Enable wc-mode
+Enable wc-mode 
 
 #+begin_src emacs-lisp :tangle yes
   (add-hook 'org-mode-hook 'wc-mode)
@@ -2181,24 +2134,6 @@ Return adds new heading or list item.
       'scimax/org-return)
 #+end_src
 
-Use TeX input method for text, markdown, and org files.
-
-#+begin_src emacs-lisp :tangle no
-(add-hook 'text-mode-hook 'toggle-input-method)
-(add-hook 'markdown-mode-hook 'toggle-input-method)
-(add-hook 'org-mode-hook 'toggle-input-method)
-#+end_src
-
-#+begin_src emacs-lisp :tangle yes
-(defun activate-default-input-method ()
-  (interactive)
-  (activate-input-method default-input-method))
-(add-hook 'text-mode-hook 'activate-default-input-method)
-(add-hook 'markdown-mode-hook 'activate-default-input-method)
-(add-hook 'org-mode-hook 'activate-default-input-method)
-#+end_src
-
-
 * LaTex
 
 
@@ -2218,7 +2153,6 @@ Use TeX input method for text, markdown, and org files.
           TeX-auto-save t                      ; Automatically save style information
           TeX-electric-sub-and-superscript t   ; Automatically insert braces after
                                           ; sub- and superscripts in math mode
-          TeX-electric-math '("\\(" . "\\)")
           ;; Don't insert magic quotes right away.
           TeX-quote-after-quote t
           ;; Don't ask for confirmation when cleaning
@@ -2226,11 +2160,13 @@ Use TeX input method for text, markdown, and org files.
           ;; Provide forward and inverse search with SyncTeX
           TeX-source-correlate-mode t
           TeX-source-correlate-method 'synctex)
-    (setq-default TeX-master nil          ; Ask for the master file
-                  TeX-engine 'luatex      ; Use a modern engine
-                  ;; Redundant in 11.88, but keep for older AUCTeX
-                  TeX-PDF-mode t)
-
+;; Insert math-mode delimiters for LaTeX and ConTeXt.
+(add-hook 'ConTeXt-mode-hook
+	  (lambda () (set (make-variable-buffer-local 'TeX-electric-math)
+			  (cons "$" "$"))))
+(add-hook 'LaTeX-mode-hook
+	  (lambda () (set (make-variable-buffer-local 'TeX-electric-math)
+			  (cons "\\(" "\\)"))))
     ;; Move to chktex
     (setcar (cdr (assoc "Check" TeX-command-list)) "chktex -v6 %s"))
 #+end_src
@@ -2240,15 +2176,6 @@ Use TeX input method for text, markdown, and org files.
         ;; :defer t
     ;; :after auctex
     :config (auctex-latexmk-setup))
-
-#+end_src
-
-#+begin_src emacs-lisp :tangle no
-  (use-package auctex-skim                ; Skim as viewer for AUCTeX - not working now.
-    :load-path "lisp/"
-    :commands (auctex-skim-select)
-    ;; :after tex
-    :config (auctex-skim-select))
 
 #+end_src
 
@@ -2272,13 +2199,11 @@ Use TeX input method for text, markdown, and org files.
 
 Cdlatex makes inserting LaTeX easier.
 
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp :tangle yes
   (use-package cdlatex
-    :ensure t)
+    :config (add-hook 'LaTeX-mode-hook 'turn-on-cdlatex)
+            (add-hook 'org-mode-hook 'turn-on-org-cdlatex))
 #+end_src
-
-
-
 
 Italics and Bold
 
@@ -2295,13 +2220,6 @@ Start Emacs server
 
 #+begin_src emacs-lisp :tangle yes
   (server-start)
-
-#+end_src
-
-Make emacs aware of multi-file projects
-
-#+begin_src emacs-lisp :tangle yes
-      ;; (setq-default TeX-master nil)
 
 #+end_src
 
@@ -2330,14 +2248,13 @@ Default bibliography
 #+begin_src emacs-lisp :tangle yes
       (setq reftex-default-bibliography
       '("/Users/rlridenour/Dropbox/bibtex/randybib.bib"))
-
 #+end_src
 
-Load Support Packages
+** Load Support Packages
 
 Load RefTeX
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
     (add-hook 'LaTeX-mode-hook 'turn-on-reftex)   ; with AUCTeX LaTeX mode
     (add-hook 'pandoc-mode-hook 'turn-on-reftex)  ; with Pandoc mode
     (autoload 'reftex-mode     "reftex" "RefTeX Minor Mode" t)
@@ -2351,7 +2268,7 @@ Load RefTeX
 
 Make RefTeX faster
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
     (setq reftex-enable-partial-scans t)
     (setq reftex-save-parse-info t)
     (setq reftex-use-multiple-selection-buffers t)
@@ -2363,21 +2280,20 @@ Make RefTeX work with Org-Mode
 use 'C-c (' instead of 'C-c [' because the latter is already
 defined in orgmode to the add-to-agenda command.
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
     (defun org-mode-reftex-setup ()
       (load-library "reftex") 
       (and (buffer-file-name)
       (file-exists-p (buffer-file-name))
       (reftex-parse-all))
       (define-key org-mode-map (kbd "C-c (") 'reftex-citation))
-  
-    (add-hook 'org-mode-hook 'org-mode-reftex-setup)
+  (add-hook 'org-mode-hook 'org-mode-reftex-setup)
 
 #+end_src
 
 RefTeX formats for biblatex (not natbib), and for pandoc
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
     (setq reftex-cite-format
           '(
             (?\C-m . "\\cite[]{%l}")
@@ -2408,6 +2324,48 @@ RefTeX formats for biblatex (not natbib), and for pandoc
     (setq reftex-cite-cleanup-optional-args t)
 
 #+end_src  
+
+#+begin_src emacs-lisp :tangle yes
+(defun bibtex-completion-format-citation-orgref (keys)
+  "Formatter for org-ref citations."
+  (let* ((prenote  (if bibtex-completion-cite-prompt-for-optional-arguments (read-from-minibuffer "Prenote: ") ""))
+         (postnote (if bibtex-completion-cite-prompt-for-optional-arguments (read-from-minibuffer "Postnote: ") ""))
+         (prenote  (if (string= "" prenote)  "" (concat prenote  "::")))
+         ;; (postnote (if (string= "" postnote) "" (concat ", " postnote)))
+)
+    (format "[[%s][%s%s]]"  (s-join "; " (--map (concat "autocite:" it) keys)) prenote postnote)))
+
+#+end_src
+
+#+begin_src emacs-lisp :tangle yes
+(use-package ivy-bibtex
+:bind ("s-2" . ivy-bibtex)
+:after (ivy)
+    :config
+    (setq bibtex-completion-bibliography '("~/zotero.bib"))
+    (setq reftex-default-bibliography '("~/zotero.bib"))
+    (setq bibtex-completion-pdf-field "File")
+(setq bibtex-completion-format-citation-functions
+  '((org-mode      . bibtex-completion-format-citation-orgref)
+    (latex-mode    . bibtex-completion-format-citation-cite)
+    (markdown-mode . bibtex-completion-format-citation-pandoc-citeproc)
+    (default       . bibtex-completion-format-citation-default))))
+#+end_src
+
+#+begin_src emacs-lisp :tangle yes
+(use-package org-ref
+    :after org
+    :init
+    (setq org-ref-completion-library 'org-ref-ivy-cite
+          org-ref-default-bibliography '("~/zotero.bib")))
+
+(setq org-latex-pdf-process (list "latexmk -shell-escape -biblatex -f -pdf %f"))
+
+
+
+#+end_src
+
+
 
 Configure AucTeX 
 Configure Biber
@@ -2469,7 +2427,7 @@ Allow AucTeX to use biber as well as/instead of bibtex.
 
 #+end_src
 
-Beamer
+*** Beamer
 
 #+begin_src emacs-lisp :tangle yes
   (setq LaTeX-paragraph-commands '("pause" "blpause"))
@@ -2488,7 +2446,7 @@ Dim tilde
 
 #+end_src
 
-Lilypond
+*** Lilypond
 
 #+begin_src emacs-lisp :tangle yes
   (setq load-path (append (list (expand-file-name "~/.emacs.d/lilypond")) load-path))
@@ -2503,7 +2461,7 @@ Lilypond
 
 Run latexmk after save.
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
   (add-hook 'after-save-hook
             (lambda ()
               (when (string= major-mode 'latex-mode)
@@ -2529,13 +2487,6 @@ Compile ConTeXt on save.
 ** ConTeXt
 
 #+begin_src emacs-lisp :tangle yes
-    ;;; Useful AUCTeX setup for ConTeXt (for your .emacs)
-    ;;; Sanjoy Mahajan (sanjoy@mrao.cam.ac.uk), 2006-04-20.  No copyright.
-    ;;;
-    ;;; With recent AUCTeX (11.50 or later), editing ConTeXt files should
-    ;;; just work, but I use the following elisp as well.
-
-    ; the AUCTeX manual recommends these settings
 
     (setq ConTeXt-Mark-version "IV")    ; Set version to Mark IV
   (add-hook 'ConTeXt-mode-hook
@@ -2565,79 +2516,7 @@ Compile ConTeXt on save.
     (setq reftex-plug-into-AUCTeX t)
     (add-hook 'TeX-mode-hook 'reftex-mode)
 
-    ;; (defun insert-balanced (left right)
-    ;;   "Insert a left, right delmiter pair and be poised to type inside them."
-    ;;   (interactive)
-    ;;   (insert left)
-    ;;   (save-excursion
-    ;;     (insert right)))
 
-    ; When start-context-math() is bound to $:
-    ; Typing one $ gets you $$ with the insertion point between them.
-    ; Typing a second $ turns the $$ into ConTeXt's form for displayed math:
-    ;
-    ;   \placeformula\startformula
-    ;   [blank line with insertion point at beginning]
-    ;   \stopformula
-    ;
-    ; Delete the \placeformula if you don't want equations numbered automatically.
-
-    ;; (defun start-context-math ()
-    ;;   (interactive)
-    ;;   (let* ((start (max (point-min) (- (point) 1)))
-    ;;      (stop  (min (point-max) (+ (point) 1))))
-    ;;     ; if in the middle of a $$, turn inline math into context display math
-    ;;     (if (equal "$$" (buffer-substring-no-properties start stop))
-    ;;     (progn
-    ;;       (delete-region start stop)	;get rid of the $$
-    ;;       ; delete preceding spaces, if any
-    ;;       (while (and (< (point-min) (point))
-    ;;               (equal (buffer-substring-no-properties (- (point) 1)
-    ;;                                  (point))
-    ;;                  " "))
-    ;;         (backward-delete-char 1))
-    ;;       ; delete a preceding newline, if any
-    ;;       (if (equal (buffer-substring-no-properties (- (point) 1)
-    ;;                              (point))
-    ;;              "\n")
-    ;;         (backward-delete-char 1))
-    ;;       ; ConTeXt's display math with automatic equation numbering
-    ;;       (insert "\n\\placeformula\\startformula\n")
-    ;;       (save-excursion (insert "\n\\stopformula")))
-    ;;       ; else: just doing inline math
-    ;;       (insert-balanced ?\$ ?\$))))
-
-    ;; ; automatically insert right delimiter for $, {, [, and ( and be
-    ;; ; poised to type inside them.
-    ;; (add-hook 'TeX-mode-hook
-    ;;       '(lambda ()
-    ;;          (local-set-key "$" 
-    ;;                 '(lambda ()
-    ;;                    (interactive)
-    ;;                    (insert-balanced ?\$ ?\$)))
-    ;;          (local-set-key "{"
-    ;;                 '(lambda ()
-    ;;                    (interactive)
-    ;;                    (insert-balanced ?\{ ?\})))
-    ;;          (local-set-key "["
-    ;;                 '(lambda ()
-    ;;                    (interactive)
-    ;;                    (insert-balanced ?\[ ?\])))
-    ;;          (local-set-key "("
-    ;;                 '(lambda ()
-    ;;                    (interactive)
-    ;;                    (insert-balanced ?\( ?\))))))
-
-    ;; ; For ConTeXt mode, inserting two $ signs needs to behave specially
-    ;; (add-hook 'ConTeXt-mode-hook
-    ;;       '(lambda ()
-    ;;          (local-set-key "$" 'start-context-math)))
-
-    ;; ; The TeX-format-list from AUCTeX's tex.el (v11.82) with a few more
-    ;; ; ConTeXt-specific patterns.  I've submitted it to the AUCTeX lists,
-    ; so later versions should have them automatically and you won't need
-    ; this regexp mess in your .emacs
-    ;
     (setq TeX-format-list
       '(("JLATEX" japanese-latex-mode
          "\\\\\\(documentstyle\\|documentclass\\)[^%\n]*{\\(j[s-]?\\|t\\)\\(article\\|report\\|book\\|slides\\)")
@@ -2652,7 +2531,7 @@ Compile ConTeXt on save.
         ("TEX" plain-tex-mode ".")))
 #+end_src
 
-* HTML 
+* HTML
 
 #+begin_src emacs-lisp :tangle yes
   (use-package emmet-mode
@@ -2891,48 +2770,52 @@ Hydra-toggle
 Major-mode Hydras
 
 #+begin_src emacs-lisp :tangle yes
-      (major-mode-hydra-bind markdown-mode "Format"
-        ("h" markdown-insert-header-dwim "header") 
-        ("1" markdown-insert-header-atx-1 "h1")
-        ("2" markdown-insert-header-atx-2 "h2")
-        ("3" markdown-insert-header-atx-3 "h3")
-        ("4" markdown-insert-header-atx-4 "h4")    
-        ("s" markdown-insert-bold "bold")
-        ("e" markdown-insert-italic "italic")
-        ("b" markdown-insert-blockquote "quote")
-        ("p" markdown-insert-pre "pre")
-        ("c" markdown-insert-code "code"))
+    (major-mode-hydra-bind markdown-mode "Format"
+      ("h" markdown-insert-header-dwim "header") 
+      ("1" markdown-insert-header-atx-1 "h1")
+      ("2" markdown-insert-header-atx-2 "h2")
+      ("3" markdown-insert-header-atx-3 "h3")
+      ("4" markdown-insert-header-atx-4 "h4")    
+      ("s" markdown-insert-bold "bold")
+      ("e" markdown-insert-italic "italic")
+      ("b" markdown-insert-blockquote "quote")
+      ("p" markdown-insert-pre "pre")
+      ("c" markdown-insert-code "code"))
 
-    (major-mode-hydra-bind markdown-mode "Other"
-        ("l" markdown-promote "promote")
-        ("r" markdown-demote "demote")
-        ("d" markdown-move-down "move down")
-        ("u" markdown-move-up "move up")  
-        ("L" markdown-insert-link "link")
-        ("U" markdown-insert-uri "url")
-        ("F" markdown-insert-footnote "footnote")
-        ("W" markdown-insert-wiki-link "wiki")
-        ("R" markdown-insert-reference-link-dwim "r-link")
-        ("n" markdown-cleanup-list-numbers "clean-lists")
-        ("C" markdown-complete-bufer "complete"))
+  (major-mode-hydra-bind markdown-mode "Other"
+      ("l" markdown-promote "promote")
+      ("r" markdown-demote "demote")
+      ("d" markdown-move-down "move down")
+      ("u" markdown-move-up "move up")  
+      ("L" markdown-insert-link "link")
+      ("U" markdown-insert-uri "url")
+      ("F" markdown-insert-footnote "footnote")
+      ("W" markdown-insert-wiki-link "wiki")
+      ("R" markdown-insert-reference-link-dwim "r-link")
+      ("n" markdown-cleanup-list-numbers "clean-lists")
+      ("C" markdown-complete-bufer "complete"))
 
-    (major-mode-hydra-bind markdown-mode "Pandoc"
-          ("A" pandoc-article "article")
-          ("B" pandoc-beamer "beamer")
-          ("S" pandoc-slides "slides")
-          ("H" pandoc-handout "handout")
-          ("O" pandoc-obuletter "obu letter")
-          ("D" pandoc-docx "docx")
-          ("H" pandoc-html "html")
-          ("P" pandoc-pdf "pdf")
-          ("t" pandoc-clean "trash non-md")
+  (major-mode-hydra-bind markdown-mode "Pandoc"
+        ("A" pandoc-article "article")
+        ("B" pandoc-beamer "beamer")
+        ("S" pandoc-slides "slides")
+        ("H" pandoc-handout "handout")
+        ("O" pandoc-obuletter "obu letter")
+        ("D" pandoc-docx "docx")
+        ("H" pandoc-html "html")
+        ("P" pandoc-pdf "pdf")
+        ("t" pandoc-clean "trash non-md")
 
-          ("q" nil))
+        ("q" nil))
 
-    (major-mode-hydra-bind latex-mode "Clean"
-          ("c" tex-clean "clean aux")
-          ("C" tex-clean-all "clean all")
-          ("q" nil))
+  (major-mode-hydra-bind latex-mode "Bibtex"
+        ("b" ivy-bibtex "Ivy-Bibtex"))
+
+  (major-mode-hydra-bind latex-mode "Clean"
+        ("c" tex-clean "clean aux")
+        ("C" tex-clean-all "clean all")
+
+        ("q" nil))
 #+end_src
 
 #+begin_src emacs-lisp :tangle yes
