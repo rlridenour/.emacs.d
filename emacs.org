@@ -1710,7 +1710,7 @@ LuaLaTeX and some fancy fonts; requires LuaTeX  (see org-latex-to-pdf-process)
   \\usepackage[parfill]{parskip} % Line between paragraphs
 
   \\usepackage[authordate,url=false,isbn=false,backend=biber]{biblatex-chicago} %Change authordate to notes if desired.
-  \\addbibresource{/Users/rlridenour/Dropbox/bibtex/randybib.bib}
+  \\addbibresource{/Users/rlridenour/zotero.bib}
   \\clubpenalty = 10000 % Reduce orphans and widows
   \\widowpenalty = 10000
 
@@ -1746,7 +1746,7 @@ PDFLaTeX export
   \\usepackage[parfill]{parskip} % Line between paragraphs
 
   \\usepackage[authordate,url=false,isbn=false,backend=biber]{biblatex-chicago} %Change authordate to notes if desired.
-  \\addbibresource{/Users/rlridenour/Dropbox/bibtex/randybib.bib}
+  \\addbibresource{/Users/rlridenour/zotero.bib}
   \\clubpenalty = 10000 % Reduce orphans and widows
   \\widowpenalty = 10000
 
@@ -1770,6 +1770,55 @@ PDFLaTeX export
                  ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
 #+end_src
 
+OBU letter
+
+#+begin_src emacs-lisp :tangle yes
+  (add-to-list 'org-latex-classes
+               '("rlr-obu-letter"
+                 "\\documentclass[12pt]{obuletter}
+
+% Customize variables --- for the entire list, see obuletter.cls and myletter.cls.
+\\newcommand{\\obuDept}{Department of Philosophy} % For personal letterhead, use name here.
+\\newcommand{\\Sender}{Randy Ridenour, Ph.D.}
+\\newcommand{\\obuTitle}{Professor of Philosophy}
+\\newcommand{\\obuCollege}{Hobbs College of Theology and Ministry} % For personal letterhead, use title here.
+\\newcommand{\\obuPhone}{405.585.4432}
+\\newcommand{\\obuFax}{405.878.2401}
+\\newcommand{\\obuBox}{61273}
+\\newcommand{\\closing}{Sincerely,}
+\\newcommand{\\toName}{Recipient}
+\\newcommand{\\toAddress}{Street Address\\\\City, State ZIP}
+
+        [NO-DEFAULT-PACKAGES]
+        [NO-PACKAGES]"
+                 ("\\section{%s}" . "\\section*{%s}")
+                 ("\\subsection{%s}" . "\\subsection*{%s}")
+                 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                 ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                 ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+#+end_src
+
+Personal letter
+
+#+begin_src emacs-lisp :tangle yes
+  (add-to-list 'org-latex-classes
+               '("rlr-personal-letter"
+                 "\\documentclass[12pt]{myletter}
+
+% Customize variables --- for the entire list, see obuletter.cls and myletter.cls.
+\\newcommand{\\Sender}{Randy Ridenour}
+\\newcommand{\\closing}{Sincerely,}
+\\newcommand{\\toName}{Recipient}
+\\newcommand{\\toAddress}{Street Address\\\\City, State ZIP}
+
+        [NO-DEFAULT-PACKAGES]
+        [NO-PACKAGES]"
+                 ("\\section{%s}" . "\\section*{%s}")
+                 ("\\subsection{%s}" . "\\subsection*{%s}")
+                 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                 ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                 ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+#+end_src
 
 #+begin_src emacs-lisp :tangle yes
   (setq org-completion-use-ido t)
@@ -1792,7 +1841,7 @@ Make windmove work in org-mode:
 Use latexmk
 
 #+begin_src emacs-lisp :tangle no
-(setq org-latex-to-pdf-process (list "/usr/texbin/latexmk -f -pdf %f"))
+(setq org-latex-pdf-process (list "latexmk -f -pdf %f"))
 #+end_src
 
 
@@ -2329,11 +2378,10 @@ RefTeX formats for biblatex (not natbib), and for pandoc
 (defun bibtex-completion-format-citation-orgref (keys)
   "Formatter for org-ref citations."
   (let* ((prenote  (if bibtex-completion-cite-prompt-for-optional-arguments (read-from-minibuffer "Prenote: ") ""))
-         (postnote (if bibtex-completion-cite-prompt-for-optional-arguments (read-from-minibuffer "Postnote: ") ""))
-         (prenote  (if (string= "" prenote)  "" (concat prenote  "::")))
-         ;; (postnote (if (string= "" postnote) "" (concat ", " postnote)))
-)
-    (format "[[%s][%s%s]]"  (s-join "; " (--map (concat "autocite:" it) keys)) prenote postnote)))
+         (postnote (if bibtex-completion-cite-prompt-for-optional-arguments (read-from-minibuffer "Postnote: ") "")))
+(if (and (string= "" prenote) (string= "" postnote))
+                (format "%s" (s-join "; " (--map (concat "autocite:" it) keys)))
+    (format "[[%s][%s::%s]]"  (s-join "; " (--map (concat "autocite:" it) keys)) prenote postnote))))
 
 #+end_src
 
