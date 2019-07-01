@@ -1749,7 +1749,7 @@ PDFLaTeX export
   \\usepackage[american]{babel}
   \\usepackage[letterpaper,centering]{geometry}
   \\usepackage[sf,sc]{titlesec}
-  \\usepackage[parfill]{parskip} % Line between paragraphs
+  % \\usepackage[parfill]{parskip} % Line between paragraphs
 
   \\usepackage[authordate,url=false,isbn=false,backend=biber]{biblatex-chicago} %Change authordate to notes if desired.
   \\addbibresource{/Users/rlridenour/zotero.bib}
@@ -2866,6 +2866,15 @@ Major-mode Hydras
         ("b" ivy-bibtex "Ivy-Bibtex"))
 
   (major-mode-hydra-bind latex-mode "Clean"
+        ("c" tex-clean "clean aux")
+        ("C" tex-clean-all "clean all")
+
+        ("q" nil))
+
+(major-mode-hydra-bind org-mode "Bibtex"
+        ("b" ivy-bibtex "Ivy-Bibtex"))
+
+  (major-mode-hydra-bind org-mode "Clean"
         ("c" tex-clean "clean aux")
         ("C" tex-clean-all "clean all")
 
