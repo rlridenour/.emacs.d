@@ -1566,11 +1566,12 @@ Pandoc Conversion
 Converts Markdown files to LaTeX articles and handouts using fish shell functions.
 
 #+begin_src emacs-lisp :tangle yes
-  (defun pandoc-article ()
+  (defun pandoc-pdfarticle ()
     "Convert file to LaTeX article"
     (interactive)
-    (shell-command (concat "article " (buffer-file-name) " " (file-name-sans-extension buffer-file-name) ".tex"))
-    (find-file (concat (file-name-sans-extension buffer-file-name) ".tex")))
+    (shell-command (concat "pdfarticle " (buffer-file-name) " " (file-name-sans-extension buffer-file-name) ".tex"))
+(shell-command (concat "open " (file-name-sans-extension buffer-file-name) ".pdf")))
+
 
   (defun pandoc-beamer ()
     "Convert file to LaTeX beamer file"
@@ -1751,7 +1752,7 @@ PDFLaTeX export
                '("rlr-pdf-article"
                  "\\documentclass[12pt]{article}
 
-  \\usepackage{iftex,graphicx,epstopdf,amsmath,amssymb,url}
+  \\usepackage{graphicx,epstopdf,amsmath,amssymb,url}
   \\usepackage[normalem]{ulem}
   \\usepackage{microtype,todonotes}
   \\usepackage[american]{babel}
@@ -2410,7 +2411,8 @@ RefTeX formats for biblatex (not natbib), and for pandoc
 (setq bibtex-completion-format-citation-functions
   '((org-mode      . bibtex-completion-format-citation-orgref)
     (latex-mode    . bibtex-completion-format-citation-cite)
-    (markdown-mode . bibtex-completion-format-citation-pandoc-citeproc)
+    (markdown-mode    . bibtex-completion-format-citation-cite)
+    ;; (markdown-mode . bibtex-completion-format-citation-pandoc-citeproc)
     (default       . bibtex-completion-format-citation-default))))
 #+end_src
 
@@ -2421,7 +2423,7 @@ RefTeX formats for biblatex (not natbib), and for pandoc
     (setq org-ref-completion-library 'org-ref-ivy-cite
           org-ref-default-bibliography '("~/zotero.bib")))
 
-(setq org-latex-pdf-process (list "latexmk -shell-escape -biblatex -f -pdf %f"))
+(setq org-latex-pdf-process (list "latexmk -shell-escape -f -pdf %f"))
 
 
 
@@ -2858,7 +2860,7 @@ Major-mode Hydras
       ("C" markdown-complete-bufer "complete"))
 
   (major-mode-hydra-bind markdown-mode "Pandoc"
-        ("A" pandoc-article "article")
+        ("A" pandoc-pdfarticle "pdfarticle")
         ("B" pandoc-beamer "beamer")
         ("S" pandoc-slides "slides")
         ("H" pandoc-handout "handout")
