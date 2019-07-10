@@ -986,6 +986,17 @@ Use anzu for search and replace.
   (global-anzu-mode))
 #+end_src
 
+Use outshine for folding.
+
+#+begin_src emacs-lisp :tangle yes
+(use-package outshine
+:init
+(defvar outline-minor-mode-prefix "\M-#")
+:config
+(add-hook 'LaTeX-mode-hook 'outshine-mode)
+(setq outshine-use-speed-commands t))
+#+end_src
+
 * Functions
 
 Window management, from https://www.bytedude.com/useful-emacs-shortcuts/
@@ -1566,60 +1577,60 @@ Pandoc Conversion
 Converts Markdown files to LaTeX articles and handouts using fish shell functions.
 
 #+begin_src emacs-lisp :tangle yes
-  (defun pandoc-pdfarticle ()
-    "Convert file to LaTeX article"
-    (interactive)
-    (shell-command (concat "pdfarticle " (buffer-file-name) " " (file-name-sans-extension buffer-file-name) ".tex"))
-(shell-command (concat "open " (file-name-sans-extension buffer-file-name) ".pdf")))
-
-
-  (defun pandoc-beamer ()
-    "Convert file to LaTeX beamer file"
-    (interactive)
-    (shell-command (concat "beamer " (buffer-file-name) " " (file-name-sans-extension buffer-file-name) ".tex"))
-    (find-file (concat (file-name-sans-extension buffer-file-name) ".tex")))
-
-  (defun pandoc-slides ()
-    "Convert file to Beamer slides"
-    (interactive)
-    (shell-command (concat "slides " (buffer-file-name) " " (file-name-sans-extension buffer-file-name) ".pdf"))
-    (shell-command (concat "open " (file-name-sans-extension buffer-file-name) ".pdf")))
-
-
-  (defun pandoc-obuletter ()
-    "Convert file to LaTeX OBU letter"
-    (interactive)
-    (shell-command (concat "obuletter " (buffer-file-name) " " (file-name-sans-extension buffer-file-name) ".tex"))
-    (find-file (concat (file-name-sans-extension buffer-file-name) ".tex")))
-
-  (defun pandoc-pdf ()
-    "Convert file to PDF"
+    (defun pandoc-pdfarticle ()
+      "Convert file to LaTeX article"
       (interactive)
-      (shell-command (concat "article " (buffer-file-name) " " (file-name-sans-extension buffer-file-name) ".tex"))
-      (shell-command (concat "mkpdf " (file-name-sans-extension buffer-file-name) ".tex"))
+      (shell-command (concat "pdfarticle " (buffer-file-name) " " (file-name-sans-extension buffer-file-name) ".tex")))
+
+
+
+    (defun pandoc-beamer ()
+      "Convert file to LaTeX beamer file"
+      (interactive)
+      (shell-command (concat "beamer " (buffer-file-name) " " (file-name-sans-extension buffer-file-name) ".tex"))
+     (shell-command (concat "open " (file-name-sans-extension buffer-file-name) ".pdf")))
+
+    (defun pandoc-slides ()
+      "Convert file to Beamer slides"
+      (interactive)
+      (shell-command (concat "slides " (buffer-file-name) " " (file-name-sans-extension buffer-file-name) ".pdf"))
       (shell-command (concat "open " (file-name-sans-extension buffer-file-name) ".pdf")))
 
-  (defun pandoc-handout ()
-    "Convert file to LaTeX tufte-handout"
+
+    (defun pandoc-obuletter ()
+      "Convert file to LaTeX OBU letter"
       (interactive)
-      (shell-command (concat "handout " (buffer-file-name) " " (file-name-sans-extension buffer-file-name) ".tex"))
+      (shell-command (concat "obuletter " (buffer-file-name) " " (file-name-sans-extension buffer-file-name) ".tex"))
       (find-file (concat (file-name-sans-extension buffer-file-name) ".tex")))
 
-  (defun pandoc-docx ()
-    "Convert file to MS Word docx"
-      (interactive)
-      (shell-command (concat "convert " (buffer-file-name) " " (file-name-sans-extension buffer-file-name) ".docx"))
-      (shell-command (concat "open " (file-name-sans-extension buffer-file-name) ".docx")))
+    (defun pandoc-pdf ()
+      "Convert file to PDF"
+        (interactive)
+        ;; (shell-command (concat "article " (buffer-file-name) " " (file-name-sans-extension buffer-file-name) ".tex"))
+       (async-shell-command (concat "mkpvc " (file-name-sans-extension buffer-file-name) ".tex"))
+(delete-other-windows))
+        ;; (shell-command (concat "open " (file-name-sans-extension buffer-file-name) ".pdf")))
 
-  (defun pandoc-html ()
-    "Convert file to html"
-      (interactive)
-      (shell-command (concat "convert " (buffer-file-name) " " (file-name-sans-extension buffer-file-name) ".html"))
-      (shell-command (concat "open " (file-name-sans-extension buffer-file-name) ".html")))
+    (defun pandoc-handout ()
+      "Convert file to LaTeX tufte-handout"
+        (interactive)
+        (shell-command (concat "handout " (buffer-file-name) " " (file-name-sans-extension buffer-file-name) ".tex")))
 
-  (defun pandoc-clean ()
-    (interactive)
-    (shell-command "panclean"))
+    (defun pandoc-docx ()
+      "Convert file to MS Word docx"
+        (interactive)
+        (shell-command (concat "convert " (buffer-file-name) " " (file-name-sans-extension buffer-file-name) ".docx"))
+        (shell-command (concat "open " (file-name-sans-extension buffer-file-name) ".docx")))
+
+    (defun pandoc-html ()
+      "Convert file to html"
+        (interactive)
+        (shell-command (concat "convert " (buffer-file-name) " " (file-name-sans-extension buffer-file-name) ".html"))
+        (shell-command (concat "open " (file-name-sans-extension buffer-file-name) ".html")))
+
+    (defun pandoc-clean ()
+      (interactive)
+      (shell-command "panclean"))
 #+end_src
 
 
@@ -2533,6 +2544,27 @@ Run latexmk after save.
                  "LaTeX"
                  (format "latexmk -pdf %s" (buffer-file-name))
                  (file-name-base (buffer-file-name))))))
+#+end_src
+
+Start latexmk continuous preview.
+
+#+begin_src emacs-lisp :tangle yes
+(defun rlr/tex-pvc ()
+  "Compile continuously with latexmk."
+  (interactive)
+  (async-shell-command (concat "mkpvc " (buffer-file-name)))
+  (delete-other-windows)
+  (TeX-view))
+#+end_src
+
+Move to edited position after save.
+
+#+begin_src emacs-lisp :tangle yes
+(add-hook 'after-save-hook
+          (lambda ()
+            (when (string= major-mode 'latex-mode)
+              (TeX-view))))
+#+end_src
 
   
   ;; Revert PDF after compilation has finished
@@ -2593,6 +2625,14 @@ Compile ConTeXt on save.
         ("LATEX" latex-mode
          "\\\\\\(begin\\|section\\|chapter\\|documentstyle\\|documentclass\\)\\b")
         ("TEX" plain-tex-mode ".")))
+#+end_src
+
+#+begin_src emacs-lisp :tangle yes
+(use-package outshine
+:init
+(defvar outline-minor-mode-prefix "\M-#")
+:config
+(add-hook 'LaTeX-mode-hook 'outshine-mode))
 #+end_src
 
 * HTML
@@ -2834,61 +2874,62 @@ Hydra-toggle
 Major-mode Hydras
 
 #+begin_src emacs-lisp :tangle yes
-    (major-mode-hydra-bind markdown-mode "Format"
-      ("h" markdown-insert-header-dwim "header") 
-      ("1" markdown-insert-header-atx-1 "h1")
-      ("2" markdown-insert-header-atx-2 "h2")
-      ("3" markdown-insert-header-atx-3 "h3")
-      ("4" markdown-insert-header-atx-4 "h4")    
-      ("s" markdown-insert-bold "bold")
-      ("e" markdown-insert-italic "italic")
-      ("b" markdown-insert-blockquote "quote")
-      ("p" markdown-insert-pre "pre")
-      ("c" markdown-insert-code "code"))
+      (major-mode-hydra-bind markdown-mode "Format"
+        ("h" markdown-insert-header-dwim "header") 
+        ("1" markdown-insert-header-atx-1 "h1")
+        ("2" markdown-insert-header-atx-2 "h2")
+        ("3" markdown-insert-header-atx-3 "h3")
+        ("4" markdown-insert-header-atx-4 "h4")    
+        ("s" markdown-insert-bold "bold")
+        ("e" markdown-insert-italic "italic")
+        ("b" markdown-insert-blockquote "quote")
+        ("p" markdown-insert-pre "pre")
+        ("c" markdown-insert-code "code"))
 
-  (major-mode-hydra-bind markdown-mode "Other"
-      ("l" markdown-promote "promote")
-      ("r" markdown-demote "demote")
-      ("d" markdown-move-down "move down")
-      ("u" markdown-move-up "move up")  
-      ("L" markdown-insert-link "link")
-      ("U" markdown-insert-uri "url")
-      ("F" markdown-insert-footnote "footnote")
-      ("W" markdown-insert-wiki-link "wiki")
-      ("R" markdown-insert-reference-link-dwim "r-link")
-      ("n" markdown-cleanup-list-numbers "clean-lists")
-      ("C" markdown-complete-bufer "complete"))
+    (major-mode-hydra-bind markdown-mode "Other"
+        ("l" markdown-promote "promote")
+        ("r" markdown-demote "demote")
+        ("d" markdown-move-down "move down")
+        ("u" markdown-move-up "move up")  
+        ("L" markdown-insert-link "link")
+        ("U" markdown-insert-uri "url")
+        ("F" markdown-insert-footnote "footnote")
+        ("W" markdown-insert-wiki-link "wiki")
+        ("R" markdown-insert-reference-link-dwim "r-link")
+        ("n" markdown-cleanup-list-numbers "clean-lists")
+        ("C" markdown-complete-bufer "complete"))
 
-  (major-mode-hydra-bind markdown-mode "Pandoc"
-        ("A" pandoc-pdfarticle "pdfarticle")
-        ("B" pandoc-beamer "beamer")
-        ("S" pandoc-slides "slides")
-        ("H" pandoc-handout "handout")
-        ("O" pandoc-obuletter "obu letter")
-        ("D" pandoc-docx "docx")
-        ("H" pandoc-html "html")
-        ("P" pandoc-pdf "pdf")
-        ("t" pandoc-clean "trash non-md")
+    (major-mode-hydra-bind markdown-mode "Pandoc"
+          ("A" pandoc-pdfarticle "pdfarticle")
+          ("B" pandoc-beamer "beamer")
+          ("S" pandoc-slides "slides")
+          ("H" pandoc-handout "handout")
+          ("O" pandoc-obuletter "obu letter")
+          ("D" pandoc-docx "docx")
+          ("H" pandoc-html "html")
+          ("P" pandoc-pdf "pdf")
+          ("t" pandoc-clean "trash non-md")
 
-        ("q" nil))
+          ("q" nil))
 
-  (major-mode-hydra-bind latex-mode "Bibtex"
-        ("b" ivy-bibtex "Ivy-Bibtex"))
+    (major-mode-hydra-bind latex-mode "Bibtex"
+          ("b" ivy-bibtex "Ivy-Bibtex"))
 
-  (major-mode-hydra-bind latex-mode "Clean"
-        ("c" tex-clean "clean aux")
-        ("C" tex-clean-all "clean all")
+    (major-mode-hydra-bind latex-mode "LaTeXmk"
+          ("p" rlr/tex-pvc "pvc")
+          ("c" tex-clean "clean aux")
+          ("C" tex-clean-all "clean all")
 
-        ("q" nil))
+          ("q" nil))
 
-(major-mode-hydra-bind org-mode "Bibtex"
-        ("b" ivy-bibtex "Ivy-Bibtex"))
+  (major-mode-hydra-bind org-mode "Bibtex"
+          ("b" ivy-bibtex "Ivy-Bibtex"))
 
-  (major-mode-hydra-bind org-mode "Clean"
-        ("c" tex-clean "clean aux")
-        ("C" tex-clean-all "clean all")
+    (major-mode-hydra-bind org-mode "Clean"
+          ("c" tex-clean "clean aux")
+          ("C" tex-clean-all "clean all")
 
-        ("q" nil))
+          ("q" nil))
 #+end_src
 
 #+begin_src emacs-lisp :tangle yes
