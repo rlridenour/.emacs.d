@@ -1582,6 +1582,10 @@ Converts Markdown files to LaTeX articles and handouts using fish shell function
       (interactive)
       (shell-command (concat "pdfarticle " (buffer-file-name) " " (file-name-sans-extension buffer-file-name) ".tex")))
 
+(defun pandoc-syllabus ()
+      "Convert file to LaTeX article"
+      (interactive)
+      (shell-command (concat "syllabus " (buffer-file-name) " " (file-name-sans-extension buffer-file-name) ".tex")))
 
 
     (defun pandoc-beamer ()
@@ -2422,8 +2426,8 @@ RefTeX formats for biblatex (not natbib), and for pandoc
 (setq bibtex-completion-format-citation-functions
   '((org-mode      . bibtex-completion-format-citation-orgref)
     (latex-mode    . bibtex-completion-format-citation-cite)
-    (markdown-mode    . bibtex-completion-format-citation-cite)
-    ;; (markdown-mode . bibtex-completion-format-citation-pandoc-citeproc)
+    ;; (markdown-mode    . bibtex-completion-format-citation-cite)
+    (markdown-mode . bibtex-completion-format-citation-pandoc-citeproc)
     (default       . bibtex-completion-format-citation-default))))
 #+end_src
 
@@ -2876,32 +2880,18 @@ Major-mode Hydras
 #+begin_src emacs-lisp :tangle yes
       (major-mode-hydra-bind markdown-mode "Format"
         ("h" markdown-insert-header-dwim "header") 
-        ("1" markdown-insert-header-atx-1 "h1")
-        ("2" markdown-insert-header-atx-2 "h2")
-        ("3" markdown-insert-header-atx-3 "h3")
-        ("4" markdown-insert-header-atx-4 "h4")    
-        ("s" markdown-insert-bold "bold")
-        ("e" markdown-insert-italic "italic")
-        ("b" markdown-insert-blockquote "quote")
-        ("p" markdown-insert-pre "pre")
-        ("c" markdown-insert-code "code"))
-
-    (major-mode-hydra-bind markdown-mode "Other"
-        ("l" markdown-promote "promote")
-        ("r" markdown-demote "demote")
-        ("d" markdown-move-down "move down")
-        ("u" markdown-move-up "move up")  
-        ("L" markdown-insert-link "link")
-        ("U" markdown-insert-uri "url")
-        ("F" markdown-insert-footnote "footnote")
-        ("W" markdown-insert-wiki-link "wiki")
-        ("R" markdown-insert-reference-link-dwim "r-link")
+        ("l" markdown-insert-link "link")
+        ("u" markdown-insert-uri "url")
+        ("f" markdown-insert-footnote "footnote")
+        ("w" markdown-insert-wiki-link "wiki")
+        ("r" markdown-insert-reference-link-dwim "r-link")
         ("n" markdown-cleanup-list-numbers "clean-lists")
-        ("C" markdown-complete-bufer "complete"))
+        ("c" markdown-complete-buffer "complete"))
 
     (major-mode-hydra-bind markdown-mode "Pandoc"
           ("A" pandoc-pdfarticle "pdfarticle")
           ("B" pandoc-beamer "beamer")
+          ("C" pandoc-syllabus "Course syllabus")
           ("S" pandoc-slides "slides")
           ("H" pandoc-handout "handout")
           ("O" pandoc-obuletter "obu letter")
