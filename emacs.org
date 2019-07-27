@@ -2423,6 +2423,7 @@ RefTeX formats for biblatex (not natbib), and for pandoc
     (setq bibtex-completion-bibliography '("~/zotero.bib"))
     (setq reftex-default-bibliography '("~/zotero.bib"))
     (setq bibtex-completion-pdf-field "File")
+    (setq ivy-bibtex-default-action 'ivy-bibtex-insert-citation)
 (setq bibtex-completion-format-citation-functions
   '((org-mode      . bibtex-completion-format-citation-orgref)
     (latex-mode    . bibtex-completion-format-citation-cite)
@@ -3240,7 +3241,8 @@ Use prescient.el
 Replace i-search with swiper-isearch.
 
 #+begin_src emacs-lisp :tangle yes
-(global-set-key (kbd "s-1") 'swiper-isearch)
+(global-set-key (kbd "C-s") 'swiper-isearch)
+(global-set-key (kbd "C-r") 'swiper-isearch-backward)
 #+end_src
 
 * Final Steps
