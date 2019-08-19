@@ -2651,12 +2651,24 @@ Compile ConTeXt on save.
                emmet-next-edit-point
                emmet-prev-edit-point)
     :init
-    (setq emmet-indentation 2)
+    (setq emmet-indentation 4)
     (setq emmet-move-cursor-between-quotes t)
     :config
     ;; Auto-start on any markup modes
     (add-hook 'sgml-mode-hook 'emmet-mode)
-    (add-hook 'web-mode-hook 'emmet-mode))
+    (add-hook 'css-mode-hook  'emmet-mode) ;; enable Emmet's css abbreviation.
+    (add-hook 'web-mode-hook 'emmet-mode)
+    (setq emmet-move-cursor-between-quotes t) ;; default nil
+)
+
+(use-package company-web
+:config
+(require 'company-web-html))
+
+(add-hook 'web-mode-hook (lambda ()
+                          (set (make-local-variable 'company-backends) '(company-web-html))
+                          (company-mode t)))
+
 #+end_src
 * Hugo Settings
 
