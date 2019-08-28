@@ -754,7 +754,8 @@ Projectile is for project management.
 #+begin_src emacs-lisp :tangle yes
   (use-package projectile
         :diminish projectile-mode
-    :config (projectile-global-mode))
+    :config (projectile-global-mode)
+    :bind ("s-p" . projectile-command-map))
 #+end_src
 
 Company-mode provides auto-completion suggestions. 
@@ -3013,7 +3014,6 @@ Major-mode Hydras
   ("<s-backspace>" . kill-whole-line)
   ("s-t" . hydra-toggle/body)
   ("s-\\" . hydra-org/body)
-  ("s-p" . hydra-markdown/body)
   ("s-l" . hydra-locate/body)
   ("C-c f" . hydra-locate/body)
   ("C-c k" . prelude-kill-other-buffers)
