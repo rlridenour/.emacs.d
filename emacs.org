@@ -688,8 +688,8 @@ Smex makes M-x commands much easier.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package smex
-        :bind (([remap execute-extended-command] . smex)
-           ("s-P" . smex))
+        ;; :bind (([remap execute-extended-command] . smex)
+           ;; ("s-P" . smex))
     :config
     (smex-initialize)
     (setq smex-save-file (expand-file-name ".smex-items" user-emacs-directory)))
@@ -2861,7 +2861,7 @@ From http://oremacs.com/2014/12/30/ace-link-eww/
 
 #+begin_src emacs-lisp :tangle yes
   (global-unset-key (kbd "C-z"))
- (global-unset-key (kbd "s-p"))
+ ;; (global-unset-key (kbd "s-p"))
 (global-unset-key (kbd "s-m"))
 
 
