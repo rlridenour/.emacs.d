@@ -1562,6 +1562,18 @@ Open files in Marked 2 using this [[https://gist.github.com/rlridenour/ac2031d50
   )
 #+end_src
 
+Use f3 to insert fragment tag in reveal.js slides.
+
+#+begin_src emacs-lisp
+(defun insert-frag ()
+  "Insert reveal.js fragment tag"
+  (interactive)
+  (end-of-line)
+  (insert "<!-- .element: class=\"fragment\" -->"))
+
+(global-set-key (kbd "s-3") 'insert-frag)
+#+end_src
+
 ** Pandoc
 
 #+begin_src emacs-lisp :tangle yes
