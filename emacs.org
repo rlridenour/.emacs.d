@@ -1564,7 +1564,7 @@ Open files in Marked 2 using this [[https://gist.github.com/rlridenour/ac2031d50
 
 Use f3 to insert fragment tag in reveal.js slides.
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
 (defun insert-frag ()
   "Insert reveal.js fragment tag"
   (interactive)
