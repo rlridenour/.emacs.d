@@ -1574,6 +1574,18 @@ Use f3 to insert fragment tag in reveal.js slides.
 (global-set-key (kbd "s-3") 'insert-frag)
 #+end_src
 
+#+begin_src emacs-lisp :tangle yes
+(defun wrap-text-slide ()
+  (interactive)
+  (progn
+	(goto-char (region-end))
+	(insert "\n </textarea> \n </section>")
+	(goto-char (region-beginning))
+	(insert "<section data-markdown> \n <textarea data-template> \n")))
+
+(global-set-key (kbd "s-4") 'wrap-text-slide)
+#+end_src
+
 ** Pandoc
 
 #+begin_src emacs-lisp :tangle yes
