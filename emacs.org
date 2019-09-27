@@ -1562,28 +1562,32 @@ Open files in Marked 2 using this [[https://gist.github.com/rlridenour/ac2031d50
   )
 #+end_src
 
-Use f3 to insert fragment tag in reveal.js slides.
+Use s-3 to insert fragment tag in reveal.js slides.
 
 #+begin_src emacs-lisp :tangle yes
 (defun insert-frag ()
   "Insert reveal.js fragment tag"
   (interactive)
   (end-of-line)
-  (insert "<!-- .element: class=\"fragment\" -->"))
+  (insert "<!-- .element: class=\"fragment\" -->")
+(next-line))
 
-(global-set-key (kbd "s-3") 'insert-frag)
+
+(global-set-key (kbd "s-4") 'insert-frag)
 #+end_src
 
 #+begin_src emacs-lisp :tangle yes
 (defun wrap-text-slide ()
   (interactive)
+(if (and transient-mark-mode mark-active)
   (progn
 	(goto-char (region-end))
 	(insert "\n </textarea> \n </section>")
 	(goto-char (region-beginning))
-	(insert "<section data-markdown> \n <textarea data-template> \n")))
+	(insert "<section data-markdown> \n <textarea data-template> \n"))
+(insert "\n </textarea> \n </section> \n \n  <section data-markdown> \n <textarea data-template> \n")(previous-line 3)))
 
-(global-set-key (kbd "s-4") 'wrap-text-slide)
+(global-set-key (kbd "s-3") 'wrap-text-slide)
 #+end_src
 
 ** Pandoc
