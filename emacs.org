@@ -3229,7 +3229,7 @@ Start a regular shell
     (("s-r" . counsel-recentf)
      ;; ("C-s" . swiper)
      ("s-f" . swiper)
-     ;; ("M-x" . counsel-M-x)
+     ("M-x" . counsel-M-x)
      ("C-x C-f" . counsel-find-file)
      ("s-o" . counsel-find-file)
      ("C-c b" . counsel-bookmark)
