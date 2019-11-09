@@ -106,24 +106,6 @@ I really like the subdued colors of the zenburn theme, but I need a bit more con
   )
 #+end_src
 
-#+begin_src emacs-lisp :tangle no
-(use-package gruvbox-theme)
-#+end_src
-
-#+begin_src emacs-lisp :tangle no
-(use-package color-theme-sanityinc-tomorrow)
-#+end_src
-
-Use theme-looper to change themes.
-
-#+begin_src emacs-lisp :tangle no
-  (use-package theme-looper
-:bind ("s-0" . theme-looper-select-theme)
-  :config
-(theme-looper-set-favorite-themes '(hc-zenburn gruvbox-dark-soft gruvbox-light-soft sanityinc-tomorrow-night sanityinc-tomorrow-eighties poet poet-dark-monochrome poet-dark poet-monochrome))
-)
-#+end_src
-
 Set the default font. The "frame-alist" is necessary to set the font when using emacs daemon and client. I find Droid Sans to be a very readable font.
 
 #+begin_src emacs-lisp :tangle yes
@@ -213,11 +195,10 @@ Speaking of the modeline, let's make it look a bit better.
 	(setq spaceline-highlight-face-func 'spaceline-highlight-face-evil-state)))
 #+end_src
 
-Use Emacs 26 display-line-numbers mode when possible.
+Display line numbers.
 
 #+begin_src emacs-lisp :tangle yes
-(when (version<= "26.0.50" emacs-version )
-  (global-display-line-numbers-mode))
+  (global-display-line-numbers-mode)
 #+end_src
 
 * System
@@ -456,19 +437,6 @@ Auto-update buffer list
            (ibuffer-switch-to-saved-filter-groups "home")))
 #+end_src
 
-** Isearch
-
-From Xah Lee, http://ergoemacs.org/emacs/emacs_isearch_by_arrow_keys.html
-
-#+begin_src emacs-lisp :tangle yes
-  (progn
-    ;; set arrow keys in isearch. left/right is backward/forward, up/down is history. press Return to exit
-    (define-key isearch-mode-map (kbd "<up>") 'isearch-ring-retreat )
-    (define-key isearch-mode-map (kbd "<down>") 'isearch-ring-advance )
-    (define-key isearch-mode-map (kbd "<left>") 'isearch-repeat-backward) ; single key, useful
-    (define-key isearch-mode-map (kbd "<right>") 'isearch-repeat-forward) ; single key, useful
-    )
-#+end_src
 
 ** Shell
 
