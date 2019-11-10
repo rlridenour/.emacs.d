@@ -600,17 +600,6 @@ Start server
 
 * Utilities
 
-#+begin_src emacs-lisp :tangle yes
-    (use-package dashboard
-                :diminish dashboard-mode
-        :config
-        (setq dashboard-items '((recents  . 10)
-                                (bookmarks . 10)))
-        (dashboard-setup-startup-hook)
-  (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
-(add-to-list 'dashboard-items '(agenda) t)
-(setq show-week-agenda-p t))
-#+end_src
 
 
 
@@ -936,7 +925,7 @@ Settings for PDF-tools. I might start using this again.
  (setq pdf-annot-activate-created-annotations t)
  ;; use normal isearch
  (define-key pdf-view-mode-map (kbd "C-s") 'isearch-forward))
-#+end_src
+#+end_soc
 
 #+begin_src emacs-lisp :tangle yes
 (use-package nswbuff
