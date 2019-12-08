@@ -6,25 +6,25 @@
 * Preliminaries
 
 ** Installation
-  This is my Emacs configuration file. To install, put this file in ~/.emacs.d, along with an empty file called "custom.el" and a file called "init.el" containing the following: 
+This is my Emacs configuration file. To install, put this file in ~/.emacs.d, along with an empty file called "custom.el" and a file called "init.el" containing the following: 
 
 #+begin_src emacs-lisp :tangle no
-(require 'org-install)
-(require 'ob-tangle)
-(org-babel-load-file (exdpand-file-name "emacs.org" user-emacs-directory))
+  (require 'org-install)
+  (require 'ob-tangle)
+  (org-babel-load-file (exdpand-file-name "emacs.org" user-emacs-directory))
 #+end_src
 
 Set the correct user information.
 
 #+begin_src emacs-lisp :tangle yes
-(setq user-full-name "Randy Ridenour"
-      user-mail-address "rlridenour@gmail.com")
+  (setq user-full-name "Randy Ridenour"
+		user-mail-address "rlridenour@gmail.com")
 #+end_src
 
 Some functions will require Common Lisp.
 
 #+begin_src emacs-lisp :tangle yes
-(require 'cl)
+  (require 'cl)
 #+end_src
 
 If needed, uncomment these for debugging.
@@ -38,53 +38,53 @@ If needed, uncomment these for debugging.
 I use John Wiegley's use-package for loading and configuring all required packages.
 
 #+begin_src emacs-lisp :tangle yes
-    (require 'package)
-    (setq package-enable-at-startup nil)
-    (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
-    (add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/") t)
+  (require 'package)
+  (setq package-enable-at-startup nil)
+  (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
+  (add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/") t)
 
-    (package-initialize)
+  (package-initialize)
 
-    ;; Bootstrap `use-package'
-    (unless (package-installed-p 'use-package)
-      (package-refresh-contents)
-      (package-install 'use-package))
+  ;; Bootstrap `use-package'
+  (unless (package-installed-p 'use-package)
+	(package-refresh-contents)
+	(package-install 'use-package))
 
-    (eval-when-compile
-      (require 'use-package))
-    (setq use-package-always-ensure t)
-    (require 'diminish)
-    (require 'bind-key)
+  (eval-when-compile
+	(require 'use-package))
+  (setq use-package-always-ensure t)
+  (require 'diminish)
+  (require 'bind-key)
 
   ;; Automatically update packages
   (use-package auto-package-update
-    :config
-    (setq auto-package-update-delete-old-versions t)
-    (setq auto-package-update-hide-results t)
-    (auto-package-update-maybe))
+	:config
+	(setq auto-package-update-delete-old-versions t)
+	(setq auto-package-update-hide-results t)
+	(auto-package-update-maybe))
 
   ;; Allow key chords in use-package bindings.
-    (use-package use-package-chords
-      :config (key-chord-mode 1))
+  (use-package use-package-chords
+	:config (key-chord-mode 1))
 
   ;;  Ensure that system utilities required by various packages are installed.
   (use-package use-package-ensure-system-package
-    :ensure t)
+	:ensure t)
 #+end_src
 
 
 Set the path variable to match the shell.
 
 #+begin_src emacs-lisp :tangle yes
-(use-package exec-path-from-shell
-  :config (exec-path-from-shell-initialize))
+  (use-package exec-path-from-shell
+	:config (exec-path-from-shell-initialize))
 #+end_src
 
 Add Homebrew packages to the path.
 
 #+begin_src emacs-lisp :tangle yes
-(let ((default-directory "/usr/local/share/emacs/site-lisp/"))
-  (normal-top-level-add-subdirs-to-load-path))
+  (let ((default-directory "/usr/local/share/emacs/site-lisp/"))
+	(normal-top-level-add-subdirs-to-load-path))
 #+end_src
 
 * Appearance
@@ -92,18 +92,18 @@ Add Homebrew packages to the path.
 I don't need to see the initial splash screen, nor do I need the comments at the top of the scratch buffer. I write more text than elisp, so set the scratch buffer to org-mode.
 
 #+begin_src emacs-lisp :tangle yes
-(setq inhibit-splash-screen t
-      initial-scratch-message nil
-      ;; initial-major-mode 'org-mode
-	  )
+  (setq inhibit-splash-screen t
+		initial-scratch-message nil
+		;; initial-major-mode 'org-mode
+		)
 #+end_src
 
 I really like the subdued colors of the zenburn theme, but I need a bit more contrast.
 
 #+begin_src emacs-lisp :tangle yes
-(use-package hc-zenburn-theme
-  :config (load-theme 'hc-zenburn t)
-  )
+  (use-package hc-zenburn-theme
+	:config (load-theme 'hc-zenburn t)
+	)
 #+end_src
 
 Set the default font. The "frame-alist" is necessary to set the font when using emacs daemon and client. I find Droid Sans to be a very readable font.
@@ -170,29 +170,29 @@ Set tab to four spaces
 Show the file path in title bar, which is very handy when editing different files with the same name.
 
 #+begin_src emacs-lisp :tangle yes
-(setq frame-title-format
-      '((:eval (if (buffer-file-name)
-                   (abbreviate-file-name (buffer-file-name))
-                 "%b"))))
+  (setq frame-title-format
+		'((:eval (if (buffer-file-name)
+					 (abbreviate-file-name (buffer-file-name))
+				   "%b"))))
 #+end_src
 
 Show the date and time in the mode line.
 
 #+begin_src emacs-lisp :tangle yes
-(setq display-time-24hr-format t)
-(setq display-time-day-and-date t)
-(display-time)
+  (setq display-time-24hr-format t)
+  (setq display-time-day-and-date t)
+  (display-time)
 #+end_src
 
 Speaking of the modeline, let's make it look a bit better.
 
 #+begin_src emacs-lisp :tangle yes
-(use-package spaceline
-    :config
-  (progn
-	(require 'spaceline-config)
-	(spaceline-spacemacs-theme)
-	(setq spaceline-highlight-face-func 'spaceline-highlight-face-evil-state)))
+  (use-package spaceline
+	:config
+	(progn
+	  (require 'spaceline-config)
+	  (spaceline-spacemacs-theme)
+	  (setq spaceline-highlight-face-func 'spaceline-highlight-face-evil-state)))
 #+end_src
 
 Display line numbers.
@@ -232,15 +232,15 @@ Always prefer UTF-8 encoding.
 Use TeX to input special characters. Activated later for text, markdown, and org modes.
 
 #+begin_src emacs-lisp :tangle yes
-(setq default-input-method 'TeX)
+  (setq default-input-method 'TeX)
 #+end_src
 
 This will save the file every time the user switches apps. It's handy for ensuring regular saves, but can be annoying when there's a TeX error and latexmk is watching the file.
 
 #+begin_src emacs-lisp :tangle yes
   (defun save-all ()
-    (interactive)
-    (save-some-buffers t))
+	(interactive)
+	(save-some-buffers t))
   (add-hook 'focus-out-hook 'save-all)
 #+end_src
 
@@ -253,14 +253,14 @@ Auto save often — save every 20 characters typed (this is the minimum)
 Use "y" and "n":
 
 #+begin_src emacs-lisp :tangle yes
-(defalias 'yes-or-no-p 'y-or-n-p)
+  (defalias 'yes-or-no-p 'y-or-n-p)
 #+end_src
 
 Confirm killing emacs on graphical sessions:
 
 #+begin_src emacs-lisp :tangle yes
   (when (window-system)
-  (setq confirm-kill-emacs 'yes-or-no-p))
+	(setq confirm-kill-emacs 'yes-or-no-p))
 #+end_src
 
 Edit by Visual Lines
@@ -289,27 +289,27 @@ Use tab for indentation and completion. From http://emacsredux.com/blog/2016/01/
 Save backups and auto-saves to the system temp directory.
 
 #+begin_src emacs-lisp :tangle yes
-    (setq backup-directory-alist
-      `((".*" . ,temporary-file-directory)))
+  (setq backup-directory-alist
+		`((".*" . ,temporary-file-directory)))
   (setq auto-save-file-name-transforms
-      `((".*" ,temporary-file-directory t)))
+		`((".*" ,temporary-file-directory t)))
   (setq backup-by-copying t)
   (setq delete-old-versions t
-    kept-new-versions 6
-    kept-old-versions 2
-    version-control t)
+		kept-new-versions 6
+		kept-old-versions 2
+		version-control t)
 #+end_src
 
 Use spotlight for locate.
 
 #+begin_src emacs-lisp :tangle yes
-(setq locate-command "mdfind")
+  (setq locate-command "mdfind")
 #+end_src
 
 Open links in default Mac browser.
 
 #+begin_src emacs-lisp :tangle yes
-(setq browse-url-browser-function 'browse-url-default-macosx-browser)
+  (setq browse-url-browser-function 'browse-url-default-macosx-browser)
 #+end_src
 
 ** Spelling
@@ -325,18 +325,18 @@ Enable flyspell mode for highlighting spelling errors.
 
 #+begin_src emacs-lisp :tangle yes
   (dolist (hook '(text-mode-hook))
-    (add-hook hook (lambda () (flyspell-mode 1))))
+	(add-hook hook (lambda () (flyspell-mode 1))))
 
   ;; Check comments and strings when coding.
   (dolist (mode '(emacs-lisp-mode-hook
-                  inferior-lisp-mode-hook
-                  clojure-mode-hook
-                  python-mode-hook
-                  js-mode-hook
-                  R-mode-hook))
-    (add-hook mode
-              '(lambda ()
-                 (flyspell-prog-mode))))
+				  inferior-lisp-mode-hook
+				  clojure-mode-hook
+				  python-mode-hook
+				  js-mode-hook
+				  R-mode-hook))
+	(add-hook mode
+			  '(lambda ()
+				 (flyspell-prog-mode))))
 #+end_src
 
 Use F7 to check the current word, M-F7 for the next word.
@@ -344,10 +344,10 @@ Use F7 to check the current word, M-F7 for the next word.
 #+begin_src emacs-lisp :tangle yes
   (global-set-key (kbd "<f7>") 'ispell-word)
   (defun flyspell-check-next-highlighted-word ()
-    "Custom function to spell check next highlighted word"
-    (interactive)
-    (flyspell-goto-next-error)
-    (ispell-word))
+	"Custom function to spell check next highlighted word"
+	(interactive)
+	(flyspell-goto-next-error)
+	(ispell-word))
   (global-set-key (kbd "M-<f7>") 'flyspell-check-next-highlighted-word)
 #+end_src
 
@@ -358,18 +358,18 @@ Find aspell and hunspell automatically
    ;; try hunspell at first
    ;; if hunspell does NOT exist, use aspell
    ((executable-find "hunspell")
-    (setq ispell-program-name "hunspell")
-    (setq ispell-local-dictionary "en_US")
-    (setq ispell-local-dictionary-alist
-          ;; Please note the list `("-d" "en_US")` contains ACTUAL parameters passed to hunspell
-          ;; You could use `("-d" "en_US,en_US-med")` to check with multiple dictionaries
-          '(("en_US" "[[:alpha:]]" "[^[:alpha:]]" "[']" nil ("-d" "en_US") nil utf-8)
-            )))
+	(setq ispell-program-name "hunspell")
+	(setq ispell-local-dictionary "en_US")
+	(setq ispell-local-dictionary-alist
+		  ;; Please note the list `("-d" "en_US")` contains ACTUAL parameters passed to hunspell
+		  ;; You could use `("-d" "en_US,en_US-med")` to check with multiple dictionaries
+		  '(("en_US" "[[:alpha:]]" "[^[:alpha:]]" "[']" nil ("-d" "en_US") nil utf-8)
+			)))
 
    ((executable-find "aspell")
-    (setq ispell-program-name "aspell")
-    ;; Please note ispell-extra-args contains ACTUAL parameters passed to aspell
-    (setq ispell-extra-args '("--sug-mode=ultra" "--lang=en_US"))))
+	(setq ispell-program-name "aspell")
+	;; Please note ispell-extra-args contains ACTUAL parameters passed to aspell
+	(setq ispell-extra-args '("--sug-mode=ultra" "--lang=en_US"))))
 #+end_src
 
 Store personal dictionary in Dropbox to sync between machines.
@@ -384,7 +384,7 @@ Hide various file types, mostly LaTeX auxiliary files, in Dired.
   (require 'dired-x)
   (setq-default dired-omit-files-p t) ; this is buffer-local variable
   (setq dired-omit-files
-        (concat dired-omit-files "\\|^\\..+$"))
+		(concat dired-omit-files "\\|^\\..+$"))
   (setq-default dired-omit-extensions '("fdb_latexmk" "aux" "bbl" "blg" "fls" "glo" "idx" "ilg" "ind" "ist" "log" "out" "gz" "bcf" "run.xml"  "DS_Store"))
   (setq dired-dwim-target t)
 #+end_src
@@ -409,7 +409,7 @@ Bookmarks
 #+begin_src emacs-lisp :tangle yes
   (require 'recentf)
   (setq recentf-max-saved-items 200
-        recentf-max-menu-items 15)
+		recentf-max-menu-items 15)
   (recentf-mode)
 #+end_src
 
@@ -417,7 +417,7 @@ Don't ask for confirmation to kill processes when exiting Emacs. Credit to [[htt
 
 #+begin_src emacs-lisp :tangle yes
   (defadvice save-buffers-kill-emacs (around no-query-kill-emacs activate)
-    (cl-flet ((process-list ())) ad-do-it))
+	(cl-flet ((process-list ())) ad-do-it))
 #+end_src
 
 ** ibuffer
@@ -432,9 +432,9 @@ Auto-update buffer list
 
 #+begin_src emacs-lisp :tangle yes
   (add-hook 'ibuffer-mode-hook
-        '(lambda ()
-           (ibuffer-auto-mode 1)
-           (ibuffer-switch-to-saved-filter-groups "home")))
+			'(lambda ()
+			   (ibuffer-auto-mode 1)
+			   (ibuffer-switch-to-saved-filter-groups "home")))
 #+end_src
 
 
@@ -446,25 +446,25 @@ Set shell to fish.
 
 #+begin_src emacs-lisp :tangle yes
   (if (eq system-type 'gnu/linux)
-  (setq multi-term-program "/usr/bin/fish")
-  (setq multi-term-program "/usr/local/bin/fish"))
+	  (setq multi-term-program "/usr/bin/fish")
+	(setq multi-term-program "/usr/local/bin/fish"))
 
   (if (eq system-type 'gnu/linux)
-  (setq explicit-shell-file-name "/usr/bin/fish")
-  (setq explicit-shell-file-name "/usr/local/bin/fish"))
+	  (setq explicit-shell-file-name "/usr/bin/fish")
+	(setq explicit-shell-file-name "/usr/local/bin/fish"))
 #+end_src
 
 This kills the buffer after closing the terminal.
 
 #+begin_src emacs-lisp :tangle yes
   (defun oleh-term-exec-hook ()
-    (let* ((buff (current-buffer))
-           (proc (get-buffer-process buff)))
-      (set-process-sentinel
-       proc
-       `(lambda (process event)
-          (if (string= event "finished\n")
-              (kill-buffer ,buff))))))
+	(let* ((buff (current-buffer))
+		   (proc (get-buffer-process buff)))
+	  (set-process-sentinel
+	   proc
+	   `(lambda (process event)
+		  (if (string= event "finished\n")
+			  (kill-buffer ,buff))))))
   (add-hook 'term-exec-hook 'oleh-term-exec-hook)
 #+end_src
 
@@ -472,7 +472,7 @@ To paste into term.
 
 #+begin_src emacs-lisp :tangle yes
   (eval-after-load "term"
-    '(define-key term-raw-map (kbd "C-c C-y") 'term-paste))
+	'(define-key term-raw-map (kbd "C-c C-y") 'term-paste))
 #+end_src
 
 Make completion case-insensitive in eshell
@@ -503,11 +503,11 @@ Kill contents of scratch buffer, not the buffer itself. From [[http://emacswiki.
 
 #+begin_src emacs-lisp :tangle yes
   (defun unkillable-scratch-buffer ()
-      (if (equal (buffer-name (current-buffer)) "*scratch*")
-          (progn
-            (delete-region (point-min) (point-max))
-            nil)
-        t))
+	(if (equal (buffer-name (current-buffer)) "*scratch*")
+		(progn
+		  (delete-region (point-min) (point-max))
+		  nil)
+	  t))
   (add-hook 'kill-buffer-query-functions 'unkillable-scratch-buffer)
 #+end_src
 
@@ -521,7 +521,7 @@ Move deleted files to system trash.
 
 #+begin_src emacs-lisp :tangle yes
   (setq delete-by-moving-to-trash t
-        trash-directory "~/.Trash/emacs")
+		trash-directory "~/.Trash/emacs")
 #+end_src
 
 Disable warning bell. This caused problems, so I flash the mode-line instead.
@@ -536,15 +536,15 @@ This flashes the mode-line (from http://www.stefanom.org/prettify-my-emacs-symbo
 
 #+begin_src emacs-lisp :tangle yes
   (defun my-terminal-visible-bell ()
-     "A friendlier visual bell effect."
-     (invert-face 'mode-line)
-     (run-with-timer 0.1 nil 'invert-face 'mode-line))
+	"A friendlier visual bell effect."
+	(invert-face 'mode-line)
+	(run-with-timer 0.1 nil 'invert-face 'mode-line))
 
 #+end_src 
 
- #+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle yes
   (setq visible-bell nil
-         ring-bell-function 'my-terminal-visible-bell)
+		ring-bell-function 'my-terminal-visible-bell)
 #+end_src
 
 CUA mode only for rectangle editing. 
@@ -571,10 +571,10 @@ Garbage collection from http://bling.github.io/blog/2016/01/18/why-are-you-chang
 
 #+begin_src emacs-lisp :tangle yes
   (defun my-minibuffer-setup-hook ()
-    (setq gc-cons-threshold most-positive-fixnum))
+	(setq gc-cons-threshold most-positive-fixnum))
 
   (defun my-minibuffer-exit-hook ()
-    (setq gc-cons-threshold 800000))
+	(setq gc-cons-threshold 800000))
 
   (add-hook 'minibuffer-setup-hook #'my-minibuffer-setup-hook)
   (add-hook 'minibuffer-exit-hook #'my-minibuffer-exit-hook)
@@ -607,14 +607,14 @@ Yasnippet for inserting commonly used bits of text.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package yasnippet
-        :defer t
-    :diminish yas-minor-mode
-    :init (progn
-            ;; (bind-key "SPC" 'yas-expand yas-minor-mode-map)
-            (yas-global-mode 1)
-            (yas-reload-all)
-            (setq yas-snippet-dirs
-              '("~/.emacs.d/snippets"))))
+	:defer t
+	:diminish yas-minor-mode
+	:init (progn
+			;; (bind-key "SPC" 'yas-expand yas-minor-mode-map)
+			(yas-global-mode 1)
+			(yas-reload-all)
+			(setq yas-snippet-dirs
+				  '("~/.emacs.d/snippets"))))
   (define-key yas-minor-mode-map (kbd "TAB") 'yas-expand)
 #+end_src
 
@@ -622,127 +622,127 @@ Avy is used for jumping to points on screen. It works well, but I don't think it
 
 #+begin_src emacs-lisp :tangle yes
   (use-package avy
-        :bind (("M-g l" . avy-goto-line)
-           ;; ("s-l" . avy-goto-line)
-           ("M-g w" . avy-goto-word-1)
-           ("M-g M-g" . avy-goto-char-2)
-           ("s-/" . avy-goto-char-timer)))
+	:bind (("M-g l" . avy-goto-line)
+		   ;; ("s-l" . avy-goto-line)
+		   ("M-g w" . avy-goto-word-1)
+		   ("M-g M-g" . avy-goto-char-2)
+		   ("s-/" . avy-goto-char-timer)))
 #+end_src
 
 I use Ace-Window a lot for switching between windows and frames.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package  ace-window
-    :ensure
-    :bind ("s-w" . ace-window)
-    :config
-    ;; (setq aw-leading-char-style 'path)
-    (setq aw-background nil)
-    (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
+	:ensure
+	:bind ("s-w" . ace-window)
+	:config
+	;; (setq aw-leading-char-style 'path)
+	(setq aw-background nil)
+	(setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
 #+end_src
 
 Smex makes M-x commands much easier.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package smex
-        ;; :bind (([remap execute-extended-command] . smex)
-           ;; ("s-P" . smex))
-    :config
-    (smex-initialize)
-    (setq smex-save-file (expand-file-name ".smex-items" user-emacs-directory)))
+	;; :bind (([remap execute-extended-command] . smex)
+	;; ("s-P" . smex))
+	:config
+	(smex-initialize)
+	(setq smex-save-file (expand-file-name ".smex-items" user-emacs-directory)))
 #+end_src
 
 Undo in Emacs is very powerful, but with great power comes great confusion. It helps to be able to visualize it with undo-tree.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package undo-tree
-        :diminish undo-tree-mode
-    :config (global-undo-tree-mode)
-    :bind (("s-z" . undo-tree-undo)
-           ("s-Z" . undo-tree-redo)))
+	:diminish undo-tree-mode
+	:config (global-undo-tree-mode)
+	:bind (("s-z" . undo-tree-undo)
+		   ("s-Z" . undo-tree-redo)))
 #+end_src
 
 Dash is required by some other packages and functions.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package dash
-        :config (dash-enable-font-lock))
+	:config (dash-enable-font-lock))
 #+end_src
 
 Expand region is useful for quickly selecting text. Each successive keystroke expands the selected region from word to line to paragraph, etc.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package expand-region
-        :commands (er/mark-symbol)
-    :bind* ("C-=" . er/expand-region))
+	:commands (er/mark-symbol)
+	:bind* ("C-=" . er/expand-region))
 #+end_src
 
 Magit is an interface for Git. If I could keep only one package in Emacs, this might be it.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package magit
-        :defer t
-    :bind ("C-x g" . magit-status))
+	:defer t
+	:bind ("C-x g" . magit-status))
 #+end_src
 
 Evil-nerd commenter is used for quickly commenting code. It works well both with and without evil-mode.
 
 #+begin_src emacs-lisp :tangle yes
-    (use-package evil-nerd-commenter
-            :config (evilnc-default-hotkeys))
+  (use-package evil-nerd-commenter
+	:config (evilnc-default-hotkeys))
 #+end_src
 
 Shrink Whitespace does exactly what it says for both blank lines and spaces. If the point is on one of several successive blank lines, then one keystroke kills all but one of them. Another keystroke kills that one also.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package shrink-whitespace
-        :bind ("M-=" . shrink-whitespace))
+	:bind ("M-=" . shrink-whitespace))
 #+end_src
 
 Zop to char also marks and acts on regions. 
 
 #+begin_src emacs-lisp :tangle yes
   (use-package zop-to-char
-        :bind ([remap zap-to-char] . zop-to-char))
+	:bind ([remap zap-to-char] . zop-to-char))
 #+end_src
 
 Projectile is for project management.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package projectile
-        :diminish projectile-mode
-    :config (projectile-global-mode)
-    :bind ("s-p" . projectile-command-map))
+	:diminish projectile-mode
+	:config (projectile-global-mode)
+	:bind ("s-p" . projectile-command-map))
 #+end_src
 
 Company-mode provides auto-completion suggestions. 
 
 #+begin_src emacs-lisp :tangle yes
   (use-package company
-        :diminish company-mode
-    :config
-    (progn
-      (setq company-tooltip-limit 20)
-      (setq company-idle-delay 1)
-      (global-company-mode 1)))
+	:diminish company-mode
+	:config
+	(progn
+	  (setq company-tooltip-limit 20)
+	  (setq company-idle-delay 1)
+	  (global-company-mode 1)))
 
-(use-package company-auctex
-:config
-(company-auctex-init))
+  (use-package company-auctex
+	:config
+	(company-auctex-init))
 #+end_src
 
 Reveal in Finder opens a Finder with the current file or folder selected. I use this a lot.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package reveal-in-osx-finder
-        :bind ("C-c z" . reveal-in-osx-finder))
+	:bind ("C-c z" . reveal-in-osx-finder))
 #+end_src
 
 Smartparens is used for things that come in pairs, like parentheses, brackets, quotation marks, etc.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package smartparens
-        :diminish smartparens-mode)
+	:diminish smartparens-mode)
   (require 'smartparens-config)
   (smartparens-global-mode t)
 #+end_src
@@ -751,208 +751,208 @@ Olivetti is a mode for writing. It sets the body width to a certain amount (defa
 
 #+begin_src emacs-lisp :tangle yes
   (use-package olivetti
-    :ensure t)
+	:ensure t)
 #+end_src
 
 Aggresive indent keeps code indented. It occasionally causes some problems, so remember to turn it off when things aren't working right. The settings below turn it on for elisp and off for Markdown.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package aggressive-indent
-        :config (global-aggressive-indent-mode 1)
-    (add-to-list 'aggressive-indent-excluded-modes 'markdown-mode))
+	:config (global-aggressive-indent-mode 1)
+	(add-to-list 'aggressive-indent-excluded-modes 'markdown-mode))
 #+end_src
 
 A tip from [[http://pragmaticemacs.com/emacs/dynamically-filter-directory-listing-with-dired-narrow/][Pragmatic Emacs]]. In a Dired buffer, type "/" followed by some text, and the items listed will be filtered by that text. For example, "/.md" lists only the files with an "md" extension in the directory. Typing "g" removes the filter. 
 
 #+begin_src emacs-lisp :tangle yes
   (use-package dired-narrow
-        :bind (:map dired-mode-map
-                ("/" . dired-narrow)))
+	:bind (:map dired-mode-map
+				("/" . dired-narrow)))
 #+end_src
 
 #+begin_src emacs-lisp :tangle yes
-(use-package dired-subtree
-:bind (:map dired-mode-map
-            ("<tab>" . dired-subtree-toggle)))
+  (use-package dired-subtree
+	:bind (:map dired-mode-map
+				("<tab>" . dired-subtree-toggle)))
 #+end_src
 
 Biblio provides database searches for bibtex references.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package biblio
-    :ensure t)
+	:ensure t)
 #+end_src
 
 Flyspell-correct-ivy uses the Ivy interface for spelling suggestions.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package flyspell-correct-ivy
-        :after flyspell
-    :bind (:map flyspell-mode-map
-                ("s-;" . flyspell-correct-word-generic)
-                ("C-;" . flyspell-correct-previous-word-generic)))
+	:after flyspell
+	:bind (:map flyspell-mode-map
+				("s-;" . flyspell-correct-word-generic)
+				("C-;" . flyspell-correct-previous-word-generic)))
 #+end_src
 
 WC-mode provides word count.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package wc-mode
-    :ensure t)
+	:ensure t)
 #+end_src
 
 Move-text - move current line or active region up or down with m-arrow key
 
 #+begin_src emacs-lisp :tangle yes
   (use-package move-text
-        :config
-    (move-text-default-bindings))
+	:config
+	(move-text-default-bindings))
 #+end_src
 
 Hungry delete mode deletes all the whitespace when you hit backspace or delete. 
 
 #+begin_src emacs-lisp :tangle yes
   (use-package hungry-delete
-        :diminish hungry-delete-mode
-    :config
-    (global-hungry-delete-mode))
+	:diminish hungry-delete-mode
+	:config
+	(global-hungry-delete-mode))
 #+end_src
 
 I use web-mode for editing html.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package web-mode
-        :config
-    (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
-    (setq web-mode-engines-alist
-          '(("django"    . "\\.html\\'")))
-    (setq web-mode-ac-sources-alist
-          '(("css" . (ac-source-css-property))
-            ("html" . (ac-source-words-in-buffer ac-source-abbrev))))
+	:config
+	(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+	(setq web-mode-engines-alist
+		  '(("django"    . "\\.html\\'")))
+	(setq web-mode-ac-sources-alist
+		  '(("css" . (ac-source-css-property))
+			("html" . (ac-source-words-in-buffer ac-source-abbrev))))
 
-    (setq web-mode-enable-auto-closing t)
-    (setq web-mode-enable-auto-quoting t))
+	(setq web-mode-enable-auto-closing t)
+	(setq web-mode-enable-auto-quoting t))
 #+end_src
 
 Which-key is a package that shows the options for command completion. For example, type "C-x" and a window pops up with all the commands that begin with "C-x" It's very useful for those times when you're thinking, "I can't remember the keys for that command, but I know it starts with..." 
 
 #+begin_src emacs-lisp :tangle yes
   (use-package which-key
-        :diminish which-key-mode
-    :config
-    (which-key-mode))
+	:diminish which-key-mode
+	:config
+	(which-key-mode))
 #+end_src
 
 Sane-term is for opening ansi-term buffers. "C-x t" creates an ansi-term buffer if there isn't one, and switches to the last one otherwise. "C-x T" always creates a new one.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package sane-term
-        :bind (("C-x t" . sane-term)
-           ("C-x T" . sane-term-create)))
+	:bind (("C-x t" . sane-term)
+		   ("C-x T" . sane-term-create)))
 #+end_src
 
 Multiple cursors setup from kaushalmodi: https://github.com/kaushalmodi/.emacs.d/blob/master/setup-files/setup-multiple-cursors.el
 
 #+begin_src emacs-lisp :tangle no
-(use-package multiple-cursors
-  :bind (("C-c m" . mc/edit-lines)
-         ("C->" . mc/mark-next-like-this)
-         ("C-<" . mc/mark-previous-like-this)
-         ("C-c C-<" . mc/mark-all-like-this)
-         ("C-S-<mouse-1>" . mc/add-cursor-on-click))
-  :bind (:map region-bindings-mode-map
-         ("a" . mc/mark-all-like-this)
-         ("p" . mc/mark-previous-like-this)
-         ("n" . mc/mark-next-like-this)
-         ("P" . mc/unmark-previous-like-this)
-         ("N" . mc/unmark-next-like-this)
-         ("[" . mc/cycle-backward)
-         ("]" . mc/cycle-forward)
-         ("m" . mc/mark-more-like-this-extended)
-         ("h" . mc-hide-unmatched-lines-mode)
-         ("\\" . mc/vertical-align-with-space)
-         ("#" . mc/insert-numbers) ; use num prefix to set the starting number
-         ("^" . mc/edit-beginnings-of-lines)
-         ("$" . mc/edit-ends-of-lines))
-  :init
-  (progn
-    ;; Temporary hack to get around bug # 28524 in emacs 26+
-    ;; https://debbugs.gnu.org/cgi/bugreport.cgi?bug=28524
-    (setq mc/mode-line
-          `(" mc:" (:eval (format ,(propertize "%-2d" 'face 'font-lock-warning-face)
-                                  (mc/num-cursors)))))
+  (use-package multiple-cursors
+	:bind (("C-c m" . mc/edit-lines)
+		   ("C->" . mc/mark-next-like-this)
+		   ("C-<" . mc/mark-previous-like-this)
+		   ("C-c C-<" . mc/mark-all-like-this)
+		   ("C-S-<mouse-1>" . mc/add-cursor-on-click))
+	:bind (:map region-bindings-mode-map
+				("a" . mc/mark-all-like-this)
+				("p" . mc/mark-previous-like-this)
+				("n" . mc/mark-next-like-this)
+				("P" . mc/unmark-previous-like-this)
+				("N" . mc/unmark-next-like-this)
+				("[" . mc/cycle-backward)
+				("]" . mc/cycle-forward)
+				("m" . mc/mark-more-like-this-extended)
+				("h" . mc-hide-unmatched-lines-mode)
+				("\\" . mc/vertical-align-with-space)
+				("#" . mc/insert-numbers) ; use num prefix to set the starting number
+				("^" . mc/edit-beginnings-of-lines)
+				("$" . mc/edit-ends-of-lines))
+	:init
+	(progn
+	  ;; Temporary hack to get around bug # 28524 in emacs 26+
+	  ;; https://debbugs.gnu.org/cgi/bugreport.cgi?bug=28524
+	  (setq mc/mode-line
+			`(" mc:" (:eval (format ,(propertize "%-2d" 'face 'font-lock-warning-face)
+									(mc/num-cursors)))))
 
-(setq mc/list-file (locate-user-emacs-file "mc-lists"))
+	  (setq mc/list-file (locate-user-emacs-file "mc-lists"))
 
-    ;; Disable the annoying sluggish matching paren blinks for all cursors
-    ;; when you happen to type a ")" or "}" at all cursor locations.
-    (defvar modi/mc-blink-matching-paren--store nil
-      "Internal variable used to restore the value of `blink-matching-paren'
-after `multiple-cursors-mode' is quit.")
+	  ;; Disable the annoying sluggish matching paren blinks for all cursors
+	  ;; when you happen to type a ")" or "}" at all cursor locations.
+	  (defvar modi/mc-blink-matching-paren--store nil
+		"Internal variable used to restore the value of `blink-matching-paren'
+  after `multiple-cursors-mode' is quit.")
 
-    ;; The `multiple-cursors-mode-enabled-hook' and
-    ;; `multiple-cursors-mode-disabled-hook' are run in the
-    ;; `multiple-cursors-mode' minor mode definition, but they are not declared
-    ;; (not `defvar'd). So do that first before using `add-hook'.
-    (defvar multiple-cursors-mode-enabled-hook nil
-      "Hook that is run after `multiple-cursors-mode' is enabled.")
-    (defvar multiple-cursors-mode-disabled-hook nil
-      "Hook that is run after `multiple-cursors-mode' is disabled.")
+	  ;; The `multiple-cursors-mode-enabled-hook' and
+	  ;; `multiple-cursors-mode-disabled-hook' are run in the
+	  ;; `multiple-cursors-mode' minor mode definition, but they are not declared
+	  ;; (not `defvar'd). So do that first before using `add-hook'.
+	  (defvar multiple-cursors-mode-enabled-hook nil
+		"Hook that is run after `multiple-cursors-mode' is enabled.")
+	  (defvar multiple-cursors-mode-disabled-hook nil
+		"Hook that is run after `multiple-cursors-mode' is disabled.")
 
-    (defun modi/mc-when-enabled ()
-      "Function to be added to `multiple-cursors-mode-enabled-hook'."
-      (setq modi/mc-blink-matching-paren--store blink-matching-paren)
-      (setq blink-matching-paren nil))
+	  (defun modi/mc-when-enabled ()
+		"Function to be added to `multiple-cursors-mode-enabled-hook'."
+		(setq modi/mc-blink-matching-paren--store blink-matching-paren)
+		(setq blink-matching-paren nil))
 
-    (defun modi/mc-when-disabled ()
-      "Function to be added to `multiple-cursors-mode-disabled-hook'."
-      (setq blink-matching-paren modi/mc-blink-matching-paren--store))
+	  (defun modi/mc-when-disabled ()
+		"Function to be added to `multiple-cursors-mode-disabled-hook'."
+		(setq blink-matching-paren modi/mc-blink-matching-paren--store))
 
-    (add-hook 'multiple-cursors-mode-enabled-hook #'modi/mc-when-enabled)
-    (add-hook 'multiple-cursors-mode-disabled-hook #'modi/mc-when-disabled)))
+	  (add-hook 'multiple-cursors-mode-enabled-hook #'modi/mc-when-enabled)
+	  (add-hook 'multiple-cursors-mode-disabled-hook #'modi/mc-when-disabled)))
 #+end_src
 
 Settings for PDF-tools. I might start using this again.
 
 #+begin_src emacs-lisp :tangle no
-(use-package pdf-tools
- :pin manual ;; manually update
- :config
- ;; initialise
- (pdf-tools-install)
- ;; open pdfs scaled to fit page
- (setq-default pdf-view-display-size 'fit-page)
- ;; automatically annotate highlights
- (setq pdf-annot-activate-created-annotations t)
- ;; use normal isearch
- (define-key pdf-view-mode-map (kbd "C-s") 'isearch-forward))
-#+end_soc
+  (use-package pdf-tools
+	:pin manual ;; manually update
+	:config
+	;; initialise
+	(pdf-tools-install)
+	;; open pdfs scaled to fit page
+	(setq-default pdf-view-display-size 'fit-page)
+	;; automatically annotate highlights
+	(setq pdf-annot-activate-created-annotations t)
+	;; use normal isearch
+	(define-key pdf-view-mode-map (kbd "C-s") 'isearch-forward))
+  ,#+end_soc
 
-#+begin_src emacs-lisp :tangle yes
-(use-package nswbuff
-:bind (("M-`" . nswbuff-switch-to-previous-buffer)
-       ("M-S-`" . nswbuff-switch-to-next-buffer))
-)
+  ,#+begin_src emacs-lisp :tangle yes
+  (use-package nswbuff
+	:bind (("M-`" . nswbuff-switch-to-previous-buffer)
+		   ("M-S-`" . nswbuff-switch-to-next-buffer))
+	)
 #+end_src
 
 Use anzu for search and replace.
 
 #+begin_src emacs-lisp :tangle yes
-(use-package anzu
-    :bind (("M-%" . anzu-query-replace)
-         ("C-M-%" . anzu-query-replace-regexp))
-  :config
-  (global-anzu-mode))
+  (use-package anzu
+	:bind (("M-%" . anzu-query-replace)
+		   ("C-M-%" . anzu-query-replace-regexp))
+	:config
+	(global-anzu-mode))
 #+end_src
 
 Use outshine for folding.
 
 #+begin_src emacs-lisp :tangle yes
-(use-package outshine
-:init
-(defvar outline-minor-mode-prefix "\M-#")
-:config
-(add-hook 'LaTeX-mode-hook 'outshine-mode)
-(setq outshine-use-speed-commands t))
+  (use-package outshine
+	:init
+	(defvar outline-minor-mode-prefix "\M-#")
+	:config
+	(add-hook 'LaTeX-mode-hook 'outshine-mode)
+	(setq outshine-use-speed-commands t))
 #+end_src
 
 * Functions
@@ -960,25 +960,25 @@ Use outshine for folding.
 Window management, from https://www.bytedude.com/useful-emacs-shortcuts/
 
 #+begin_src emacs-lisp :tangle yes
-(defun delete-window-balance ()
-  "Delete window and rebalance the remaining ones."
-  (interactive)
-  (delete-window)
-  (balance-windows))
+  (defun delete-window-balance ()
+	"Delete window and rebalance the remaining ones."
+	(interactive)
+	(delete-window)
+	(balance-windows))
 
-(defun split-window-below-focus ()
-  "Split window horizontally and move focus to other window."
-  (interactive)
-  (split-window-below)
-  (balance-windows)
-  (other-window 1))
- 
-(defun split-window-right-focus ()
-  "Split window vertically and move focus to other window."
-  (interactive)
-  (split-window-right)
-  (balance-windows)
-  (other-window 1))
+  (defun split-window-below-focus ()
+	"Split window horizontally and move focus to other window."
+	(interactive)
+	(split-window-below)
+	(balance-windows)
+	(other-window 1))
+
+  (defun split-window-right-focus ()
+	"Split window vertically and move focus to other window."
+	(interactive)
+	(split-window-right)
+	(balance-windows)
+	(other-window 1))
 #+end_src
 
 
@@ -987,27 +987,27 @@ Wraps text in an emacs-lisp code block. Used for converting my init files to org
 
 #+begin_src emacs-lisp :tangle yes
   (defun wrap-src (start end)
-    "Insert an elisp src around a region."
-    (interactive "r")
-    (save-excursion
-      (goto-char end) (newline) (insert "#+end_src")
-      (goto-char start) (insert "#+begin_src emacs-lisp :tangle yes") (newline)))
+	"Insert an elisp src around a region."
+	(interactive "r")
+	(save-excursion
+	  (goto-char end) (newline) (insert "#+end_src")
+	  (goto-char start) (insert "#+begin_src emacs-lisp :tangle yes") (newline)))
 #+end_src
 
 Inserting dates.
 
 #+begin_src emacs-lisp :tangle yes
-    (defun insert-date-string ()
-        "Insert current date yyyymmdd."
-        (interactive)
-        (insert (format-time-string "%Y%m%d")))
+  (defun insert-date-string ()
+	"Insert current date yyyymmdd."
+	(interactive)
+	(insert (format-time-string "%Y%m%d")))
 
-    (defun insert-standard-date ()
-        "Inserts standard date time string." 
-        (interactive)
-        (insert (format-time-string "%B %e, %Y")))
-    (global-set-key (kbd "<f8>") 'insert-standard-date)
-    (global-set-key (kbd "C-c d") 'insert-date-string)
+  (defun insert-standard-date ()
+	"Inserts standard date time string." 
+	(interactive)
+	(insert (format-time-string "%B %e, %Y")))
+  (global-set-key (kbd "<f8>") 'insert-standard-date)
+  (global-set-key (kbd "C-c d") 'insert-date-string)
 #+end_src
 
 Compact-Uncompact Block
@@ -1015,50 +1015,50 @@ Compact-Uncompact Block
 Fill-paragraph from Xah Lee (http://ergoemacs.org/emacs/modernization_fill-paragraph.html)
 
 #+begin_src emacs-lisp :tangle yes
-    (defun rlr/compact-uncompact-block ()
-      "Remove or add line ending chars on current paragraph.
-    This command is similar to a toggle of `fill-paragraph'.
-    When there is a text selection, act on the region."
-      (interactive)
-      ;; This command symbol has a property “'stateIsCompact-p”.
-      (let (currentStateIsCompact (bigFillColumnVal 90002000) (deactivate-mark nil))
-        ;; 90002000 is just random. you can use `most-positive-fixnum'
-        (save-excursion
-          ;; Determine whether the text is currently compact.
-          (setq currentStateIsCompact
-                (if (eq last-command this-command)
-                    (get this-command 'stateIsCompact-p)
-                  (if (> (- (line-end-position) (line-beginning-position)) fill-column) t nil) ) )
-          (if (use-region-p)
-              (if currentStateIsCompact
-                  (fill-region (region-beginning) (region-end))
-                (let ((fill-column bigFillColumnVal))
-                  (fill-region (region-beginning) (region-end))) )
-            (if currentStateIsCompact
-                (fill-paragraph nil)
-              (let ((fill-column bigFillColumnVal))
-                (fill-paragraph nil)) ) )
-          (put this-command 'stateIsCompact-p (if currentStateIsCompact nil t)) ) ) )
+  (defun rlr/compact-uncompact-block ()
+	"Remove or add line ending chars on current paragraph.
+  This command is similar to a toggle of `fill-paragraph'.
+  When there is a text selection, act on the region."
+	(interactive)
+	;; This command symbol has a property “'stateIsCompact-p”.
+	(let (currentStateIsCompact (bigFillColumnVal 90002000) (deactivate-mark nil))
+	  ;; 90002000 is just random. you can use `most-positive-fixnum'
+	  (save-excursion
+		;; Determine whether the text is currently compact.
+		(setq currentStateIsCompact
+			  (if (eq last-command this-command)
+				  (get this-command 'stateIsCompact-p)
+				(if (> (- (line-end-position) (line-beginning-position)) fill-column) t nil) ) )
+		(if (use-region-p)
+			(if currentStateIsCompact
+				(fill-region (region-beginning) (region-end))
+			  (let ((fill-column bigFillColumnVal))
+				(fill-region (region-beginning) (region-end))) )
+		  (if currentStateIsCompact
+			  (fill-paragraph nil)
+			(let ((fill-column bigFillColumnVal))
+			  (fill-paragraph nil)) ) )
+		(put this-command 'stateIsCompact-p (if currentStateIsCompact nil t)) ) ) )
 #+end_src
 
 Focus Emacs 
 
 #+begin_src emacs-lisp :tangle yes
   (when (featurep 'ns)
-    (defun ns-raise-emacs ()
-      "Raise Emacs."
-      (ns-do-applescript "tell application \"Emacs\" to activate"))
+	(defun ns-raise-emacs ()
+	  "Raise Emacs."
+	  (ns-do-applescript "tell application \"Emacs\" to activate"))
 
-    (defun ns-raise-emacs-with-frame (frame)
-      "Raise Emacs and select the provided frame."
-      (with-selected-frame frame
-        (when (display-graphic-p)
-          (ns-raise-emacs))))
+	(defun ns-raise-emacs-with-frame (frame)
+	  "Raise Emacs and select the provided frame."
+	  (with-selected-frame frame
+		(when (display-graphic-p)
+		  (ns-raise-emacs))))
 
-    (add-hook 'after-make-frame-functions 'ns-raise-emacs-with-frame)
+	(add-hook 'after-make-frame-functions 'ns-raise-emacs-with-frame)
 
-    (when (display-graphic-p)
-      (ns-raise-emacs)))
+	(when (display-graphic-p)
+	  (ns-raise-emacs)))
 #+end_src
 
    
@@ -1068,9 +1068,9 @@ From [[https://github.com/grettke/home/blob/master/.emacs.el#L436][Grant Rettke]
 
 #+begin_src emacs-lisp :tangle yes
   (defun rlr/smart-open-line ()
-    (interactive)
-    (move-end-of-line nil)
-    (newline-and-indent))
+	(interactive)
+	(move-end-of-line nil)
+	(newline-and-indent))
   (global-set-key (kbd "s-<return>") 'rlr/smart-open-line)
 #+end_src
 
@@ -1079,16 +1079,16 @@ From [[https://github.com/bbatsov/prelude][Emacs Prelude]]
 
 #+begin_src emacs-lisp :tangle yes
   (defun delete-file-and-buffer ()
-    "Kill the current buffer and deletes the file it is visiting."
-    (interactive)
-    (let ((filename (buffer-file-name)))
-      (when filename
-        (if (vc-backend filename)
-            (vc-delete-file filename)
-          (when (y-or-n-p (format "Are you sure you want to delete %s? " filename))
-            (delete-file filename)
-            (message "Deleted file %s" filename)
-            (kill-buffer))))))
+	"Kill the current buffer and deletes the file it is visiting."
+	(interactive)
+	(let ((filename (buffer-file-name)))
+	  (when filename
+		(if (vc-backend filename)
+			(vc-delete-file filename)
+		  (when (y-or-n-p (format "Are you sure you want to delete %s? " filename))
+			(delete-file filename)
+			(message "Deleted file %s" filename)
+			(kill-buffer))))))
   (global-set-key (kbd "C-c D") 'delete-file-and-buffer)
 #+end_src
 
@@ -1096,17 +1096,17 @@ Rename Buffer and File
 
 #+begin_src emacs-lisp :tangle yes
   (defun rename-buffer-and-file ()
-    "Rename current buffer and if the buffer is visiting a file, rename it too."
-    (interactive)
-    (let ((filename (buffer-file-name)))
-      (if (not (and filename (file-exists-p filename)))
-          (rename-buffer (read-from-minibuffer "New name: " (buffer-name)))
-        (let ((new-name (read-file-name "New name: " filename)))
-          (cond
-           ((vc-backend filename) (vc-rename-file filename new-name))
-           (t
-            (rename-file filename new-name t)
-            (set-visited-file-name new-name t t)))))))
+	"Rename current buffer and if the buffer is visiting a file, rename it too."
+	(interactive)
+	(let ((filename (buffer-file-name)))
+	  (if (not (and filename (file-exists-p filename)))
+		  (rename-buffer (read-from-minibuffer "New name: " (buffer-name)))
+		(let ((new-name (read-file-name "New name: " filename)))
+		  (cond
+		   ((vc-backend filename) (vc-rename-file filename new-name))
+		   (t
+			(rename-file filename new-name t)
+			(set-visited-file-name new-name t t)))))))
   (global-set-key (kbd "C-c r") 'rename-buffer-and-file)
 #+end_src
 
@@ -1114,44 +1114,44 @@ Open With External App
 
 #+begin_src emacs-lisp :tangle yes
   (defun open-with (arg)
-    "Open visited file in default external program.
+	"Open visited file in default external program.
   When in dired mode, open file under the cursor.
   With a prefix ARG always prompt for command to use."
-    (interactive "P")
-    (let* ((current-file-name
-            (if (eq major-mode 'dired-mode)
-                (dired-get-file-for-visit)
-              buffer-file-name))
-           (open (pcase system-type
-                   (`darwin "open")
-                   ((or `gnu `gnu/linux `gnu/kfreebsd) "xdg-open")))
-           (program (if (or arg (not open))
-                        (read-shell-command "Open current file with: ")
-                      open)))
-      (start-process "prelude-open-with-process" nil program current-file-name)))
+	(interactive "P")
+	(let* ((current-file-name
+			(if (eq major-mode 'dired-mode)
+				(dired-get-file-for-visit)
+			  buffer-file-name))
+		   (open (pcase system-type
+				   (`darwin "open")
+				   ((or `gnu `gnu/linux `gnu/kfreebsd) "xdg-open")))
+		   (program (if (or arg (not open))
+						(read-shell-command "Open current file with: ")
+					  open)))
+	  (start-process "prelude-open-with-process" nil program current-file-name)))
   (global-set-key (kbd "C-c o") 'open-with)
 #+end_src
 
 Open files from dired from [[https://jblevins.org/log/dired-open][Jason Blevins]]
 
 #+begin_src emacs-lisp :tangle yes
-;; Open files in dired mode using 'open' in OS X
-(eval-after-load "dired"
-  '(progn
-     (define-key dired-mode-map (kbd "z")
-       (lambda () (interactive)
-         (let ((fn (dired-get-file-for-visit)))
-           (start-process "default-app" nil "open" fn))))))
+  ;; Open files in dired mode using 'open' in OS X
+  (eval-after-load "dired"
+	'(progn
+	   (define-key dired-mode-map (kbd "z")
+		 (lambda () (interactive)
+		   (let ((fn (dired-get-file-for-visit)))
+			 (start-process "default-app" nil "open" fn))))))
 #+end_src
 
 Switch to Previous Buffer
 
 #+begin_src emacs-lisp :tangle yes
   (defun prelude-switch-to-previous-buffer ()
-    "Switch to previously open buffer.
+	"Switch to previously open buffer.
   Repeated invocations toggle between the two most recently open buffers."
-    (interactive)
-    (switch-to-buffer (other-buffer (current-buffer) 1)))
+	(interactive)
+	(switch-to-buffer (other-buffer (current-buffer) 1)))
 
 #+end_src
 
@@ -1159,41 +1159,41 @@ Kill other buffers
 
 #+begin_src emacs-lisp :tangle yes
   (defun prelude-kill-other-buffers ()
-    "Kill all buffers but the current one.
+	"Kill all buffers but the current one.
   Doesn't mess with special buffers."
-    (interactive)
-    (-each
-     (->> (buffer-list)
-       (-filter #'buffer-file-name)
-       (--remove (eql (current-buffer) it)))
-     #'kill-buffer))
+	(interactive)
+	(-each
+		(->> (buffer-list)
+			 (-filter #'buffer-file-name)
+			 (--remove (eql (current-buffer) it)))
+	  #'kill-buffer))
 #+end_src
 
 From  [[http://endlessparentheses.com/fixing-double-capitals-as-you-type.html?source=rss][Endless Parentheses]], fix double capital mistakes.
 
 #+begin_src emacs-lisp :tangle yes
   (defun dcaps-to-scaps ()
-    "Convert word in DOuble CApitals to Single Capitals."
-    (interactive)
-    (and (= ?w (char-syntax (char-before)))
-         (save-excursion
-           (and (if (called-interactively-p)
-                    (skip-syntax-backward "w")
-                  (= -3 (skip-syntax-backward "w")))
-                (let (case-fold-search)
-                  (looking-at "\\b[[:upper:]]\\{2\\}[[:lower:]]"))
-                (capitalize-word 1)))))
+	"Convert word in DOuble CApitals to Single Capitals."
+	(interactive)
+	(and (= ?w (char-syntax (char-before)))
+		 (save-excursion
+		   (and (if (called-interactively-p)
+					(skip-syntax-backward "w")
+				  (= -3 (skip-syntax-backward "w")))
+				(let (case-fold-search)
+				  (looking-at "\\b[[:upper:]]\\{2\\}[[:lower:]]"))
+				(capitalize-word 1)))))
 
   ;; (add-hook 'post-self-insert-hook #'dcaps-to-scaps nil 'local)
   ;; Define minor mode
   (define-minor-mode dubcaps-mode
-    "Toggle `dubcaps-mode'.  Converts words in DOuble CApitals to
+	"Toggle `dubcaps-mode'.  Converts words in DOuble CApitals to
   Single Capitals as you type."
-    :init-value nil
-    :lighter ("")
-    (if dubcaps-mode
-        (add-hook 'post-self-insert-hook #'dcaps-to-scaps nil 'local)
-      (remove-hook 'post-self-insert-hook #'dcaps-to-scaps 'local)))
+	:init-value nil
+	:lighter ("")
+	(if dubcaps-mode
+		(add-hook 'post-self-insert-hook #'dcaps-to-scaps nil 'local)
+	  (remove-hook 'post-self-insert-hook #'dcaps-to-scaps 'local)))
   ;; Add hook to text mode
   (add-hook 'text-mode-hook #'dubcaps-mode)
 #+end_src
@@ -1202,119 +1202,119 @@ Byte-Compile Config
 
 #+begin_src emacs-lisp :tangle yes
   (defun byte-compile-init-dir ()
-    "Byte-compile all your dotfiles."
-    (interactive)
-    (byte-recompile-directory user-emacs-directory 0))
+	"Byte-compile all your dotfiles."
+	(interactive)
+	(byte-recompile-directory user-emacs-directory 0))
 
   ;; join line to next line
   (global-set-key (kbd "M-j")
-              (lambda ()
-                    (interactive)
-                    (join-line -1)))
+				  (lambda ()
+					(interactive)
+					(join-line -1)))
 #+end_src
 
 Count words
 
 #+begin_src emacs-lisp :tangle yes
   (defun rlr-count-words (&optional begin end)
-    "count words between BEGIN and END (region); if no region defined, count words in buffer"
-    (interactive "r")
-    (let ((b (if mark-active begin (point-min)))
-        (e (if mark-active end (point-max))))
-      (message "Word count: %s" (how-many "\\w+" b e))))
+	"count words between BEGIN and END (region); if no region defined, count words in buffer"
+	(interactive "r")
+	(let ((b (if mark-active begin (point-min)))
+		  (e (if mark-active end (point-max))))
+	  (message "Word count: %s" (how-many "\\w+" b e))))
 #+end_src
 
 Swap windows
 
 #+begin_src emacs-lisp :tangle yes
   (defun swap-windows ()
-    "If you have 2 windows, it swaps them."
-    (interactive)
-    (cond ((/= (count-windows) 2)
-           (message "You need exactly 2 windows to do this."))
-          (t
-           (let* ((w1 (first (window-list)))
-                  (w2 (second (window-list)))
-                  (b1 (window-buffer w1))
-                  (b2 (window-buffer w2))
-                  (s1 (window-start w1))
-                  (s2 (window-start w2)))
-             (set-window-buffer w1 b2)
-             (set-window-buffer w2 b1)
-             (set-window-start w1 s2)
-             (set-window-start w2 s1))))
-    (other-window 1))
+	"If you have 2 windows, it swaps them."
+	(interactive)
+	(cond ((/= (count-windows) 2)
+		   (message "You need exactly 2 windows to do this."))
+		  (t
+		   (let* ((w1 (first (window-list)))
+				  (w2 (second (window-list)))
+				  (b1 (window-buffer w1))
+				  (b2 (window-buffer w2))
+				  (s1 (window-start w1))
+				  (s2 (window-start w2)))
+			 (set-window-buffer w1 b2)
+			 (set-window-buffer w2 b1)
+			 (set-window-start w1 s2)
+			 (set-window-start w2 s1))))
+	(other-window 1))
 #+end_src
 
 Title-case from http://ergoemacs.org/emacs/elisp_title_case_text.html
 
 #+begin_src emacs-lisp :tangle yes
   (defun xah-title-case-region-or-line (φbegin φend)
-    "Title case text between nearest brackets, or current line, or text selection.
+	"Title case text between nearest brackets, or current line, or text selection.
   Capitalize first letter of each word, except words like {to, of, the, a, in, or, and, …}. If a word already contains cap letters such as HTTP, URL, they are left as is.
 
   When called in a elisp program, φbegin φend are region boundaries.
   URL `http://ergoemacs.org/emacs/elisp_title_case_text.html'
   Version 2015-05-07"
-    (interactive
-     (if (use-region-p)
-         (list (region-beginning) (region-end))
-       (let (
-             ξp1
-             ξp2
-             (ξskipChars "^\"<>(){}[]“”‘’‹›«»「」『』【】〖〗《》〈〉〔〕"))
-         (progn
-           (skip-chars-backward ξskipChars (line-beginning-position))
-           (setq ξp1 (point))
-           (skip-chars-forward ξskipChars (line-end-position))
-           (setq ξp2 (point)))
-         (list ξp1 ξp2))))
-    (let* (
-           (ξstrPairs [
-                       [" A " " a "]
-                       [" And " " and "]
-                       [" At " " at "]
-                       [" As " " as "]
-                       [" By " " by "]
-                       [" Be " " be "]
-                       [" Into " " into "]
-                       [" In " " in "]
-                       [" Is " " is "]
-                       [" It " " it "]
-                       [" For " " for "]
-                       [" Of " " of "]
-                       [" Or " " or "]
-                       [" On " " on "]
-                       [" Via " " via "]
-                       [" The " " the "]
-                       [" That " " that "]
-                       [" To " " to "]
-                       [" Vs " " vs "]
-                       [" With " " with "]
-                       [" From " " from "]
-                       ["'S " "'s "]
-                       ]))
-      (save-excursion 
-        (save-restriction
-          (narrow-to-region φbegin φend)
-          (upcase-initials-region (point-min) (point-max))
-          (let ((case-fold-search nil))
-            (mapc
-             (lambda (ξx)
-               (goto-char (point-min))
-               (while
-                   (search-forward (aref ξx 0) nil t)
-                 (replace-match (aref ξx 1) 'FIXEDCASE 'LITERAL)))
-             ξstrPairs))))))
+	(interactive
+	 (if (use-region-p)
+		 (list (region-beginning) (region-end))
+	   (let (
+			 ξp1
+			 ξp2
+			 (ξskipChars "^\"<>(){}[]“”‘’‹›«»「」『』【】〖〗《》〈〉〔〕"))
+		 (progn
+		   (skip-chars-backward ξskipChars (line-beginning-position))
+		   (setq ξp1 (point))
+		   (skip-chars-forward ξskipChars (line-end-position))
+		   (setq ξp2 (point)))
+		 (list ξp1 ξp2))))
+	(let* (
+		   (ξstrPairs [
+					   [" A " " a "]
+					   [" And " " and "]
+					   [" At " " at "]
+					   [" As " " as "]
+					   [" By " " by "]
+					   [" Be " " be "]
+					   [" Into " " into "]
+					   [" In " " in "]
+					   [" Is " " is "]
+					   [" It " " it "]
+					   [" For " " for "]
+					   [" Of " " of "]
+					   [" Or " " or "]
+					   [" On " " on "]
+					   [" Via " " via "]
+					   [" The " " the "]
+					   [" That " " that "]
+					   [" To " " to "]
+					   [" Vs " " vs "]
+					   [" With " " with "]
+					   [" From " " from "]
+					   ["'S " "'s "]
+					   ]))
+	  (save-excursion 
+		(save-restriction
+		  (narrow-to-region φbegin φend)
+		  (upcase-initials-region (point-min) (point-max))
+		  (let ((case-fold-search nil))
+			(mapc
+			 (lambda (ξx)
+			   (goto-char (point-min))
+			   (while
+				   (search-forward (aref ξx 0) nil t)
+				 (replace-match (aref ξx 1) 'FIXEDCASE 'LITERAL)))
+			 ξstrPairs))))))
 #+end_src
 
 Find non-ascii characters in current buffer
 
 #+begin_src emacs-lisp :tangle yes
   (defun occur-non-ascii ()
-    "Find any non-ascii characters in the current buffer."
-    (interactive)
-    (occur "[^[:ascii:]]"))
+	"Find any non-ascii characters in the current buffer."
+	(interactive)
+	(occur "[^[:ascii:]]"))
 #+end_src
 
 Unfill paragraph
@@ -1323,57 +1323,57 @@ Stefan Monnier <foo at acm.org>. It is the opposite of fill-paragraph
 
 #+begin_src emacs-lisp :tangle no
   (defun unfill-paragraph (&optional region)
-    "Takes a multi-line paragraph and makes it into a single line of text."
-    (interactive (progn (barf-if-buffer-read-only) '(t)))
-    (let ((fill-column (point-max)))
-      (fill-paragraph nil region)))
+	"Takes a multi-line paragraph and makes it into a single line of text."
+	(interactive (progn (barf-if-buffer-read-only) '(t)))
+	(let ((fill-column (point-max)))
+	  (fill-paragraph nil region)))
 #+end_src
 
 From https://github.com/ocodo/.emacs.d/blob/master/custom/handy-functions.el
 
 #+begin_src emacs-lisp :tangle yes
-(defun nuke-all-buffers ()
-  "Kill all the open buffers except the current one.
-Leave *scratch*, *dashboard* and *Messages* alone too."
-  (interactive)
-  (mapc
-   (lambda (buffer)
-     (unless (or
-              (string= (buffer-name buffer) "*scratch*")
-              (string= (buffer-name buffer) "*dashboard*")
-              (string= (buffer-name buffer) "*Messages*"))
-       (kill-buffer buffer)))
-   (buffer-list))
-  (delete-other-windows))
+  (defun nuke-all-buffers ()
+	"Kill all the open buffers except the current one.
+  Leave *scratch*, *dashboard* and *Messages* alone too."
+	(interactive)
+	(mapc
+	 (lambda (buffer)
+	   (unless (or
+				(string= (buffer-name buffer) "*scratch*")
+				(string= (buffer-name buffer) "*dashboard*")
+				(string= (buffer-name buffer) "*Messages*"))
+		 (kill-buffer buffer)))
+	 (buffer-list))
+	(delete-other-windows))
 #+end_src
 
 Toggle horizontal and vertical windows
 
 #+begin_src emacs-lisp :tangle yes
   (defun toggle-window-split ()
-    (interactive)
-    (if (= (count-windows) 2)
-        (let* ((this-win-buffer (window-buffer))
-               (next-win-buffer (window-buffer (next-window)))
-               (this-win-edges (window-edges (selected-window)))
-               (next-win-edges (window-edges (next-window)))
-               (this-win-2nd (not (and (<= (car this-win-edges)
-                                           (car next-win-edges))
-                                       (<= (cadr this-win-edges)
-                                           (cadr next-win-edges)))))
-               (splitter
-                (if (= (car this-win-edges)
-                       (car (window-edges (next-window))))
-                    'split-window-horizontally
-                  'split-window-vertically)))
-          (delete-other-windows)
-          (let ((first-win (selected-window)))
-            (funcall splitter)
-            (if this-win-2nd (other-window 1))
-            (set-window-buffer (selected-window) this-win-buffer)
-            (set-window-buffer (next-window) next-win-buffer)
-            (select-window first-win)
-            (if this-win-2nd (other-window 1))))))
+	(interactive)
+	(if (= (count-windows) 2)
+		(let* ((this-win-buffer (window-buffer))
+			   (next-win-buffer (window-buffer (next-window)))
+			   (this-win-edges (window-edges (selected-window)))
+			   (next-win-edges (window-edges (next-window)))
+			   (this-win-2nd (not (and (<= (car this-win-edges)
+										   (car next-win-edges))
+									   (<= (cadr this-win-edges)
+										   (cadr next-win-edges)))))
+			   (splitter
+				(if (= (car this-win-edges)
+					   (car (window-edges (next-window))))
+					'split-window-horizontally
+				  'split-window-vertically)))
+		  (delete-other-windows)
+		  (let ((first-win (selected-window)))
+			(funcall splitter)
+			(if this-win-2nd (other-window 1))
+			(set-window-buffer (selected-window) this-win-buffer)
+			(set-window-buffer (next-window) next-win-buffer)
+			(select-window first-win)
+			(if this-win-2nd (other-window 1))))))
 #+end_src
 
 From http://pragmaticemacs.com/emacs/open-a-recent-directory-in-dired-revisited/
@@ -1382,56 +1382,56 @@ borrows from http://stackoverflow.com/questions/23328037/in-emacs-how-to-maintai
 
 #+begin_src emacs-lisp :tangle yes
   (defun rlr/ivy-dired-recent-dirs ()
-    "Present a list of recently used directories and open the selected one in dired"
-    (interactive)
-    (let ((recent-dirs
-           (delete-dups
-            (mapcar (lambda (file)
-                      (if (file-directory-p file) file (file-name-directory file)))
-                    recentf-list))))
+	"Present a list of recently used directories and open the selected one in dired"
+	(interactive)
+	(let ((recent-dirs
+		   (delete-dups
+			(mapcar (lambda (file)
+					  (if (file-directory-p file) file (file-name-directory file)))
+					recentf-list))))
 
-      (let ((dir (ivy-read "Directory: "
-                           recent-dirs
-                           :re-builder #'ivy--regex
-                           :sort nil
-                           :initial-input nil)))
-        (dired dir))))
+	  (let ((dir (ivy-read "Directory: "
+						   recent-dirs
+						   :re-builder #'ivy--regex
+						   :sort nil
+						   :initial-input nil)))
+		(dired dir))))
 #+end_src
 
 From http://endlessparentheses.com/ispell-and-abbrev-the-perfect-auto-correct.html
 
 #+begin_src emacs-lisp :tangle yes
-(defun endless/ispell-word-then-abbrev (p)
-    "Call `ispell-word', then create an abbrev for it.
-  With prefix P, create local abbrev. Otherwise it will
-  be global.
-  If there's nothing wrong with the word at point, keep
-  looking for a typo until the beginning of buffer. You can
-  skip typos you don't want to fix with `SPC', and you can
-  abort completely with `C-g'."
-    (interactive "P")
-    (let (bef aft)
-      (save-excursion
-        (while (if (setq bef (thing-at-point 'word))
-                   ;; Word was corrected or used quit.
-                   (if (ispell-word nil 'quiet)
-                       nil ; End the loop.
-                     ;; Also end if we reach `bob'.
-                     (not (bobp)))
-                 ;; If there's no word at point, keep looking
-                 ;; until `bob'.
-                 (not (bobp)))
-          (backward-word))
-        (setq aft (thing-at-point 'word)))
-      (if (and aft bef (not (equal aft bef)))
-          (let ((aft (downcase aft))
-                (bef (downcase bef)))
-            (define-abbrev
-              (if p local-abbrev-table global-abbrev-table)
-              bef aft)
-            (message "\"%s\" now expands to \"%s\" %sally"
-                     bef aft (if p "loc" "glob")))
-        (user-error "No typo at or before point"))))
+  (defun endless/ispell-word-then-abbrev (p)
+	"Call `ispell-word', then create an abbrev for it.
+	With prefix P, create local abbrev. Otherwise it will
+	be global.
+	If there's nothing wrong with the word at point, keep
+	looking for a typo until the beginning of buffer. You can
+	skip typos you don't want to fix with `SPC', and you can
+	abort completely with `C-g'."
+	(interactive "P")
+	(let (bef aft)
+	  (save-excursion
+		(while (if (setq bef (thing-at-point 'word))
+				   ;; Word was corrected or used quit.
+				   (if (ispell-word nil 'quiet)
+					   nil ; End the loop.
+					 ;; Also end if we reach `bob'.
+					 (not (bobp)))
+				 ;; If there's no word at point, keep looking
+				 ;; until `bob'.
+				 (not (bobp)))
+		  (backward-word))
+		(setq aft (thing-at-point 'word)))
+	  (if (and aft bef (not (equal aft bef)))
+		  (let ((aft (downcase aft))
+				(bef (downcase bef)))
+			(define-abbrev
+			  (if p local-abbrev-table global-abbrev-table)
+			  bef aft)
+			(message "\"%s\" now expands to \"%s\" %sally"
+					 bef aft (if p "loc" "glob")))
+		(user-error "No typo at or before point"))))
 
   (setq save-abbrevs 'silently)
   (setq-default abbrev-mode t)
@@ -1441,7 +1441,7 @@ From Xah Lee, http://ergoemacs.org/emacs/elisp_unicode_replace_invisible_chars.h
 
 #+begin_src emacs-lisp :tangle yes
   (defun rlr-replace-BOM-mark-etc ()
-    "Query replace some invisible Unicode chars.
+	"Query replace some invisible Unicode chars.
   The chars to be searched are:
    ZERO WIDTH NO-BREAK SPACE (codepoint 65279, #xfeff)
    RIGHT-TO-LEFT MARK (codepoint 8207, #x200f)
@@ -1453,32 +1453,56 @@ From Xah Lee, http://ergoemacs.org/emacs/elisp_unicode_replace_invisible_chars.h
 
   URL `http://ergoemacs.org/emacs/elisp_unicode_replace_invisible_chars.html'
   Version 2015-10-25"
-    (interactive)
-    (query-replace-regexp "\u200f\\|\u202e\\|\ufeff" ""))
+	(interactive)
+	(query-replace-regexp "\u200f\\|\u202e\\|\ufeff" ""))
 #+end_src
 
 Ispell ignore TeX commands
 
 #+begin_src emacs-lisp :tangle yes
   (defun flyspell-ignore-tex ()
-    (interactive)
-    (set (make-variable-buffer-local 'ispell-parser) 'tex))
+	(interactive)
+	(set (make-variable-buffer-local 'ispell-parser) 'tex))
 #+end_src
 
 Make parent directory when creating new file. From http://mbork.pl/2016-07-25_Making_directories_on_the_fly
 
 #+begin_src emacs-lisp :tangle yes
   (defun make-parent-directory ()
-    "Make sure the directory of `buffer-file-name' exists."
-    (make-directory (file-name-directory buffer-file-name) t))
-    (add-hook 'find-file-not-found-functions #'make-parent-directory)
+	"Make sure the directory of `buffer-file-name' exists."
+	(make-directory (file-name-directory buffer-file-name) t))
+  (add-hook 'find-file-not-found-functions #'make-parent-directory)
 #+end_src
 
 Unfill provides the inverse of Emacs' fill commands
 
 #+begin_src emacs-lisp :tangle yes
-(use-package unfill
-   :bind (("s-j" . unfill-paragraph)))
+  (use-package unfill
+	:bind (("s-j" . unfill-paragraph)))
+#+end_src
+
+
+Indents active region or entire buffer. From https://emacsredux.com/blog/2013/03/27/indent-region-or-buffer/
+
+#+begin_src emacs-lisp :tangle yes
+  (defun rr-indent-buffer ()
+	"Indent the currently visited buffer."
+	(interactive)
+	(indent-region (point-min) (point-max)))
+
+  (defun rr-indent-region-or-buffer ()
+	"Indent a region if selected, otherwise the whole buffer."
+	(interactive)
+	(save-excursion
+	  (if (region-active-p)
+		  (progn
+			(indent-region (region-beginning) (region-end))
+			(message "Indented selected region."))
+		(progn
+		  (rr-indent-buffer)
+		  (message "Indented buffer.")))))
+
+  (global-set-key (kbd "C-M-\\") #'rr-indent-region-or-buffer)
 #+end_src
 
 * Markdown and Pandoc
@@ -1487,22 +1511,22 @@ Unfill provides the inverse of Emacs' fill commands
 
 #+begin_src emacs-lisp :tangle yes
   (use-package markdown-mode
-        :defer t
-    :mode (("\\.text\\'" . markdown-mode)
-           ("\\.markdown\\'" . markdown-mode)
-           ("\\.md\\'" . markdown-mode)
-           ("\\.Rmd\\'" . markdown-mode))
-    :config
-    (setq markdown-indent-on-enter 'indent-and-new-item))
+	:defer t
+	:mode (("\\.text\\'" . markdown-mode)
+		   ("\\.markdown\\'" . markdown-mode)
+		   ("\\.md\\'" . markdown-mode)
+		   ("\\.Rmd\\'" . markdown-mode))
+	:config
+	(setq markdown-indent-on-enter 'indent-and-new-item))
 #+end_src
 
 Make it easier to bold and italicize in Markdown Mode
 
 #+begin_src emacs-lisp :tangle yes
   (add-hook 'markdown-mode-hook
-            (lambda ()
-              (local-set-key (kbd "s-b") 'markdown-insert-bold)
-              (local-set-key (kbd "s-i") 'markdown-insert-italic)))
+			(lambda ()
+			  (local-set-key (kbd "s-b") 'markdown-insert-bold)
+			  (local-set-key (kbd "s-i") 'markdown-insert-italic)))
 #+end_src
 
 Enable wc-mode for word count.
@@ -1515,47 +1539,47 @@ Open files in Marked 2 using this [[https://gist.github.com/rlridenour/ac2031d50
 
 #+begin_src emacs-lisp :tangle yes
   (if (eq system-type 'darwin)
-  (setq markdown-open-command "~/bin/mark")
-  )
+	  (setq markdown-open-command "~/bin/mark")
+	)
 #+end_src
 
 Use s-3 to insert fragment tag in reveal.js slides.
 
 #+begin_src emacs-lisp :tangle yes
-(defun insert-frag ()
-  "Insert reveal.js fragment tag"
-  (interactive)
-  (end-of-line)
-  (insert "<!-- .element: class=\"fragment\" -->")
-(next-line))
+  (defun insert-frag ()
+	"Insert reveal.js fragment tag"
+	(interactive)
+	(end-of-line)
+	(insert "<!-- .element: class=\"fragment\" -->")
+	(next-line))
 
 
-(global-set-key (kbd "s-4") 'insert-frag)
+  (global-set-key (kbd "s-4") 'insert-frag)
 #+end_src
 
 #+begin_src emacs-lisp :tangle yes
-(defun wrap-text-slide ()
-  (interactive)
-(if (and transient-mark-mode mark-active)
-  (progn
-	(goto-char (region-end))
-	(insert "\n </textarea> \n </section>")
-	(goto-char (region-beginning))
-	(insert "<section data-markdown> \n <textarea data-template> \n"))
-(insert "\n </textarea> \n </section> \n \n  <section data-markdown> \n <textarea data-template> \n")(previous-line 3)))
+  (defun wrap-text-slide ()
+	(interactive)
+	(if (and transient-mark-mode mark-active)
+		(progn
+		  (goto-char (region-end))
+		  (insert "\n </textarea> \n </section>")
+		  (goto-char (region-beginning))
+		  (insert "<section data-markdown> \n <textarea data-template> \n"))
+	  (insert "\n </textarea> \n </section> \n \n  <section data-markdown> \n <textarea data-template> \n")(previous-line 3)))
 
-(global-set-key (kbd "s-3") 'wrap-text-slide)
+  (global-set-key (kbd "s-3") 'wrap-text-slide)
 #+end_src
 
 ** Pandoc
 
 #+begin_src emacs-lisp :tangle yes
   (use-package pandoc-mode
-        :diminish pandoc-mode
-    :config
-    (add-hook 'markdown-mode-hook 'pandoc-mode)
-    (add-hook 'org-mode-hook 'pandoc-mode)
-    (add-hook 'pandoc-mode-hook 'pandoc-load-default-settings))
+	:diminish pandoc-mode
+	:config
+	(add-hook 'markdown-mode-hook 'pandoc-mode)
+	(add-hook 'org-mode-hook 'pandoc-mode)
+	(add-hook 'pandoc-mode-hook 'pandoc-load-default-settings))
 #+end_src
 
 Pandoc Conversion
@@ -1563,64 +1587,64 @@ Pandoc Conversion
 Converts Markdown files to LaTeX articles and handouts using fish shell functions.
 
 #+begin_src emacs-lisp :tangle yes
-    (defun pandoc-pdfarticle ()
-      "Convert file to LaTeX article"
-      (interactive)
-      (shell-command (concat "pdfarticle " (buffer-file-name) " " (file-name-sans-extension buffer-file-name) ".tex")))
+  (defun pandoc-pdfarticle ()
+	"Convert file to LaTeX article"
+	(interactive)
+	(shell-command (concat "pdfarticle " (buffer-file-name) " " (file-name-sans-extension buffer-file-name) ".tex")))
 
-(defun pandoc-syllabus ()
-      "Convert file to LaTeX article"
-      (interactive)
-      (shell-command (concat "syllabus " (buffer-file-name) " " (file-name-sans-extension buffer-file-name) ".tex")))
-
-
-    (defun pandoc-beamer ()
-      "Convert file to LaTeX beamer file"
-      (interactive)
-      (shell-command (concat "beamer " (buffer-file-name) " " (file-name-sans-extension buffer-file-name) ".tex"))
-     (shell-command (concat "open " (file-name-sans-extension buffer-file-name) ".pdf")))
-
-    (defun pandoc-slides ()
-      "Convert file to Beamer slides"
-      (interactive)
-      (shell-command (concat "slides " (buffer-file-name) " " (file-name-sans-extension buffer-file-name) ".pdf"))
-      (shell-command (concat "open " (file-name-sans-extension buffer-file-name) ".pdf")))
+  (defun pandoc-syllabus ()
+	"Convert file to LaTeX article"
+	(interactive)
+	(shell-command (concat "syllabus " (buffer-file-name) " " (file-name-sans-extension buffer-file-name) ".tex")))
 
 
-    (defun pandoc-obuletter ()
-      "Convert file to LaTeX OBU letter"
-      (interactive)
-      (shell-command (concat "obuletter " (buffer-file-name) " " (file-name-sans-extension buffer-file-name) ".tex"))
-      (find-file (concat (file-name-sans-extension buffer-file-name) ".tex")))
+  (defun pandoc-beamer ()
+	"Convert file to LaTeX beamer file"
+	(interactive)
+	(shell-command (concat "beamer " (buffer-file-name) " " (file-name-sans-extension buffer-file-name) ".tex"))
+	(shell-command (concat "open " (file-name-sans-extension buffer-file-name) ".pdf")))
 
-    (defun pandoc-pdf ()
-      "Convert file to PDF"
-        (interactive)
-        ;; (shell-command (concat "article " (buffer-file-name) " " (file-name-sans-extension buffer-file-name) ".tex"))
-       (async-shell-command (concat "mkpvc " (file-name-sans-extension buffer-file-name) ".tex"))
-(delete-other-windows))
-        ;; (shell-command (concat "open " (file-name-sans-extension buffer-file-name) ".pdf")))
+  (defun pandoc-slides ()
+	"Convert file to Beamer slides"
+	(interactive)
+	(shell-command (concat "slides " (buffer-file-name) " " (file-name-sans-extension buffer-file-name) ".pdf"))
+	(shell-command (concat "open " (file-name-sans-extension buffer-file-name) ".pdf")))
 
-    (defun pandoc-handout ()
-      "Convert file to LaTeX tufte-handout"
-        (interactive)
-        (shell-command (concat "handout " (buffer-file-name) " " (file-name-sans-extension buffer-file-name) ".tex")))
 
-    (defun pandoc-docx ()
-      "Convert file to MS Word docx"
-        (interactive)
-        (shell-command (concat "convert " (buffer-file-name) " " (file-name-sans-extension buffer-file-name) ".docx"))
-        (shell-command (concat "open " (file-name-sans-extension buffer-file-name) ".docx")))
+  (defun pandoc-obuletter ()
+	"Convert file to LaTeX OBU letter"
+	(interactive)
+	(shell-command (concat "obuletter " (buffer-file-name) " " (file-name-sans-extension buffer-file-name) ".tex"))
+	(find-file (concat (file-name-sans-extension buffer-file-name) ".tex")))
 
-    (defun pandoc-html ()
-      "Convert file to html"
-        (interactive)
-        (shell-command (concat "convert " (buffer-file-name) " " (file-name-sans-extension buffer-file-name) ".html"))
-        (shell-command (concat "open " (file-name-sans-extension buffer-file-name) ".html")))
+  (defun pandoc-pdf ()
+	"Convert file to PDF"
+	(interactive)
+	;; (shell-command (concat "article " (buffer-file-name) " " (file-name-sans-extension buffer-file-name) ".tex"))
+	(async-shell-command (concat "mkpvc " (file-name-sans-extension buffer-file-name) ".tex"))
+	(delete-other-windows))
+  ;; (shell-command (concat "open " (file-name-sans-extension buffer-file-name) ".pdf")))
 
-    (defun pandoc-clean ()
-      (interactive)
-      (shell-command "panclean"))
+  (defun pandoc-handout ()
+	"Convert file to LaTeX tufte-handout"
+	(interactive)
+	(shell-command (concat "handout " (buffer-file-name) " " (file-name-sans-extension buffer-file-name) ".tex")))
+
+  (defun pandoc-docx ()
+	"Convert file to MS Word docx"
+	(interactive)
+	(shell-command (concat "convert " (buffer-file-name) " " (file-name-sans-extension buffer-file-name) ".docx"))
+	(shell-command (concat "open " (file-name-sans-extension buffer-file-name) ".docx")))
+
+  (defun pandoc-html ()
+	"Convert file to html"
+	(interactive)
+	(shell-command (concat "convert " (buffer-file-name) " " (file-name-sans-extension buffer-file-name) ".html"))
+	(shell-command (concat "open " (file-name-sans-extension buffer-file-name) ".html")))
+
+  (defun pandoc-clean ()
+	(interactive)
+	(shell-command "panclean"))
 #+end_src
 
 
@@ -1635,8 +1659,8 @@ Ispell ignore TeX
 
 #+begin_src emacs-lisp :tangle yes
 
-(use-package org
-)
+  (use-package org
+	)
 #+end_src
 
 
@@ -1699,7 +1723,7 @@ Autocomplete for orgmode
 
 #+begin_src emacs-lisp :tangle yes
   (use-package org-ac
-:config (org-ac/config-default))
+	:config (org-ac/config-default))
 #+end_src
 
 Markdown exporter
@@ -1714,8 +1738,8 @@ LuaLaTeX and some fancy fonts; requires LuaTeX  (see org-latex-to-pdf-process)
 
 #+begin_src emacs-lisp :tangle yes
   (add-to-list 'org-latex-classes
-               '("rlr-lua-article"
-                 "\\documentclass[12pt]{article}
+			   '("rlr-lua-article"
+				 "\\documentclass[12pt]{article}
 
   \\usepackage{iftex,graphicx,epstopdf,amsmath,amssymb,url}
   \\usepackage[normalem]{ulem}
@@ -1737,103 +1761,103 @@ LuaLaTeX and some fancy fonts; requires LuaTeX  (see org-latex-to-pdf-process)
   \\usepackage[unicode=true]{hyperref}
 
   \\title{}
-        [NO-DEFAULT-PACKAGES]
-        [NO-PACKAGES]"
-                 ("\\section{%s}" . "\\section*{%s}")
-                 ("\\subsection{%s}" . "\\subsection*{%s}")
-                 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-                 ("\\paragraph{%s}" . "\\paragraph*{%s}")
-                 ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+		[NO-DEFAULT-PACKAGES]
+		[NO-PACKAGES]"
+				 ("\\section{%s}" . "\\section*{%s}")
+				 ("\\subsection{%s}" . "\\subsection*{%s}")
+				 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+				 ("\\paragraph{%s}" . "\\paragraph*{%s}")
+				 ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
 #+end_src
 
 PDFLaTeX export
 
 #+begin_src emacs-lisp :tangle yes
   (add-to-list 'org-latex-classes
-               '("rlr-pdf-article"
-                 "\\documentclass[12pt]{article}
+			   '("rlr-pdf-article"
+				 "\\documentclass[12pt]{article}
 
-  \\usepackage{graphicx,epstopdf,amsmath,amssymb,url}
-  \\usepackage[normalem]{ulem}
-  \\usepackage{microtype,todonotes}
-  \\usepackage[american]{babel}
-  \\usepackage[letterpaper,centering]{geometry}
-  \\usepackage[sf,sc]{titlesec}
-  % \\usepackage[parfill]{parskip} % Line between paragraphs
+	\\usepackage{graphicx,epstopdf,amsmath,amssymb,url}
+	\\usepackage[normalem]{ulem}
+	\\usepackage{microtype,todonotes}
+	\\usepackage[american]{babel}
+	\\usepackage[letterpaper,centering]{geometry}
+	\\usepackage[sf,sc]{titlesec}
+	% \\usepackage[parfill]{parskip} % Line between paragraphs
 
-  \\usepackage[authordate,url=false,isbn=false,backend=biber]{biblatex-chicago} %Change authordate to notes if desired.
-  \\addbibresource{/Users/rlridenour/zotero.bib}
-  \\clubpenalty = 10000 % Reduce orphans and widows
-  \\widowpenalty = 10000
+	\\usepackage[authordate,url=false,isbn=false,backend=biber]{biblatex-chicago} %Change authordate to notes if desired.
+	\\addbibresource{/Users/rlridenour/zotero.bib}
+	\\clubpenalty = 10000 % Reduce orphans and widows
+	\\widowpenalty = 10000
 
-\\usepackage{enumitem}
-\\setlist[itemize]{noitemsep} % Comment out for wider separation in lists.
-\\setlist[enumerate]{noitemsep}
+  \\usepackage{enumitem}
+  \\setlist[itemize]{noitemsep} % Comment out for wider separation in lists.
+  \\setlist[enumerate]{noitemsep}
 
-  \\usepackage{libertine}
-  \\usepackage[libertine]{newtxmath}
-  \\usepackage[scaled=0.96]{zi4}
-  \\usepackage[T1]{fontenc}
-  \\usepackage{hyperref}
+	\\usepackage{libertine}
+	\\usepackage[libertine]{newtxmath}
+	\\usepackage[scaled=0.96]{zi4}
+	\\usepackage[T1]{fontenc}
+	\\usepackage{hyperref}
 
-  \\title{}
-        [NO-DEFAULT-PACKAGES]
-        [NO-PACKAGES]"
-                 ("\\section{%s}" . "\\section*{%s}")
-                 ("\\subsection{%s}" . "\\subsection*{%s}")
-                 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-                 ("\\paragraph{%s}" . "\\paragraph*{%s}")
-                 ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+	\\title{}
+		  [NO-DEFAULT-PACKAGES]
+		  [NO-PACKAGES]"
+				 ("\\section{%s}" . "\\section*{%s}")
+				 ("\\subsection{%s}" . "\\subsection*{%s}")
+				 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+				 ("\\paragraph{%s}" . "\\paragraph*{%s}")
+				 ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
 #+end_src
 
 OBU letter
 
 #+begin_src emacs-lisp :tangle yes
   (add-to-list 'org-latex-classes
-               '("rlr-obu-letter"
-                 "\\documentclass[12pt]{obuletter}
+			   '("rlr-obu-letter"
+				 "\\documentclass[12pt]{obuletter}
 
-% Customize variables --- for the entire list, see obuletter.cls and myletter.cls.
-\\newcommand{\\obuDept}{Department of Philosophy} % For personal letterhead, use name here.
-\\newcommand{\\Sender}{Randy Ridenour, Ph.D.}
-\\newcommand{\\obuTitle}{Professor of Philosophy}
-\\newcommand{\\obuCollege}{Hobbs College of Theology and Ministry} % For personal letterhead, use title here.
-\\newcommand{\\obuPhone}{405.585.4432}
-\\newcommand{\\obuFax}{405.878.2401}
-\\newcommand{\\obuBox}{61273}
-\\newcommand{\\closing}{Sincerely,}
-\\newcommand{\\toName}{Recipient}
-\\newcommand{\\toAddress}{Street Address\\\\City, State ZIP}
+  % Customize variables --- for the entire list, see obuletter.cls and myletter.cls.
+  \\newcommand{\\obuDept}{Department of Philosophy} % For personal letterhead, use name here.
+  \\newcommand{\\Sender}{Randy Ridenour, Ph.D.}
+  \\newcommand{\\obuTitle}{Professor of Philosophy}
+  \\newcommand{\\obuCollege}{Hobbs College of Theology and Ministry} % For personal letterhead, use title here.
+  \\newcommand{\\obuPhone}{405.585.4432}
+  \\newcommand{\\obuFax}{405.878.2401}
+  \\newcommand{\\obuBox}{61273}
+  \\newcommand{\\closing}{Sincerely,}
+  \\newcommand{\\toName}{Recipient}
+  \\newcommand{\\toAddress}{Street Address\\\\City, State ZIP}
 
-        [NO-DEFAULT-PACKAGES]
-        [NO-PACKAGES]"
-                 ("\\section{%s}" . "\\section*{%s}")
-                 ("\\subsection{%s}" . "\\subsection*{%s}")
-                 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-                 ("\\paragraph{%s}" . "\\paragraph*{%s}")
-                 ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+		  [NO-DEFAULT-PACKAGES]
+		  [NO-PACKAGES]"
+				 ("\\section{%s}" . "\\section*{%s}")
+				 ("\\subsection{%s}" . "\\subsection*{%s}")
+				 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+				 ("\\paragraph{%s}" . "\\paragraph*{%s}")
+				 ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
 #+end_src
 
 Personal letter
 
 #+begin_src emacs-lisp :tangle yes
   (add-to-list 'org-latex-classes
-               '("rlr-personal-letter"
-                 "\\documentclass[12pt]{myletter}
+			   '("rlr-personal-letter"
+				 "\\documentclass[12pt]{myletter}
 
-% Customize variables --- for the entire list, see obuletter.cls and myletter.cls.
-\\newcommand{\\Sender}{Randy Ridenour}
-\\newcommand{\\closing}{Sincerely,}
-\\newcommand{\\toName}{Recipient}
-\\newcommand{\\toAddress}{Street Address\\\\City, State ZIP}
+  % Customize variables --- for the entire list, see obuletter.cls and myletter.cls.
+  \\newcommand{\\Sender}{Randy Ridenour}
+  \\newcommand{\\closing}{Sincerely,}
+  \\newcommand{\\toName}{Recipient}
+  \\newcommand{\\toAddress}{Street Address\\\\City, State ZIP}
 
-        [NO-DEFAULT-PACKAGES]
-        [NO-PACKAGES]"
-                 ("\\section{%s}" . "\\section*{%s}")
-                 ("\\subsection{%s}" . "\\subsection*{%s}")
-                 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-                 ("\\paragraph{%s}" . "\\paragraph*{%s}")
-                 ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+		  [NO-DEFAULT-PACKAGES]
+		  [NO-PACKAGES]"
+				 ("\\section{%s}" . "\\section*{%s}")
+				 ("\\subsection{%s}" . "\\subsection*{%s}")
+				 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+				 ("\\paragraph{%s}" . "\\paragraph*{%s}")
+				 ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
 #+end_src
 
 #+begin_src emacs-lisp :tangle yes
@@ -1857,7 +1881,7 @@ Make windmove work in org-mode:
 Use latexmk
 
 #+begin_src emacs-lisp :tangle no
-(setq org-latex-pdf-process (list "latexmk -f -pdf %f"))
+  (setq org-latex-pdf-process (list "latexmk -f -pdf %f"))
 #+end_src
 
 
@@ -1870,35 +1894,35 @@ Make yasnippet work properly with org-mode.
 
 
   (defun yas-org-very-safe-expand ()
-    (let ((yas-fallback-behavior 'return-nil))
-      (and (fboundp 'yas-expand) (yas-expand))))
+	(let ((yas-fallback-behavior 'return-nil))
+	  (and (fboundp 'yas-expand) (yas-expand))))
 
   (add-hook 'org-mode-hook
-            (lambda ()
-              (add-to-list 'org-tab-first-hook
-                           'yas-org-very-safe-expand)
-              ))
+			(lambda ()
+			  (add-to-list 'org-tab-first-hook
+						   'yas-org-very-safe-expand)
+			  ))
 
 
 
 
   (add-hook 'org-mode-hook
-            (lambda ()
-              (local-set-key "\M-\C-n" 'outline-next-visible-heading)
-              (local-set-key "\M-\C-p" 'outline-previous-visible-heading)
-              (local-set-key "\M-\C-u" 'outline-up-heading)
-              ;; table
-              (local-set-key "\M-\C-w" 'org-table-copy-region)
-              (local-set-key "\M-\C-y" 'org-table-paste-rectangle)
-              (local-set-key "\M-\C-l" 'org-table-sort-lines)
-              ;; display images
-              (local-set-key "\M-I" 'org-toggle-iimage-in-org)
-              ;; yasnippet (using the new org-cycle hooks)
-              ;;(make-variable-buffer-local 'yas/trigger-key)
-              ;;(setq yas/trigger-key [tab])
-              ;;(add-to-list 'org-tab-first-hook 'yas/org-very-safe-expand)
-              ;;(define-key yas/keymap [tab] 'yas/next-field)
-              ))
+			(lambda ()
+			  (local-set-key "\M-\C-n" 'outline-next-visible-heading)
+			  (local-set-key "\M-\C-p" 'outline-previous-visible-heading)
+			  (local-set-key "\M-\C-u" 'outline-up-heading)
+			  ;; table
+			  (local-set-key "\M-\C-w" 'org-table-copy-region)
+			  (local-set-key "\M-\C-y" 'org-table-paste-rectangle)
+			  (local-set-key "\M-\C-l" 'org-table-sort-lines)
+			  ;; display images
+			  (local-set-key "\M-I" 'org-toggle-iimage-in-org)
+			  ;; yasnippet (using the new org-cycle hooks)
+			  ;;(make-variable-buffer-local 'yas/trigger-key)
+			  ;;(setq yas/trigger-key [tab])
+			  ;;(add-to-list 'org-tab-first-hook 'yas/org-very-safe-expand)
+			  ;;(define-key yas/keymap [tab] 'yas/next-field)
+			  ))
 #+end_src
 
 Code blocks
@@ -1908,13 +1932,13 @@ This activates a number of widely used languages, you are encouraged to activate
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((emacs-lisp . t)
-     (shell . t)
-     (R . t)
-     (perl . t)
-     (ruby . t)
-     (python . t)
-     (js . t)
-     (haskell . t)))
+	 (shell . t)
+	 (R . t)
+	 (perl . t)
+	 (ruby . t)
+	 (python . t)
+	 (js . t)
+	 (haskell . t)))
 #+end_src
 
 Code block fontification
@@ -1937,8 +1961,8 @@ Don't ask for confirmation on every =C-c C-c= code-block compile.
 Nice Bulleted Lists
 
 #+begin_src emacs-lisp :tangle no
-(require 'org-bullets)
-(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+  (require 'org-bullets)
+  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
 
 #+end_src
 
@@ -1964,10 +1988,10 @@ Use C-c c for Org Capture to ~/Dropbox/notes.org
 #+begin_src emacs-lisp :tangle yes
   ;;(setq org-default-notes-file (concat org-directory "/notes.org"))
   (setq org-capture-templates
-        '(("t" "Todo" entry (file+headline "~/Dropbox/org/tasks.org" "Tasks")
-           "* TODO %?\n  %i\n  %a")
-          ("j" "Journal" entry (file+datetree "~/Dropbox/org/journal.org")
-           "* %?\nEntered on %U\n  %i\n  %a")))
+		'(("t" "Todo" entry (file+headline "~/Dropbox/org/tasks.org" "Tasks")
+		   "* TODO %?\n  %i\n  %a")
+		  ("j" "Journal" entry (file+datetree "~/Dropbox/org/journal.org")
+		   "* %?\nEntered on %U\n  %i\n  %a")))
   (define-key global-map "\C-cc" 'org-capture)
 #+end_src
 
@@ -1987,28 +2011,28 @@ Use Markdown-style reference links in Org Mode. From [[http://endlessparentheses
   (org-add-link-type "lid" 'endless/open-id-link 'endless/export-id-link)
 
   (defun endless/open-id-link (path)
-    "Follow an ID link to PATH."
-    (browse-url (endless/find-id-link path)))
+	"Follow an ID link to PATH."
+	(browse-url (endless/find-id-link path)))
 
   (defun endless/export-id-link (path desc format)
-    "Create the export version of an ID link specified by PATH and DESC.
+	"Create the export version of an ID link specified by PATH and DESC.
   FORMATs understood are 'latex and 'html."
-    (setq path (endless/find-id-link path))
-    (cond
-     ((eq format 'html) (format "<a href=\"%s\">%s</a>" path desc))
-     ((eq format 'latex) (format "\\href{%s}{%s}" path desc))
-     (t desc)))
+	(setq path (endless/find-id-link path))
+	(cond
+	 ((eq format 'html) (format "<a href=\"%s\">%s</a>" path desc))
+	 ((eq format 'latex) (format "\\href{%s}{%s}" path desc))
+	 (t desc)))
 
   (defun endless/find-id-link (id &optional noerror)
-    "Find \"#+LINK-ID: ID\" in current buffer and return the link.
+	"Find \"#+LINK-ID: ID\" in current buffer and return the link.
   Unless NOERROR is non-nil, throw an error if link not found."
-    (save-excursion
-      (goto-char (point-min))
-      (let ((case-fold-search t))
-        (when (search-forward-regexp 
-               (format "^#\\+LINK-ID: \\b%s\\b +\\(.*\\) *$" id)
-               nil noerror)
-          (match-string-no-properties 1)))))
+	(save-excursion
+	  (goto-char (point-min))
+	  (let ((case-fold-search t))
+		(when (search-forward-regexp 
+			   (format "^#\\+LINK-ID: \\b%s\\b +\\(.*\\) *$" id)
+			   nil noerror)
+		  (match-string-no-properties 1)))))
 
 #+end_src
 
@@ -2018,12 +2042,12 @@ From [[http://endlessparentheses.com/ispell-and-org-mode.html?source=rss][Endles
 
 #+begin_src emacs-lisp :tangle yes
   (defun endless/org-ispell ()
-    "Configure `ispell-skip-region-alist' for `org-mode'."
-    (make-local-variable 'ispell-skip-region-alist)
-    (add-to-list 'ispell-skip-region-alist '(org-property-drawer-re))
-    (add-to-list 'ispell-skip-region-alist '("~" "~"))
-    (add-to-list 'ispell-skip-region-alist '("=" "="))
-    (add-to-list 'ispell-skip-region-alist '("^#\\+BEGIN_SRC" . "^#\\+END_SRC")))
+	"Configure `ispell-skip-region-alist' for `org-mode'."
+	(make-local-variable 'ispell-skip-region-alist)
+	(add-to-list 'ispell-skip-region-alist '(org-property-drawer-re))
+	(add-to-list 'ispell-skip-region-alist '("~" "~"))
+	(add-to-list 'ispell-skip-region-alist '("=" "="))
+	(add-to-list 'ispell-skip-region-alist '("^#\\+BEGIN_SRC" . "^#\\+END_SRC")))
   (add-hook 'org-mode-hook #'endless/org-ispell)
 
 #+end_src
@@ -2033,50 +2057,50 @@ Tufte-book class for writing classy books
 #+begin_src emacs-lisp :tangle yes
   (require 'ox-latex) 
   (add-to-list 'org-latex-classes
-  '("tuftebook"
-  "\\documentclass{tufte-book}\n
-  \\usepackage{color}
-  \\usepackage{amssymb}
-  \\usepackage{gensymb}
-  \\usepackage{nicefrac}
-  \\usepackage{units}"
-  ("\\section{%s}" . "\\section*{%s}")
-  ("\\subsection{%s}" . "\\subsection*{%s}")
-  ("\\paragraph{%s}" . "\\paragraph*{%s}")
-  ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+			   '("tuftebook"
+				 "\\documentclass{tufte-book}\n
+	\\usepackage{color}
+	\\usepackage{amssymb}
+	\\usepackage{gensymb}
+	\\usepackage{nicefrac}
+	\\usepackage{units}"
+				 ("\\section{%s}" . "\\section*{%s}")
+				 ("\\subsection{%s}" . "\\subsection*{%s}")
+				 ("\\paragraph{%s}" . "\\paragraph*{%s}")
+				 ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
 
   ;; tufte-handout class for writing classy handouts and papers
   (require 'ox-latex) 
   (add-to-list 'org-latex-classes
-               '("tuftehandout"
-                 "\\documentclass{tufte-handout}
-  \\usepackage{color}
-  \\usepackage{amssymb}
-  \\usepackage{amsmath}
-  \\usepackage{gensymb}
-  \\usepackage{nicefrac}
-  \\usepackage{units}"
-                 ("\\section{%s}" . "\\section*{%s}")
-                 ("\\subsection{%s}" . "\\subsection*{%s}")
-                 ("\\paragraph{%s}" . "\\paragraph*{%s}")
-                 ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+			   '("tuftehandout"
+				 "\\documentclass{tufte-handout}
+	\\usepackage{color}
+	\\usepackage{amssymb}
+	\\usepackage{amsmath}
+	\\usepackage{gensymb}
+	\\usepackage{nicefrac}
+	\\usepackage{units}"
+				 ("\\section{%s}" . "\\section*{%s}")
+				 ("\\subsection{%s}" . "\\subsection*{%s}")
+				 ("\\paragraph{%s}" . "\\paragraph*{%s}")
+				 ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
 
   ;; Beamer export
-(eval-after-load "ox-latex"
+  (eval-after-load "ox-latex"
 
-  ;; update the list of LaTeX classes and associated header (encoding, etc.)
-  ;; and structure
-  '(add-to-list 'org-latex-classes
-                `("beamer"
-                  ,(concat "\\documentclass[presentation]{beamer}\n"
-                           "[DEFAULT-PACKAGES]"
-                           "[PACKAGES]"
-                           "[EXTRA]\n")
-                  ("\\section{%s}" . "\\section*{%s}")
-                  ("\\subsection{%s}" . "\\subsection*{%s}")
-                  ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))))
+	;; update the list of LaTeX classes and associated header (encoding, etc.)
+	;; and structure
+	'(add-to-list 'org-latex-classes
+				  `("beamer"
+					,(concat "\\documentclass[presentation]{beamer}\n"
+							 "[DEFAULT-PACKAGES]"
+							 "[PACKAGES]"
+							 "[EXTRA]\n")
+					("\\section{%s}" . "\\section*{%s}")
+					("\\subsection{%s}" . "\\subsection*{%s}")
+					("\\subsubsection{%s}" . "\\subsubsection*{%s}"))))
 
-(setq org-latex-listings t)
+  (setq org-latex-listings t)
 #+end_src
 
 Enable wc-mode 
@@ -2102,101 +2126,101 @@ Return adds new heading or list item.
   (require 'org-inlinetask)
 
   (defun scimax/org-return (&optional ignore)
-    "Add new list item, heading or table row with RET.
+	"Add new list item, heading or table row with RET.
   A double return on an empty element deletes it.
   Use a prefix arg to get regular RET. "
-    (interactive "P")
-    (if ignore
-        (org-return)
-      (cond
+	(interactive "P")
+	(if ignore
+		(org-return)
+	  (cond
 
-       ((eq 'line-break (car (org-element-context)))
-        (org-return-indent))
+	   ((eq 'line-break (car (org-element-context)))
+		(org-return-indent))
 
-       ;; Open links like usual, unless point is at the end of a line.
-       ;; and if at beginning of line, just press enter.
-       ((or (and (eq 'link (car (org-element-context))) (not (eolp)))
-        (bolp))
-        (org-return))
+	   ;; Open links like usual, unless point is at the end of a line.
+	   ;; and if at beginning of line, just press enter.
+	   ((or (and (eq 'link (car (org-element-context))) (not (eolp)))
+			(bolp))
+		(org-return))
 
-       ;; It doesn't make sense to add headings in inline tasks. Thanks Anders
-       ;; Johansson!
-       ((org-inlinetask-in-task-p)
-        (org-return))
+	   ;; It doesn't make sense to add headings in inline tasks. Thanks Anders
+	   ;; Johansson!
+	   ((org-inlinetask-in-task-p)
+		(org-return))
 
-       ;; checkboxes - add new or delete empty
-       ((org-at-item-checkbox-p)
-        (cond
-         ;; at the end of a line.
-         ((and (eolp)
-           (not (eq 'item (car (org-element-context)))))
-      (org-insert-todo-heading nil))
-         ;; no content, delete
-         ((and (eolp) (eq 'item (car (org-element-context))))
-      (setf (buffer-substring (line-beginning-position) (point)) ""))
-         ((eq 'paragraph (car (org-element-context)))
-      (goto-char (org-element-property :end (org-element-context)))
-      (org-insert-todo-heading nil))
-         (t
-      (org-return))))
+	   ;; checkboxes - add new or delete empty
+	   ((org-at-item-checkbox-p)
+		(cond
+		 ;; at the end of a line.
+		 ((and (eolp)
+			   (not (eq 'item (car (org-element-context)))))
+		  (org-insert-todo-heading nil))
+		 ;; no content, delete
+		 ((and (eolp) (eq 'item (car (org-element-context))))
+		  (setf (buffer-substring (line-beginning-position) (point)) ""))
+		 ((eq 'paragraph (car (org-element-context)))
+		  (goto-char (org-element-property :end (org-element-context)))
+		  (org-insert-todo-heading nil))
+		 (t
+		  (org-return))))
 
-       ;; lists end with two blank lines, so we need to make sure we are also not
-       ;; at the beginning of a line to avoid a loop where a new entry gets
-       ;; created with only one blank line.
-       ((org-in-item-p)
-        (cond
-         ;; empty definition list
-         ((and (looking-at " ::")
-           (looking-back "- " 3))
-      (beginning-of-line)
-      (delete-region (line-beginning-position) (line-end-position)))
-         ;; empty item
-         ((and (looking-at "$")
-           (looking-back "- " 3))
-      (beginning-of-line)
-      (delete-region (line-beginning-position) (line-end-position)))
-         ;; numbered list
-         ((and (looking-at "$")
-           (looking-back "[0-9]*. " (line-beginning-position)))
-      (beginning-of-line)
-      (delete-region (line-beginning-position) (line-end-position)))
-         ;; insert new item
-         (t
-      (end-of-line)
-      (org-insert-item))))
+	   ;; lists end with two blank lines, so we need to make sure we are also not
+	   ;; at the beginning of a line to avoid a loop where a new entry gets
+	   ;; created with only one blank line.
+	   ((org-in-item-p)
+		(cond
+		 ;; empty definition list
+		 ((and (looking-at " ::")
+			   (looking-back "- " 3))
+		  (beginning-of-line)
+		  (delete-region (line-beginning-position) (line-end-position)))
+		 ;; empty item
+		 ((and (looking-at "$")
+			   (looking-back "- " 3))
+		  (beginning-of-line)
+		  (delete-region (line-beginning-position) (line-end-position)))
+		 ;; numbered list
+		 ((and (looking-at "$")
+			   (looking-back "[0-9]*. " (line-beginning-position)))
+		  (beginning-of-line)
+		  (delete-region (line-beginning-position) (line-end-position)))
+		 ;; insert new item
+		 (t
+		  (end-of-line)
+		  (org-insert-item))))
 
-       ;; org-heading
-       ((org-at-heading-p)
-        (if (not (string= "" (org-element-property :title (org-element-context))))
-        (progn
-          ;; Go to end of subtree suggested by Pablo GG on Disqus post.
-          (org-end-of-subtree)
-          (org-insert-heading-respect-content)
-          (outline-show-entry))
-      ;; The heading was empty, so we delete it
-      (beginning-of-line)
-      (setf (buffer-substring
-             (line-beginning-position) (line-end-position)) "")))
+	   ;; org-heading
+	   ((org-at-heading-p)
+		(if (not (string= "" (org-element-property :title (org-element-context))))
+			(progn
+			  ;; Go to end of subtree suggested by Pablo GG on Disqus post.
+			  (org-end-of-subtree)
+			  (org-insert-heading-respect-content)
+			  (outline-show-entry))
+		  ;; The heading was empty, so we delete it
+		  (beginning-of-line)
+		  (setf (buffer-substring
+				 (line-beginning-position) (line-end-position)) "")))
 
-       ;; tables
-       ((org-at-table-p)
-        (if (-any?
-         (lambda (x) (not (string= "" x)))
-         (nth
-          (- (org-table-current-dline) 1)
-          (remove 'hline (org-table-to-lisp))))
-        (org-return)
-      ;; empty row
-      (beginning-of-line)
-      (setf (buffer-substring
-             (line-beginning-position) (line-end-position)) "")
-      (org-return)))
+	   ;; tables
+	   ((org-at-table-p)
+		(if (-any?
+			 (lambda (x) (not (string= "" x)))
+			 (nth
+			  (- (org-table-current-dline) 1)
+			  (remove 'hline (org-table-to-lisp))))
+			(org-return)
+		  ;; empty row
+		  (beginning-of-line)
+		  (setf (buffer-substring
+				 (line-beginning-position) (line-end-position)) "")
+		  (org-return)))
 
-       ;; fall-through case
-       (t
-        (org-return)))))
-    (define-key org-mode-map (kbd "RET")
-      'scimax/org-return)
+	   ;; fall-through case
+	   (t
+		(org-return)))))
+  (define-key org-mode-map (kbd "RET")
+	'scimax/org-return)
 #+end_src
 
 * LaTex
@@ -2204,81 +2228,81 @@ Return adds new heading or list item.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package tex-site
-    :ensure auctex)
+	:ensure auctex)
 
 #+end_src
 
 #+begin_src emacs-lisp :tangle yes
   (use-package tex                        ; TeX editing/processing
-    :ensure auctex
-    :defer t
-    :config
-    (setq TeX-parse-self t                     ; Parse documents to provide completion
-                                          ; for packages, etc.
-          TeX-auto-save t                      ; Automatically save style information
-          TeX-electric-sub-and-superscript t   ; Automatically insert braces after
-                                          ; sub- and superscripts in math mode
-          ;; Don't insert magic quotes right away.
-          TeX-quote-after-quote t
-          ;; Don't ask for confirmation when cleaning
-          TeX-clean-confirm nil
-          ;; Provide forward and inverse search with SyncTeX
-          TeX-source-correlate-mode t
-          TeX-source-correlate-method 'synctex)
-;; Insert math-mode delimiters for LaTeX and ConTeXt.
-(add-hook 'ConTeXt-mode-hook
-	  (lambda () (set (make-variable-buffer-local 'TeX-electric-math)
-			  (cons "$" "$"))))
-(add-hook 'LaTeX-mode-hook
-	  (lambda () (set (make-variable-buffer-local 'TeX-electric-math)
-			  (cons "\\(" "\\)"))))
-    ;; Move to chktex
-    (setcar (cdr (assoc "Check" TeX-command-list)) "chktex -v6 %s"))
+	:ensure auctex
+	:defer t
+	:config
+	(setq TeX-parse-self t                     ; Parse documents to provide completion
+										  ; for packages, etc.
+		  TeX-auto-save t                      ; Automatically save style information
+		  TeX-electric-sub-and-superscript t   ; Automatically insert braces after
+										  ; sub- and superscripts in math mode
+		  ;; Don't insert magic quotes right away.
+		  TeX-quote-after-quote t
+		  ;; Don't ask for confirmation when cleaning
+		  TeX-clean-confirm nil
+		  ;; Provide forward and inverse search with SyncTeX
+		  TeX-source-correlate-mode t
+		  TeX-source-correlate-method 'synctex)
+	;; Insert math-mode delimiters for LaTeX and ConTeXt.
+	(add-hook 'ConTeXt-mode-hook
+			  (lambda () (set (make-variable-buffer-local 'TeX-electric-math)
+							  (cons "$" "$"))))
+	(add-hook 'LaTeX-mode-hook
+			  (lambda () (set (make-variable-buffer-local 'TeX-electric-math)
+							  (cons "\\(" "\\)"))))
+	;; Move to chktex
+	(setcar (cdr (assoc "Check" TeX-command-list)) "chktex -v6 %s"))
 #+end_src
 
 #+begin_src emacs-lisp :tangle yes
   (use-package auctex-latexmk             ; latexmk command for AUCTeX
-        ;; :defer t
-    ;; :after auctex
-    :config (auctex-latexmk-setup))
+	;; :defer t
+	;; :after auctex
+	:config (auctex-latexmk-setup))
 
 #+end_src
 
 #+begin_src emacs-lisp :tangle yes
-(setq TeX-view-program-selection '((output-pdf "PDF Viewer")))
-(setq TeX-view-program-list
-     '(("PDF Viewer" "/Applications/Skim.app/Contents/SharedSupport/displayline -b -g %n %o %b")))
+  (setq TeX-view-program-selection '((output-pdf "PDF Viewer")))
+  (setq TeX-view-program-list
+		'(("PDF Viewer" "/Applications/Skim.app/Contents/SharedSupport/displayline -b -g %n %o %b")))
 #+end_src
 
 
 #+begin_src emacs-lisp :tangle no
-;; Use pdf-tools to open PDF files
-(setq TeX-view-program-selection '((output-pdf "PDF Tools"))
-      TeX-source-correlate-start-server t)
-(unless (assoc "PDF Tools" TeX-view-program-list-builtin)
-    (push '("PDF Tools" TeX-pdf-tools-sync-view) TeX-view-program-list))
-;; Update PDF buffers after successful LaTeX runs
-(add-hook 'TeX-after-compilation-finished-functions
-           #'TeX-revert-document-buffer)
+  ;; Use pdf-tools to open PDF files
+  (setq TeX-view-program-selection '((output-pdf "PDF Tools"))
+		TeX-source-correlate-start-server t)
+  (unless (assoc "PDF Tools" TeX-view-program-list-builtin)
+	(push '("PDF Tools" TeX-pdf-tools-sync-view) TeX-view-program-list))
+  ;; Update PDF buffers after successful LaTeX runs
+  (add-hook 'TeX-after-compilation-finished-functions
+			#'TeX-revert-document-buffer)
 #+end_src
 
 Cdlatex makes inserting LaTeX easier.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package cdlatex
-    :config (add-hook 'LaTeX-mode-hook 'turn-on-cdlatex)
-            (add-hook 'org-mode-hook 'turn-on-org-cdlatex))
+	:config (add-hook 'LaTeX-mode-hook 'turn-on-cdlatex)
+	(add-hook 'org-mode-hook 'turn-on-org-cdlatex))
 #+end_src
 
 Italics and Bold
 
 #+begin_src emacs-lisp :tangle yes
   (add-hook 'LaTeX-mode-hook
-            '(lambda ()
-               (define-key LaTeX-mode-map (kbd "s-i") (kbd "\C-c \C-f \C-e"))
-               (define-key LaTeX-mode-map (kbd "s-b") (kbd "\C-c \C-f \C-b"))
-               )
-            )
+			'(lambda ()
+			   (define-key LaTeX-mode-map (kbd "s-i") (kbd "\C-c \C-f \C-e"))
+			   (define-key LaTeX-mode-map (kbd "s-b") (kbd "\C-c \C-f \C-b"))
+			   )
+			)
 #+end_src
 
 Start Emacs server
@@ -2291,9 +2315,9 @@ Start Emacs server
 Auto-raise Emacs on activation (from Skim, usually)
 
 #+begin_src emacs-lisp :tangle yes
-      (defun raise-emacs-on-aqua()
-      (shell-command "osascript -e 'tell application \"Emacs\" to activate' "))
-      (add-hook 'server-switch-hook 'raise-emacs-on-aqua)
+  (defun raise-emacs-on-aqua()
+	(shell-command "osascript -e 'tell application \"Emacs\" to activate' "))
+  (add-hook 'server-switch-hook 'raise-emacs-on-aqua)
 
 #+end_src
 
@@ -2303,16 +2327,16 @@ Tell RefTeX where the bibliography files are.
 Make RefTex able to find my local bib files
 
 #+begin_src emacs-lisp :tangle yes
-      (setq reftex-bibpath-environment-variables
-      '("/Users/rlridenour/Dropbox/bibtex"))
+  (setq reftex-bibpath-environment-variables
+		'("/Users/rlridenour/Dropbox/bibtex"))
 
 #+end_src
 
 Default bibliography
 
 #+begin_src emacs-lisp :tangle yes
-      (setq reftex-default-bibliography
-      '("/Users/rlridenour/Dropbox/bibtex/randybib.bib"))
+  (setq reftex-default-bibliography
+		'("/Users/rlridenour/Dropbox/bibtex/randybib.bib"))
 #+end_src
 
 ** Load Support Packages
@@ -2320,24 +2344,24 @@ Default bibliography
 Load RefTeX
 
 #+begin_src emacs-lisp :tangle no
-    (add-hook 'LaTeX-mode-hook 'turn-on-reftex)   ; with AUCTeX LaTeX mode
-    (add-hook 'pandoc-mode-hook 'turn-on-reftex)  ; with Pandoc mode
-    (autoload 'reftex-mode     "reftex" "RefTeX Minor Mode" t)
-    (autoload 'turn-on-reftex  "reftex" "RefTeX Minor Mode" nil)
-    (autoload 'reftex-citation "reftex-cite" "Make citation" nil)
-    (autoload 'reftex-index-phrase-mode "reftex-index" "Phrase mode" t)
-    (add-hook 'LaTeX-mode-hook 'turn-on-reftex)   ; with AUCTeX LaTeX mode
-    (add-hook 'latex-mode-hook 'turn-on-reftex)   ; with Emacs latex mode
+  (add-hook 'LaTeX-mode-hook 'turn-on-reftex)   ; with AUCTeX LaTeX mode
+  (add-hook 'pandoc-mode-hook 'turn-on-reftex)  ; with Pandoc mode
+  (autoload 'reftex-mode     "reftex" "RefTeX Minor Mode" t)
+  (autoload 'turn-on-reftex  "reftex" "RefTeX Minor Mode" nil)
+  (autoload 'reftex-citation "reftex-cite" "Make citation" nil)
+  (autoload 'reftex-index-phrase-mode "reftex-index" "Phrase mode" t)
+  (add-hook 'LaTeX-mode-hook 'turn-on-reftex)   ; with AUCTeX LaTeX mode
+  (add-hook 'latex-mode-hook 'turn-on-reftex)   ; with Emacs latex mode
 
 #+end_src
 
 Make RefTeX faster
 
 #+begin_src emacs-lisp :tangle no
-    (setq reftex-enable-partial-scans t)
-    (setq reftex-save-parse-info t)
-    (setq reftex-use-multiple-selection-buffers t)
-    (setq reftex-plug-into-AUCTeX t)
+  (setq reftex-enable-partial-scans t)
+  (setq reftex-save-parse-info t)
+  (setq reftex-use-multiple-selection-buffers t)
+  (setq reftex-plug-into-AUCTeX t)
 
 #+end_src
 
@@ -2346,12 +2370,12 @@ use 'C-c (' instead of 'C-c [' because the latter is already
 defined in orgmode to the add-to-agenda command.
 
 #+begin_src emacs-lisp :tangle no
-    (defun org-mode-reftex-setup ()
-      (load-library "reftex") 
-      (and (buffer-file-name)
-      (file-exists-p (buffer-file-name))
-      (reftex-parse-all))
-      (define-key org-mode-map (kbd "C-c (") 'reftex-citation))
+  (defun org-mode-reftex-setup ()
+	(load-library "reftex") 
+	(and (buffer-file-name)
+		 (file-exists-p (buffer-file-name))
+		 (reftex-parse-all))
+	(define-key org-mode-map (kbd "C-c (") 'reftex-citation))
   (add-hook 'org-mode-hook 'org-mode-reftex-setup)
 
 #+end_src
@@ -2359,73 +2383,73 @@ defined in orgmode to the add-to-agenda command.
 RefTeX formats for biblatex (not natbib), and for pandoc
 
 #+begin_src emacs-lisp :tangle no
-    (setq reftex-cite-format
-          '(
-            (?\C-m . "\\cite[]{%l}")
-            (?t . "\\textcite{%l}")
-            (?a . "\\autocite[]{%l}")
-            (?p . "\\parencite{%l}")
-            (?f . "\\footcite[][]{%l}")
-            (?F . "\\fullcite[]{%l}")
-            (?P . "[@%l]")
-            (?T . "@%l [p. ]")
-            (?x . "[]{%l}")
-            (?X . "{%l}")
-            ))
-  
-    (setq font-latex-match-reference-keywords
-          '(("cite" "[{")
-            ("cites" "[{}]")
-            ("footcite" "[{")
-            ("footcites" "[{")
-            ("parencite" "[{")
-            ("textcite" "[{")
-            ("fullcite" "[{") 
-            ("citetitle" "[{") 
-            ("citetitles" "[{") 
-            ("headlessfullcite" "[{")))
-  
-    (setq reftex-cite-prompt-optional-args nil)
-    (setq reftex-cite-cleanup-optional-args t)
+  (setq reftex-cite-format
+		'(
+		  (?\C-m . "\\cite[]{%l}")
+		  (?t . "\\textcite{%l}")
+		  (?a . "\\autocite[]{%l}")
+		  (?p . "\\parencite{%l}")
+		  (?f . "\\footcite[][]{%l}")
+		  (?F . "\\fullcite[]{%l}")
+		  (?P . "[@%l]")
+		  (?T . "@%l [p. ]")
+		  (?x . "[]{%l}")
+		  (?X . "{%l}")
+		  ))
+
+  (setq font-latex-match-reference-keywords
+		'(("cite" "[{")
+		  ("cites" "[{}]")
+		  ("footcite" "[{")
+		  ("footcites" "[{")
+		  ("parencite" "[{")
+		  ("textcite" "[{")
+		  ("fullcite" "[{") 
+		  ("citetitle" "[{") 
+		  ("citetitles" "[{") 
+		  ("headlessfullcite" "[{")))
+
+  (setq reftex-cite-prompt-optional-args nil)
+  (setq reftex-cite-cleanup-optional-args t)
 
 #+end_src  
 
 #+begin_src emacs-lisp :tangle yes
-(defun bibtex-completion-format-citation-orgref (keys)
-  "Formatter for org-ref citations."
-  (let* ((prenote  (if bibtex-completion-cite-prompt-for-optional-arguments (read-from-minibuffer "Prenote: ") ""))
-         (postnote (if bibtex-completion-cite-prompt-for-optional-arguments (read-from-minibuffer "Postnote: ") "")))
-(if (and (string= "" prenote) (string= "" postnote))
-                (format "%s" (s-join "; " (--map (concat "autocite:" it) keys)))
-    (format "[[%s][%s::%s]]"  (s-join "; " (--map (concat "autocite:" it) keys)) prenote postnote))))
+  (defun bibtex-completion-format-citation-orgref (keys)
+	"Formatter for org-ref citations."
+	(let* ((prenote  (if bibtex-completion-cite-prompt-for-optional-arguments (read-from-minibuffer "Prenote: ") ""))
+		   (postnote (if bibtex-completion-cite-prompt-for-optional-arguments (read-from-minibuffer "Postnote: ") "")))
+	  (if (and (string= "" prenote) (string= "" postnote))
+		  (format "%s" (s-join "; " (--map (concat "autocite:" it) keys)))
+		(format "[[%s][%s::%s]]"  (s-join "; " (--map (concat "autocite:" it) keys)) prenote postnote))))
 
 #+end_src
 
 #+begin_src emacs-lisp :tangle yes
-(use-package ivy-bibtex
-:bind ("s-2" . ivy-bibtex)
-:after (ivy)
-    :config
-    (setq bibtex-completion-bibliography '("~/zotero.bib"))
-    (setq reftex-default-bibliography '("~/zotero.bib"))
-    (setq bibtex-completion-pdf-field "File")
-    (setq ivy-bibtex-default-action 'ivy-bibtex-insert-citation)
-(setq bibtex-completion-format-citation-functions
-  '((org-mode      . bibtex-completion-format-citation-orgref)
-    (latex-mode    . bibtex-completion-format-citation-cite)
-    ;; (markdown-mode    . bibtex-completion-format-citation-cite)
-    (markdown-mode . bibtex-completion-format-citation-pandoc-citeproc)
-    (default       . bibtex-completion-format-citation-default))))
+  (use-package ivy-bibtex
+	:bind ("s-2" . ivy-bibtex)
+	:after (ivy)
+	:config
+	(setq bibtex-completion-bibliography '("~/zotero.bib"))
+	(setq reftex-default-bibliography '("~/zotero.bib"))
+	(setq bibtex-completion-pdf-field "File")
+	(setq ivy-bibtex-default-action 'ivy-bibtex-insert-citation)
+	(setq bibtex-completion-format-citation-functions
+		  '((org-mode      . bibtex-completion-format-citation-orgref)
+			(latex-mode    . bibtex-completion-format-citation-cite)
+			;; (markdown-mode    . bibtex-completion-format-citation-cite)
+			(markdown-mode . bibtex-completion-format-citation-pandoc-citeproc)
+			(default       . bibtex-completion-format-citation-default))))
 #+end_src
 
 #+begin_src emacs-lisp :tangle yes
-(use-package org-ref
-    :after org
-    :init
-    (setq org-ref-completion-library 'org-ref-ivy-cite
-          org-ref-default-bibliography '("~/zotero.bib")))
+  (use-package org-ref
+	:after org
+	:init
+	(setq org-ref-completion-library 'org-ref-ivy-cite
+		  org-ref-default-bibliography '("~/zotero.bib")))
 
-(setq org-latex-pdf-process (list "latexmk -shell-escape -f -pdf %f"))
+  (setq org-latex-pdf-process (list "latexmk -shell-escape -f -pdf %f"))
 
 
 
@@ -2438,58 +2462,58 @@ Configure Biber
 Allow AucTeX to use biber as well as/instead of bibtex.
 
 #+begin_src emacs-lisp :tangle yes
-      ;; Biber under AUCTeX
-      (defun TeX-run-Biber (name command file)
-        "Create a process for NAME using COMMAND to format FILE with Biber." 
-       (let ((process (TeX-run-command name command file)))
-          (setq TeX-sentinel-function 'TeX-Biber-sentinel)
-          (if TeX-process-asynchronous
-              process
-            (TeX-synchronous-sentinel name file process))))
-    
-      (defun TeX-Biber-sentinel (process name)
-        "Cleanup TeX output buffer after running Biber."
-        (goto-char (point-max))
-        (cond
-         ;; Check whether Biber reports any warnings or errors.
-         ((re-search-backward (concat
-                               "^(There \\(?:was\\|were\\) \\([0-9]+\\) "
-                               "\\(warnings?\\|error messages?\\))") nil t)
-          ;; Tell the user their number so that she sees whether the
-          ;; situation is getting better or worse.
-          (message (concat "Biber finished with %s %s. "
-                           "Type `%s' to display output.")
-                   (match-string 1) (match-string 2)
-                   (substitute-command-keys
-                    "\\\\[TeX-recenter-output-buffer]")))
-         (t
-          (message (concat "Biber finished successfully. "
-                           "Run LaTeX again to get citations right."))))
-        (setq TeX-command-next TeX-command-default))
-  
-    (eval-after-load "tex"
-      '(add-to-list 'TeX-command-list '("Biber" "biber %s" TeX-run-Biber nil t :help "Run Biber"))
-      )    
+  ;; Biber under AUCTeX
+  (defun TeX-run-Biber (name command file)
+	"Create a process for NAME using COMMAND to format FILE with Biber." 
+	(let ((process (TeX-run-command name command file)))
+	  (setq TeX-sentinel-function 'TeX-Biber-sentinel)
+	  (if TeX-process-asynchronous
+		  process
+		(TeX-synchronous-sentinel name file process))))
+
+  (defun TeX-Biber-sentinel (process name)
+	"Cleanup TeX output buffer after running Biber."
+	(goto-char (point-max))
+	(cond
+	 ;; Check whether Biber reports any warnings or errors.
+	 ((re-search-backward (concat
+						   "^(There \\(?:was\\|were\\) \\([0-9]+\\) "
+						   "\\(warnings?\\|error messages?\\))") nil t)
+	  ;; Tell the user their number so that she sees whether the
+	  ;; situation is getting better or worse.
+	  (message (concat "Biber finished with %s %s. "
+					   "Type `%s' to display output.")
+			   (match-string 1) (match-string 2)
+			   (substitute-command-keys
+				"\\\\[TeX-recenter-output-buffer]")))
+	 (t
+	  (message (concat "Biber finished successfully. "
+					   "Run LaTeX again to get citations right."))))
+	(setq TeX-command-next TeX-command-default))
+
+  (eval-after-load "tex"
+	'(add-to-list 'TeX-command-list '("Biber" "biber %s" TeX-run-Biber nil t :help "Run Biber"))
+	)    
 #+end_src
 
 #+begin_src emacs-lisp :tangle yes
   (defun tex-clean ()
-    (interactive)
-    (shell-command "latexmk -c"))
+	(interactive)
+	(shell-command "latexmk -c"))
 
 #+end_src
 
 #+begin_src emacs-lisp :tangle yes
   (defun tex-clean-all ()
-    (interactive)
-    (shell-command "latexmk -C"))
+	(interactive)
+	(shell-command "latexmk -C"))
 
 #+end_src
 
 #+begin_src emacs-lisp :tangle yes
   (use-package ebib
-        :init
-    (setq ebib-preload-bib-search-dirs "~/Dropbox/bibtex/randybib.bib"))
+	:init
+	(setq ebib-preload-bib-search-dirs "~/Dropbox/bibtex/randybib.bib"))
 
 #+end_src
 
@@ -2506,9 +2530,9 @@ Dim tilde
   (add-hook
    'TeX-mode-hook
    (lambda ()
-     (font-lock-add-keywords
-      nil
-      '(("~" . 'font-latex-sedate-face)))))
+	 (font-lock-add-keywords
+	  nil
+	  '(("~" . 'font-latex-sedate-face)))))
 
 #+end_src
 
@@ -2519,7 +2543,7 @@ Dim tilde
   (load-file "~/.emacs.d/lilypond/lilypond-init.el")
   (autoload 'LilyPond-mode "lilypond-mode")
   (setq auto-mode-alist
-        (cons '("\\.ly$" . LilyPond-mode) auto-mode-alist))
+		(cons '("\\.ly$" . LilyPond-mode) auto-mode-alist))
 
   (add-hook 'LilyPond-mode-hook (lambda () (turn-on-font-lock)))
 
@@ -2529,171 +2553,171 @@ Run latexmk after save.
 
 #+begin_src emacs-lisp :tangle no
   (add-hook 'after-save-hook
-            (lambda ()
-              (when (string= major-mode 'latex-mode)
-                (TeX-run-latexmk
-                 "LaTeX"
-                 (format "latexmk -pdf %s" (buffer-file-name))
-                 (file-name-base (buffer-file-name))))))
+			(lambda ()
+			  (when (string= major-mode 'latex-mode)
+				(TeX-run-latexmk
+				 "LaTeX"
+				 (format "latexmk -pdf %s" (buffer-file-name))
+				 (file-name-base (buffer-file-name))))))
 #+end_src
 
 Start latexmk continuous preview.
 
 #+begin_src emacs-lisp :tangle yes
-(defun rlr/tex-pvc ()
-  "Compile continuously with latexmk."
-  (interactive)
-  (async-shell-command (concat "mkpvc " (buffer-file-name)))
-  (delete-other-windows)
-  (TeX-view))
+  (defun rlr/tex-pvc ()
+	"Compile continuously with latexmk."
+	(interactive)
+	(async-shell-command (concat "mkpvc " (buffer-file-name)))
+	(delete-other-windows)
+	(TeX-view))
 #+end_src
 
 Move to edited position after save.
 
 #+begin_src emacs-lisp :tangle yes
-(add-hook 'after-save-hook
-          (lambda ()
-            (when (string= major-mode 'latex-mode)
-              (TeX-view))))
+  (add-hook 'after-save-hook
+			(lambda ()
+			  (when (string= major-mode 'latex-mode)
+				(TeX-view))))
 #+end_src
 
   
-  ;; Revert PDF after compilation has finished
-  (add-hook 'TeX-after-compilation-finished-functions #'TeX-revert-document-buffer)
+;; Revert PDF after compilation has finished
+(add-hook 'TeX-after-compilation-finished-functions #'TeX-revert-document-buffer)
 #+end_src
 
 Compile ConTeXt on save.
 
 #+begin_src emacs-lisp :tangle yes
   (add-hook 'after-save-hook
-            (lambda ()
-              (when (string= major-mode 'context-mode)
-                (TeX-command-menu "ConTeXt Full"))))
+			(lambda ()
+			  (when (string= major-mode 'context-mode)
+				(TeX-command-menu "ConTeXt Full"))))
 #+end_src
 
 ** ConTeXt
 
 #+begin_src emacs-lisp :tangle yes
 
-    (setq ConTeXt-Mark-version "IV")    ; Set version to Mark IV
+  (setq ConTeXt-Mark-version "IV")    ; Set version to Mark IV
   (add-hook 'ConTeXt-mode-hook
-            (lambda()
-              (setq TeX-command-default "ConTeXt Full")))
+			(lambda()
+			  (setq TeX-command-default "ConTeXt Full")))
 
   (add-to-list 'auto-mode-alist '("\\.mkiv\\'" . ConTeXt-mode))
   (add-to-list 'auto-mode-alist '("\\.mkvi\\'" . ConTeXt-mode))
   (with-eval-after-load "context"
-    (add-to-list 'TeX-file-extensions "mkvi" t)
-    (add-to-list 'TeX-file-extensions "mkiv" t))
+	(add-to-list 'TeX-file-extensions "mkvi" t)
+	(add-to-list 'TeX-file-extensions "mkiv" t))
 
 
-    (setq TeX-parse-self t)			; Enable parse on load.
-    (setq TeX-auto-save t)			; Enable parse on save.
+  (setq TeX-parse-self t)			; Enable parse on load.
+  (setq TeX-auto-save t)			; Enable parse on save.
 
-    ; for outline views (hide/show sections, chapters, etc.)
-    (add-hook 'TeX-mode-hook '(lambda () (TeX-fold-mode 1)))
-    (add-hook 'TeX-mode-hook '(lambda () (outline-minor-mode 1)))
-    ; make PDF by default (can toggle with C-c C-t C-p
-    (add-hook 'TeX-mode-hook '(lambda () (TeX-PDF-mode 1)))
-    ; these math abbrevs (` as prefix char) are also useful in TeX/ConTeXt files
-    (require 'latex)			; defines LaTeX-math-mode
-    (add-hook 'TeX-mode-hook 'LaTeX-math-mode)
-    ; Emacs help for \label, \ref, \cite.  Normally used only with
-    ; LaTeX-mode but also useful with plain TeX + eplain and with ConTeXt, so:
-    (setq reftex-plug-into-AUCTeX t)
-    (add-hook 'TeX-mode-hook 'reftex-mode)
+										  ; for outline views (hide/show sections, chapters, etc.)
+  (add-hook 'TeX-mode-hook '(lambda () (TeX-fold-mode 1)))
+  (add-hook 'TeX-mode-hook '(lambda () (outline-minor-mode 1)))
+										  ; make PDF by default (can toggle with C-c C-t C-p
+  (add-hook 'TeX-mode-hook '(lambda () (TeX-PDF-mode 1)))
+										  ; these math abbrevs (` as prefix char) are also useful in TeX/ConTeXt files
+  (require 'latex)			; defines LaTeX-math-mode
+  (add-hook 'TeX-mode-hook 'LaTeX-math-mode)
+										  ; Emacs help for \label, \ref, \cite.  Normally used only with
+										  ; LaTeX-mode but also useful with plain TeX + eplain and with ConTeXt, so:
+  (setq reftex-plug-into-AUCTeX t)
+  (add-hook 'TeX-mode-hook 'reftex-mode)
 
 
-    (setq TeX-format-list
-      '(("JLATEX" japanese-latex-mode
-         "\\\\\\(documentstyle\\|documentclass\\)[^%\n]*{\\(j[s-]?\\|t\\)\\(article\\|report\\|book\\|slides\\)")
-        ("JTEX" japanese-plain-tex-mode
-         "-- string likely in Japanese TeX --")
-        ("AMSTEX" ams-tex-mode
-         "\\\\document\\b")
-        ("CONTEXT" context-mode
-         "\\(\\\\\\(start\\(text\\|project\\|environment\\|product\\|typing\\|component\\|tekst\\)\\)\\|%.*?interface=\\)")
-        ("LATEX" latex-mode
-         "\\\\\\(begin\\|section\\|chapter\\|documentstyle\\|documentclass\\)\\b")
-        ("TEX" plain-tex-mode ".")))
+  (setq TeX-format-list
+		'(("JLATEX" japanese-latex-mode
+		   "\\\\\\(documentstyle\\|documentclass\\)[^%\n]*{\\(j[s-]?\\|t\\)\\(article\\|report\\|book\\|slides\\)")
+		  ("JTEX" japanese-plain-tex-mode
+		   "-- string likely in Japanese TeX --")
+		  ("AMSTEX" ams-tex-mode
+		   "\\\\document\\b")
+		  ("CONTEXT" context-mode
+		   "\\(\\\\\\(start\\(text\\|project\\|environment\\|product\\|typing\\|component\\|tekst\\)\\)\\|%.*?interface=\\)")
+		  ("LATEX" latex-mode
+		   "\\\\\\(begin\\|section\\|chapter\\|documentstyle\\|documentclass\\)\\b")
+		  ("TEX" plain-tex-mode ".")))
 #+end_src
 
 #+begin_src emacs-lisp :tangle yes
-(use-package outshine
-:init
-(defvar outline-minor-mode-prefix "\M-#")
-:config
-(add-hook 'LaTeX-mode-hook 'outshine-mode))
+  (use-package outshine
+	:init
+	(defvar outline-minor-mode-prefix "\M-#")
+	:config
+	(add-hook 'LaTeX-mode-hook 'outshine-mode))
 #+end_src
 
 * HTML
 
 #+begin_src emacs-lisp :tangle yes
 
-(add-to-list 'auto-mode-alist '("\\.ts\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.css?\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.js\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.ts\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.css?\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.js\\'" . web-mode))
 
   (use-package emmet-mode
-        :diminish (emmet-mode . "ε")
-    :bind* (("C-)" . emmet-next-edit-point)
-            ("C-(" . emmet-prev-edit-point))
-    :commands (emmet-mode
-               emmet-next-edit-point
-               emmet-prev-edit-point)
-    :init
-    (setq emmet-indentation 4)
-    (setq emmet-move-cursor-between-quotes t)
-    :config
-    ;; Auto-start on any markup modes
-    (add-hook 'sgml-mode-hook 'emmet-mode)
-    (add-hook 'css-mode-hook  'emmet-mode) ;; enable Emmet's css abbreviation.
-    (add-hook 'web-mode-hook 'emmet-mode)
-    (setq emmet-move-cursor-between-quotes t) ;; default nil
-)
+	:diminish (emmet-mode . "ε")
+	:bind* (("C-)" . emmet-next-edit-point)
+			("C-(" . emmet-prev-edit-point))
+	:commands (emmet-mode
+			   emmet-next-edit-point
+			   emmet-prev-edit-point)
+	:init
+	(setq emmet-indentation 4)
+	(setq emmet-move-cursor-between-quotes t)
+	:config
+	;; Auto-start on any markup modes
+	(add-hook 'sgml-mode-hook 'emmet-mode)
+	(add-hook 'css-mode-hook  'emmet-mode) ;; enable Emmet's css abbreviation.
+	(add-hook 'web-mode-hook 'emmet-mode)
+	(setq emmet-move-cursor-between-quotes t) ;; default nil
+	)
 
-(setq web-mode-enable-current-column-highlight t)
-(setq web-mode-enable-current-element-highlight t)
+  (setq web-mode-enable-current-column-highlight t)
+  (setq web-mode-enable-current-element-highlight t)
 
-(use-package company-web
-:config
-(require 'company-web-html))
+  (use-package company-web
+	:config
+	(require 'company-web-html))
 
-(add-hook 'web-mode-hook (lambda ()
-                          (set (make-local-variable 'company-backends) '(company-web-html))
-                          (company-mode t)))
-(defun my-web-mode-hook ()
-  (set (make-local-variable 'company-backends) '(company-css company-web-html company-yasnippet company-files))
-)
+  (add-hook 'web-mode-hook (lambda ()
+							 (set (make-local-variable 'company-backends) '(company-web-html))
+							 (company-mode t)))
+  (defun my-web-mode-hook ()
+	(set (make-local-variable 'company-backends) '(company-css company-web-html company-yasnippet company-files))
+	)
 
-(add-hook 'web-mode-hook  'emmet-mode) 
+  (add-hook 'web-mode-hook  'emmet-mode) 
 
-(add-hook 'web-mode-before-auto-complete-hooks
-    '(lambda ()
-     (let ((web-mode-cur-language
-  	    (web-mode-language-at-pos)))
-               (if (string= web-mode-cur-language "php")
-    	   (yas-activate-extra-mode 'php-mode)
-      	 (yas-deactivate-extra-mode 'php-mode))
-               (if (string= web-mode-cur-language "css")
-    	   (setq emmet-use-css-transform t)
-      	 (setq emmet-use-css-transform nil)))))
+  (add-hook 'web-mode-before-auto-complete-hooks
+			'(lambda ()
+			   (let ((web-mode-cur-language
+					  (web-mode-language-at-pos)))
+				 (if (string= web-mode-cur-language "php")
+					 (yas-activate-extra-mode 'php-mode)
+				   (yas-deactivate-extra-mode 'php-mode))
+				 (if (string= web-mode-cur-language "css")
+					 (setq emmet-use-css-transform t)
+				   (setq emmet-use-css-transform nil)))))
 
 #+end_src
 * Hugo Settings
 
 #+begin_src emacs-lisp :tangle yes
   (defun hugo-timestamp ()
-    "Update existing date: timestamp on a Hugo post."
-    (interactive)
-    (save-excursion (
-                     goto-char 1)
-                    (re-search-forward "^date:")
-                    (let ((beg (point)))
-                      (end-of-line)
-                      (delete-region beg (point)))
-                    (insert (concat " " (format-time-string "%Y-%m-%dT%H:%M:%S")))))
+	"Update existing date: timestamp on a Hugo post."
+	(interactive)
+	(save-excursion (
+					 goto-char 1)
+					(re-search-forward "^date:")
+					(let ((beg (point)))
+					  (end-of-line)
+					  (delete-region beg (point)))
+					(insert (concat " " (format-time-string "%Y-%m-%dT%H:%M:%S")))))
 
 #+end_src
 
@@ -2714,70 +2738,70 @@ Compile ConTeXt on save.
   
 #+begin_src emacs-lisp :tangle yes
   (defvar hugo-post-template "---\ntitle: \"%s\"\ndraft: true\ncategories: []\ntags:\n- \ncomments: true\ndate: \nhighlight: true\nmarkup: \"\"\nmath: false\nurl: \"\"\n---\n"
-    "Default template for Hugo posts. %s will be replace by the post title.")
+	"Default template for Hugo posts. %s will be replace by the post title.")
 
 #+end_src
 
 #+begin_src emacs-lisp :tangle yes
   (defun hugo-make-slug (s) "Turn a string into a slug."
-         (replace-regexp-in-string " " "-"  (downcase (replace-regexp-in-string "[^A-Za-z0-9 ]" "" s))))
+		 (replace-regexp-in-string " " "-"  (downcase (replace-regexp-in-string "[^A-Za-z0-9 ]" "" s))))
 
 #+end_src
 
 #+begin_src emacs-lisp :tangle yes
   (defun hugo-yaml-escape (s) "Escape a string for YAML."
-         (if (or (string-match ":" s) (string-match "\"" s)) (concat "\"" (replace-regexp-in-string "\"" "\\\\\"" s) "\"") s))
+		 (if (or (string-match ":" s) (string-match "\"" s)) (concat "\"" (replace-regexp-in-string "\"" "\\\\\"" s) "\"") s))
 
 #+end_src
 
 #+begin_src emacs-lisp :tangle yes
   (defun hugo-draft-post (title) "Create a new Hugo blog post."
-         (interactive "sPost Title: ")
-         (let ((draft-file (concat hugo-directory hugo-posts-dir
-                                   (format-time-string "%Y-%m-%d-")
-                                   (hugo-make-slug title)
-                                   hugo-post-ext)))
-           (if (file-exists-p draft-file)
-               (find-file draft-file)
-             (find-file draft-file)
-             (insert (format hugo-post-template (hugo-yaml-escape title))))))
+		 (interactive "sPost Title: ")
+		 (let ((draft-file (concat hugo-directory hugo-posts-dir
+								   (format-time-string "%Y-%m-%d-")
+								   (hugo-make-slug title)
+								   hugo-post-ext)))
+		   (if (file-exists-p draft-file)
+			   (find-file draft-file)
+			 (find-file draft-file)
+			 (insert (format hugo-post-template (hugo-yaml-escape title))))))
 
 #+end_src
              
 #+begin_src emacs-lisp :tangle yes
   (defun hugo-publish-post ()
-    "Update timestamp and set draft to false."
-    (interactive)
-    (hugo-timestamp)
-    (save-excursion (
-                     goto-char 1)
-                    (re-search-forward "^draft:")
-                    (let ((beg (point)))
-                      (end-of-line)
-                      (delete-region beg (point)))
-                    (insert " false"))) 
+	"Update timestamp and set draft to false."
+	(interactive)
+	(hugo-timestamp)
+	(save-excursion (
+					 goto-char 1)
+					(re-search-forward "^draft:")
+					(let ((beg (point)))
+					  (end-of-line)
+					  (delete-region beg (point)))
+					(insert " false"))) 
 
 #+end_src
 
 #+begin_src emacs-lisp :tangle yes
   (defmacro with-dir (DIR &rest FORMS)
-    "Execute FORMS in DIR."
-    (let ((orig-dir (gensym)))
-      `(progn (setq ,orig-dir default-directory)
-              (cd ,DIR) ,@FORMS (cd ,orig-dir))))
+	"Execute FORMS in DIR."
+	(let ((orig-dir (gensym)))
+	  `(progn (setq ,orig-dir default-directory)
+			  (cd ,DIR) ,@FORMS (cd ,orig-dir))))
 
 #+end_src
 
 #+begin_src emacs-lisp :tangle yes
   (defun hugo-deploy ()
-    "Push changes upstream."
-    (interactive)
-    (with-dir hugo-directory
-              (shell-command "git add .")
-              (--> (current-time-string)
-                   (concat "git commit -m \"" it "\"")
-                   (shell-command it))
-              (magit-push-current-to-upstream nil)))
+	"Push changes upstream."
+	(interactive)
+	(with-dir hugo-directory
+			  (shell-command "git add .")
+			  (--> (current-time-string)
+				   (concat "git commit -m \"" it "\"")
+				   (shell-command it))
+			  (magit-push-current-to-upstream nil)))
 
 #+end_src
 
@@ -2798,47 +2822,47 @@ From http://oremacs.com/2014/12/30/ace-link-eww/
 
 #+begin_src emacs-lisp :tangle yes
   (use-package ace-link
-        :init
-      (ace-link-setup-default))
+	:init
+	(ace-link-setup-default))
 
 #+end_src
 
 #+begin_src emacs-lisp :tangle yes
   (defun oleh-eww-hook ()
-    (define-key eww-mode-map "j" 'oww-down)
-    (define-key eww-mode-map "k" 'oww-up)
-    (define-key eww-mode-map "l" 'forward-char)
-    (define-key eww-mode-map "L" 'eww-back-url)
-    (define-key eww-mode-map "h" 'backward-char)
-    (define-key eww-mode-map "v" 'recenter-top-bottom)
-    (define-key eww-mode-map "V" 'eww-view-source)
-    (define-key eww-mode-map "m" 'eww-follow-link)
-    (define-key eww-mode-map "a" 'move-beginning-of-line)
-    (define-key eww-mode-map "e" 'move-end-of-line)
-    (define-key eww-mode-map "o" 'ace-link-eww)
-    (define-key eww-mode-map "f" 'ace-link-eww)
-    (define-key eww-mode-map "y" 'eww))
+	(define-key eww-mode-map "j" 'oww-down)
+	(define-key eww-mode-map "k" 'oww-up)
+	(define-key eww-mode-map "l" 'forward-char)
+	(define-key eww-mode-map "L" 'eww-back-url)
+	(define-key eww-mode-map "h" 'backward-char)
+	(define-key eww-mode-map "v" 'recenter-top-bottom)
+	(define-key eww-mode-map "V" 'eww-view-source)
+	(define-key eww-mode-map "m" 'eww-follow-link)
+	(define-key eww-mode-map "a" 'move-beginning-of-line)
+	(define-key eww-mode-map "e" 'move-end-of-line)
+	(define-key eww-mode-map "o" 'ace-link-eww)
+	(define-key eww-mode-map "f" 'ace-link-eww)
+	(define-key eww-mode-map "y" 'eww))
   (add-hook 'eww-mode-hook 'oleh-eww-hook)
 
 #+end_src
 
 #+begin_src emacs-lisp :tangle yes
   (defun oww-down (arg)
-    (interactive "p")
-    (if (bolp)
-        (progn
-          (forward-paragraph arg)
-          (forward-line 1))
-      (line-move arg)))
+	(interactive "p")
+	(if (bolp)
+		(progn
+		  (forward-paragraph arg)
+		  (forward-line 1))
+	  (line-move arg)))
 
   (defun oww-up (arg)
-  (interactive "p")
-      (if (bolp)
-        (progn
-          (forward-line -1)
-          (backward-paragraph arg)
-          (forward-line 1))
-      (line-move (- arg))))
+	(interactive "p")
+	(if (bolp)
+		(progn
+		  (forward-line -1)
+		  (backward-paragraph arg)
+		  (forward-line 1))
+	  (line-move (- arg))))
 
 #+end_src
 
@@ -2846,8 +2870,8 @@ From http://oremacs.com/2014/12/30/ace-link-eww/
 
 #+begin_src emacs-lisp :tangle yes
   (global-unset-key (kbd "C-z"))
- ;; (global-unset-key (kbd "s-p"))
-(global-unset-key (kbd "s-m"))
+  ;; (global-unset-key (kbd "s-p"))
+  (global-unset-key (kbd "s-m"))
 
 
 
@@ -2857,21 +2881,21 @@ From http://oremacs.com/2014/12/30/ace-link-eww/
 
 #+begin_src emacs-lisp :tangle yes
   (use-package key-chord
-        :defer t
-    :config
-    (key-chord-mode 1))
+	:defer t
+	:config
+	(key-chord-mode 1))
 
 #+end_src
 
 ** Hydras
 
 #+begin_src emacs-lisp :tangle yes
-(use-package ivy-hydra
-:ensure t)
+  (use-package ivy-hydra
+	:ensure t)
 
-(use-package major-mode-hydra
-  :bind
-  ("s-m" . major-mode-hydra))
+  (use-package major-mode-hydra
+	:bind
+	("s-m" . major-mode-hydra))
 #+end_src
 
 
@@ -2879,21 +2903,21 @@ Hydra-toggle
 
 #+begin_src emacs-lisp :tangle yes
   (defhydra hydra-toggle (:color blue) 
-    "toggle"
-    ("a" abbrev-mode "abbrev")
-    ("c" column-number-mode "column")
-    ("C" cdlatex-mode "cdlatex")
-    ("d" toggle-debug-on-error "debug")
-    ("e" evil-mode "evil")
-    ("f" auto-fill-mode "fill")
-    ;; ("g" god-mode "god")
-    ("l" display-line-numbers-mode "linum")
-    ("o" olivetti-mode "olivetti")
-    ("r" read-only-mode "read-only") 
-    ("t" toggle-truncate-lines "truncate")
-    ("w" wc-mode "word-count")
-    ("W" whitespace-mode "whitespace")
-    ("q" nil "global"))
+	"toggle"
+	("a" abbrev-mode "abbrev")
+	("c" column-number-mode "column")
+	("C" cdlatex-mode "cdlatex")
+	("d" toggle-debug-on-error "debug")
+	("e" evil-mode "evil")
+	("f" auto-fill-mode "fill")
+	;; ("g" god-mode "god")
+	("l" display-line-numbers-mode "linum")
+	("o" olivetti-mode "olivetti")
+	("r" read-only-mode "read-only") 
+	("t" toggle-truncate-lines "truncate")
+	("w" wc-mode "word-count")
+	("W" whitespace-mode "whitespace")
+	("q" nil "global"))
   ;; (global-set-key (kbd "s-t") 'hydra-toggle/body)
 
 #+end_src
@@ -2902,66 +2926,66 @@ Hydra-toggle
 Major-mode Hydras
 
 #+begin_src emacs-lisp :tangle yes
-      (major-mode-hydra-bind markdown-mode "Format"
-        ("h" markdown-insert-header-dwim "header") 
-        ("l" markdown-insert-link "link")
-        ("u" markdown-insert-uri "url")
-        ("f" markdown-insert-footnote "footnote")
-        ("w" markdown-insert-wiki-link "wiki")
-        ("r" markdown-insert-reference-link-dwim "r-link")
-        ("n" markdown-cleanup-list-numbers "clean-lists")
-        ("c" markdown-complete-buffer "complete"))
+  (major-mode-hydra-bind markdown-mode "Format"
+	("h" markdown-insert-header-dwim "header") 
+	("l" markdown-insert-link "link")
+	("u" markdown-insert-uri "url")
+	("f" markdown-insert-footnote "footnote")
+	("w" markdown-insert-wiki-link "wiki")
+	("r" markdown-insert-reference-link-dwim "r-link")
+	("n" markdown-cleanup-list-numbers "clean-lists")
+	("c" markdown-complete-buffer "complete"))
 
-    (major-mode-hydra-bind markdown-mode "Pandoc"
-          ("A" pandoc-pdfarticle "pdfarticle")
-          ("B" pandoc-beamer "beamer")
-          ("C" pandoc-syllabus "Course syllabus")
-          ("S" pandoc-slides "slides")
-          ("H" pandoc-handout "handout")
-          ("O" pandoc-obuletter "obu letter")
-          ("D" pandoc-docx "docx")
-          ("H" pandoc-html "html")
-          ("P" pandoc-pdf "pdf")
-          ("t" pandoc-clean "trash non-md")
+  (major-mode-hydra-bind markdown-mode "Pandoc"
+	("A" pandoc-pdfarticle "pdfarticle")
+	("B" pandoc-beamer "beamer")
+	("C" pandoc-syllabus "Course syllabus")
+	("S" pandoc-slides "slides")
+	("H" pandoc-handout "handout")
+	("O" pandoc-obuletter "obu letter")
+	("D" pandoc-docx "docx")
+	("H" pandoc-html "html")
+	("P" pandoc-pdf "pdf")
+	("t" pandoc-clean "trash non-md")
 
-          ("q" nil))
+	("q" nil))
 
-    (major-mode-hydra-bind latex-mode "Bibtex"
-          ("b" ivy-bibtex "Ivy-Bibtex"))
+  (major-mode-hydra-bind latex-mode "Bibtex"
+	("b" ivy-bibtex "Ivy-Bibtex"))
 
-    (major-mode-hydra-bind latex-mode "LaTeXmk"
-          ("p" rlr/tex-pvc "pvc")
-          ("c" tex-clean "clean aux")
-          ("C" tex-clean-all "clean all")
+  (major-mode-hydra-bind latex-mode "LaTeXmk"
+	("p" rlr/tex-pvc "pvc")
+	("c" tex-clean "clean aux")
+	("C" tex-clean-all "clean all")
 
-          ("q" nil))
+	("q" nil))
 
   (major-mode-hydra-bind org-mode "Bibtex"
-          ("b" ivy-bibtex "Ivy-Bibtex"))
+	("b" ivy-bibtex "Ivy-Bibtex"))
 
-    (major-mode-hydra-bind org-mode "Clean"
-          ("c" tex-clean "clean aux")
-          ("C" tex-clean-all "clean all")
+  (major-mode-hydra-bind org-mode "Clean"
+	("c" tex-clean "clean aux")
+	("C" tex-clean-all "clean all")
 
-          ("q" nil))
+	("q" nil))
 #+end_src
 
 #+begin_src emacs-lisp :tangle yes
-(defhydra hydra-locate (:color blue)
-      ("l" avy-goto-line "avy-line")
-      ("L" goto-line "goto-line")
-      ("w" avy-goto-word-1 "goto-word")
-      ("b" ivy-bookmark-goto "bookmarks")
-      ("m" counsel-imenu "imenu")
-      ("q" nil))
+  (defhydra hydra-locate (:color blue)
+	("l" avy-goto-line "avy-line")
+	("L" goto-line "goto-line")
+	("w" avy-goto-word-1 "goto-word")
+	("b" ivy-bookmark-goto "bookmarks")
+	("m" counsel-imenu "imenu")
+	("q" nil))
 
 #+end_src
 
 #+begin_src emacs-lisp :tangle yes
   (defhydra hydra-org (:color blue)
-    ("a" org-agenda "agenda")
-    ("l" org-store-link "store-link")
-    ("q" nil))
+	("a" org-agenda "agenda")
+	("l" org-store-link "store-link")
+	("q" nil))
 
 #+end_src
 
@@ -2974,39 +2998,39 @@ Major-mode Hydras
 
 #+begin_src emacs-lisp :tangle yes
   (bind-keys
-  ("C-0" . delete-window-balance)
-  ("C-1" . delete-other-windows)
-  ("C-2" . split-window-below-focus)
-  ("C-3" . split-window-right-focus)
-  ("C-4" . nuke-all-buffers)
-  ("s-5" . delete-frame)
-  ("s-6" . toggle-window-split)
-  ("S-C-<left>" . shrink-window-horizontally)
-  ("S-C-<right>" . enlarge-window-horizontally)
-  ("S-C-<down>" . shrink-window)
-  ("S-C-<up>" . enlarge-window)
-  ("C-x c" . save-buffers-kill-emacs)
-  ("C-x w" . delete-frame)
-  ;; ("s-." . helm-buffers-list)
-  ;; ("C-c i" . ivy-imenu-goto)	
-  ;; ("C-c b" . ivy-bookmark-goto)
-  ("C-x C-b" . ibuffer)
-  ("RET" . newline-and-indent)
-  ("M-/" . hippie-expand)
-  ("C-+" . text-scale-increase)
-  ("C--" . text-scale-decrease)
-  ("C-c C-k" . compile)
-  ("<s-backspace>" . kill-whole-line)
-  ("s-t" . hydra-toggle/body)
-  ("s-\\" . hydra-org/body)
-  ("s-l" . hydra-locate/body)
-  ("C-c f" . hydra-locate/body)
-  ("C-c k" . prelude-kill-other-buffers)
-  ("C-c u" . unfill-paragraph)
-  ("s-d" . bjm/ivy-dired-recent-dirs)
-  ("C-c v" . counsel-M-x)
-  ("s-=" . endless/ispell-word-then-abbrev)
-  ("<f5>" . call-last-kbd-macro))
+   ("C-0" . delete-window-balance)
+   ("C-1" . delete-other-windows)
+   ("C-2" . split-window-below-focus)
+   ("C-3" . split-window-right-focus)
+   ("C-4" . nuke-all-buffers)
+   ("s-5" . delete-frame)
+   ("s-6" . toggle-window-split)
+   ("S-C-<left>" . shrink-window-horizontally)
+   ("S-C-<right>" . enlarge-window-horizontally)
+   ("S-C-<down>" . shrink-window)
+   ("S-C-<up>" . enlarge-window)
+   ("C-x c" . save-buffers-kill-emacs)
+   ("C-x w" . delete-frame)
+   ;; ("s-." . helm-buffers-list)
+   ;; ("C-c i" . ivy-imenu-goto)	
+   ;; ("C-c b" . ivy-bookmark-goto)
+   ("C-x C-b" . ibuffer)
+   ("RET" . newline-and-indent)
+   ("M-/" . hippie-expand)
+   ("C-+" . text-scale-increase)
+   ("C--" . text-scale-decrease)
+   ("C-c C-k" . compile)
+   ("<s-backspace>" . kill-whole-line)
+   ("s-t" . hydra-toggle/body)
+   ("s-\\" . hydra-org/body)
+   ("s-l" . hydra-locate/body)
+   ("C-c f" . hydra-locate/body)
+   ("C-c k" . prelude-kill-other-buffers)
+   ("C-c u" . unfill-paragraph)
+   ("s-d" . bjm/ivy-dired-recent-dirs)
+   ("C-c v" . counsel-M-x)
+   ("s-=" . endless/ispell-word-then-abbrev)
+   ("<f5>" . call-last-kbd-macro))
 
 #+end_src
 
@@ -3021,9 +3045,9 @@ Flycheck
 
 #+begin_src emacs-lisp :tangle yes
   (use-package flycheck
-        :defer t
-    :config
-    (add-hook 'after-init-hook #'global-flycheck-mode))
+	:defer t
+	:config
+	(add-hook 'after-init-hook #'global-flycheck-mode))
 
 #+end_src
 
@@ -3031,15 +3055,15 @@ Python ;;
 
 #+begin_src emacs-lisp :tangle no
   (use-package elpy
-        :config
-    (elpy-enable))
+	:config
+	(elpy-enable))
 
 #+end_src
 
 #+begin_src emacs-lisp :tangle no
   (use-package py-autopep8
-    :config
-    (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save))
+	:config
+	(add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save))
 
 #+end_src
 
@@ -3047,14 +3071,14 @@ Racket ;;
 
 #+begin_src emacs-lisp :tangle yes
   (use-package racket-mode
-        :defer t
-    :mode ("\\.rkt[dl]?\\'" . racket-mode))
+	:defer t
+	:mode ("\\.rkt[dl]?\\'" . racket-mode))
 
 #+end_src
 
 #+begin_src emacs-lisp :tangle no
-(use-package geiser
-:ensure t)
+  (use-package geiser
+	:ensure t)
 
 #+end_src
 
@@ -3062,9 +3086,9 @@ Common Lisp
 
 #+begin_src emacs-lisp :tangle yes
   (use-package slime
-        :config
-    (setq inferior-lisp-program "/usr/local/bin/sbcl")
-    (setq slime-contribs '(slime-fancy)))
+	:config
+	(setq inferior-lisp-program "/usr/local/bin/sbcl")
+	(setq slime-contribs '(slime-fancy)))
 
 #+end_src
 
@@ -3072,7 +3096,7 @@ Swift
 
 #+begin_src emacs-lisp :tangle yes
   (use-package swift-mode
-        :defer t)
+	:defer t)
 
 #+end_src
 
@@ -3103,13 +3127,13 @@ From http://oremacs.com/2015/01/01/three-ansi-term-tips/
 
 #+begin_src emacs-lisp :tangle yes
   (defun oleh-term-exec-hook ()
-    (let* ((buff (current-buffer))
-           (proc (get-buffer-process buff)))
-      (set-process-sentinel
-       proc
-       `(lambda (process event)
-          (if (string= event "finished\n")
-              (kill-buffer ,buff))))))
+	(let* ((buff (current-buffer))
+		   (proc (get-buffer-process buff)))
+	  (set-process-sentinel
+	   proc
+	   `(lambda (process event)
+		  (if (string= event "finished\n")
+			  (kill-buffer ,buff))))))
 
   (add-hook 'term-exec-hook 'oleh-term-exec-hook)
   (add-hook 'ansi-term-exec-hook 'oleh-term-exec-hook)
@@ -3140,32 +3164,32 @@ Start a regular shell
 
 #+begin_src emacs-lisp :tangle yes
   (defun eshell-here ()
-    "Opens up a new shell in the directory associated with the
+	"Opens up a new shell in the directory associated with the
   current buffer's file. The eshell is renamed to match that
   directory to make multiple eshell windows easier."
-    (interactive)
-    (let* ((parent (if (buffer-file-name)
-                       (file-name-directory (buffer-file-name))
-                     default-directory))
-           (height (/ (window-total-height) 3))
-           (name   (car (last (split-string parent "/" t)))))
-      (split-window-vertically (- height))
-      (other-window 1)
-      (eshell "new")
-      (rename-buffer (concat "*eshell: " name "*"))
+	(interactive)
+	(let* ((parent (if (buffer-file-name)
+					   (file-name-directory (buffer-file-name))
+					 default-directory))
+		   (height (/ (window-total-height) 3))
+		   (name   (car (last (split-string parent "/" t)))))
+	  (split-window-vertically (- height))
+	  (other-window 1)
+	  (eshell "new")
+	  (rename-buffer (concat "*eshell: " name "*"))
 
-      (insert (concat "ls"))
-      (eshell-send-input)))
+	  (insert (concat "ls"))
+	  (eshell-send-input)))
 
   (global-set-key (kbd "C-!") 'eshell-here)
 
 #+end_src
 
 #+begin_src emacs-lisp :tangle no
-(defun eshell/x ()
-  (insert "exit")
-  (eshell-send-input)
-  (delete-window))
+  (defun eshell/x ()
+	(insert "exit")
+	(eshell-send-input)
+	(delete-window))
 
 #+end_src
 
@@ -3181,90 +3205,90 @@ Start a regular shell
 
 #+begin_src emacs-lisp :tangle yes
   (use-package swiper
-        :diminish ivy-mode
-    :bind
-    (("s-r" . counsel-recentf)
-     ;; ("C-s" . swiper)
-     ("s-f" . swiper)
-     ("M-x" . counsel-M-x)
-     ("C-x C-f" . counsel-find-file)
-     ("s-o" . counsel-find-file)
-     ("C-c b" . counsel-bookmark)
-     ("C-c i" . counsel-imenu)
-     ("s-." . ivy-switch-buffer)
-     ("<f1> f" . counsel-describe-function)
-     ("<f1> v" . counsel-describe-variable)
-     ("<f1> l" . counsel-load-library)
-     ("<f2> i" . counsel-info-lookup-symbol)
-     ("<f2> u" . counsel-unicode-char)
-     ("C-c g" . counsel-git)
-     ("C-c j" . counsel-git-grep)
-     ("C-c s" . counsel-rg)
-     ("C-x l" . locate)
-     ("C-S-o" . counsel-rhythmbox)
-     ("C-c C-r" . ivy-resume)
-     ("M-y" . counsel-yank-pop)
-     :map ivy-minibuffer-map
-     ("M-y" . ivy-next-line-and-call))
-    :init
-    (setq ivy-display-style 'fancy)
-    (setq ivy-use-virtual-buffers t)
-    (setq ivy-height 10)
-    (setq ivy-count-format "(%d/%d) ")
-    (setq counsel-find-file-ignore-regexp
-      (concat
-       ;; File names beginning with # or .
-       "\\(?:\\`[#.]\\)"
-       ;; File names ending with # or ~
-       "\\|\\(?:\\`.+?[#~]\\'\\)"))
-    :config
-    (ivy-mode 1)
-    ;; version of ivy-yank-word to yank from start of word
-    ;; from http://pragmaticemacs.com/emacs/search-or-swipe-for-the-current-word/
-    (defun bjm/ivy-yank-whole-word ()
-      "Pull next word from buffer into search string."
-      (interactive)
-      (let (amend)
-        (with-ivy-window
-          ;;move to last word boundary
-          (re-search-backward "\\b")
-          (let ((pt (point))
-                (le (line-end-position)))
-            (forward-word 1)
-            (if (> (point) le)
-                (goto-char pt)
-              (setq amend (buffer-substring-no-properties pt (point))))))
-        (when amend
-          (insert (replace-regexp-in-string "  +" " " amend)))))
+	:diminish ivy-mode
+	:bind
+	(("s-r" . counsel-recentf)
+	 ;; ("C-s" . swiper)
+	 ("s-f" . swiper)
+	 ("M-x" . counsel-M-x)
+	 ("C-x C-f" . counsel-find-file)
+	 ("s-o" . counsel-find-file)
+	 ("C-c b" . counsel-bookmark)
+	 ("C-c i" . counsel-imenu)
+	 ("s-." . ivy-switch-buffer)
+	 ("<f1> f" . counsel-describe-function)
+	 ("<f1> v" . counsel-describe-variable)
+	 ("<f1> l" . counsel-load-library)
+	 ("<f2> i" . counsel-info-lookup-symbol)
+	 ("<f2> u" . counsel-unicode-char)
+	 ("C-c g" . counsel-git)
+	 ("C-c j" . counsel-git-grep)
+	 ("C-c s" . counsel-rg)
+	 ("C-x l" . locate)
+	 ("C-S-o" . counsel-rhythmbox)
+	 ("C-c C-r" . ivy-resume)
+	 ("M-y" . counsel-yank-pop)
+	 :map ivy-minibuffer-map
+	 ("M-y" . ivy-next-line-and-call))
+	:init
+	(setq ivy-display-style 'fancy)
+	(setq ivy-use-virtual-buffers t)
+	(setq ivy-height 10)
+	(setq ivy-count-format "(%d/%d) ")
+	(setq counsel-find-file-ignore-regexp
+		  (concat
+		   ;; File names beginning with # or .
+		   "\\(?:\\`[#.]\\)"
+		   ;; File names ending with # or ~
+		   "\\|\\(?:\\`.+?[#~]\\'\\)"))
+	:config
+	(ivy-mode 1)
+	;; version of ivy-yank-word to yank from start of word
+	;; from http://pragmaticemacs.com/emacs/search-or-swipe-for-the-current-word/
+	(defun bjm/ivy-yank-whole-word ()
+	  "Pull next word from buffer into search string."
+	  (interactive)
+	  (let (amend)
+		(with-ivy-window
+		  ;;move to last word boundary
+		  (re-search-backward "\\b")
+		  (let ((pt (point))
+				(le (line-end-position)))
+			(forward-word 1)
+			(if (> (point) le)
+				(goto-char pt)
+			  (setq amend (buffer-substring-no-properties pt (point))))))
+		(when amend
+		  (insert (replace-regexp-in-string "  +" " " amend)))))
 
-    ;; bind it to M-j
-    (define-key ivy-minibuffer-map (kbd "M-j") 'bjm/ivy-yank-whole-word)
-    )
+	;; bind it to M-j
+	(define-key ivy-minibuffer-map (kbd "M-j") 'bjm/ivy-yank-whole-word)
+	)
 #+end_src
 
 #+begin_src emacs-lisp :tangle no
-(use-package spotlight
-)
+  (use-package spotlight
+	)
 #+end_src
 
 Use prescient.el
 
 #+begin_src emacs-lisp :tangle yes
-(use-package prescient
-:ensure t)
-(use-package ivy-prescient
-:config
-(ivy-prescient-mode t))
-(use-package company-prescient
-:config
-(company-prescient-mode t))
+  (use-package prescient
+	:ensure t)
+  (use-package ivy-prescient
+	:config
+	(ivy-prescient-mode t))
+  (use-package company-prescient
+	:config
+	(company-prescient-mode t))
 #+end_src
 
 Replace i-search with swiper-isearch.
 
 #+begin_src emacs-lisp :tangle yes
-(global-set-key (kbd "C-s") 'swiper-isearch)
-(global-set-key (kbd "C-r") 'swiper-isearch-backward)
+  (global-set-key (kbd "C-s") 'swiper-isearch)
+  (global-set-key (kbd "C-r") 'swiper-isearch-backward)
 #+end_src
 
 * Final Steps
@@ -3274,10 +3298,10 @@ I don't need to see these minor-modes in the modeline.
 
 #+begin_src emacs-lisp :tangle yes
   (eval-after-load "flyspell"
-     '(diminish 'flyspell-mode))
+	'(diminish 'flyspell-mode))
   (diminish 'visual-line-mode)
   (diminish 'abbrev-mode)
   (diminish 'auto-revert-mode)
   (eval-after-load "reftex"
-  '(diminish 'reftex-mode))
+	'(diminish 'reftex-mode))
 #+end_src
