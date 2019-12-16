@@ -2935,6 +2935,7 @@ Hydra-toggle
 	("f" auto-fill-mode "fill")
 	;; ("g" god-mode "god")
 	("l" display-line-numbers-mode "linum")
+    ("m" toggle-frame-maximized-undecorated "max")
 	("o" olivetti-mode "olivetti")
 	("r" read-only-mode "read-only") 
 	("t" toggle-truncate-lines "truncate")
@@ -2942,6 +2943,7 @@ Hydra-toggle
 	("W" whitespace-mode "whitespace")
 	("q" nil "global"))
   ;; (global-set-key (kbd "s-t") 'hydra-toggle/body)
+
 
 #+end_src
 
