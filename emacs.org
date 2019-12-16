@@ -983,6 +983,29 @@ Window management, from https://www.bytedude.com/useful-emacs-shortcuts/
 
 
 
+#+begin_src emacs-lisp :tangle yes
+(defun toggle-frame-maximized-undecorated ()
+  (interactive)
+  (let* ((frame (selected-frame))
+         (on? (and (frame-parameter frame 'undecorated)
+                   (eq (frame-parameter frame 'fullscreen) 'maximized)))
+         (geom (frame-monitor-attribute 'geometry))
+         (initial-x (first geom))
+         (display-height (first (last geom))))
+    (if on?
+        (progn
+          (set-frame-parameter frame 'undecorated nil)
+          (toggle-frame-maximized))
+      (progn
+        (set-frame-position frame initial-x 0)
+        (set-frame-parameter frame 'fullscreen 'maximized)
+        (set-frame-parameter frame 'undecorated t)
+        (set-frame-height frame (- display-height 26) nil t)
+        (set-frame-position frame initial-x 0)))))
+#+end_src
+
+
+
 Wraps text in an emacs-lisp code block. Used for converting my init files to org files.
 
 #+begin_src emacs-lisp :tangle yes
