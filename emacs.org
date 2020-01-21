@@ -1528,6 +1528,30 @@ Indents active region or entire buffer. From https://emacsredux.com/blog/2013/03
   (global-set-key (kbd "C-M-\\") #'rr-indent-region-or-buffer)
 #+end_src
 
+Opens iTerm in the directory of the current file.
+
+#+begin_src emacs-lisp
+(defun iterm-goto-filedir-or-home ()
+  "Go to present working dir and focus iterm"
+  (interactive)
+  (do-applescript
+   (concat
+    " tell application \"iTerm2\"\n"
+    "   tell the current session of current window\n"
+    (format "     write text \"cd %s\" \n"
+            ;; string escaping madness for applescript
+            (replace-regexp-in-string "\\\\" "\\\\\\\\"
+                                      (shell-quote-argument (or default-directory "~"))))
+    "   end tell\n"
+    " end tell\n"
+    " do shell script \"open -a iTerm\"\n"
+    ))
+  )
+
+(global-set-key (kbd "C-`") 'iterm-goto-filedir-or-home)
+#+end_src
+
+
 * Markdown and Pandoc
 
 ** Markdown
