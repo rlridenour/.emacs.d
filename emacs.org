@@ -1530,7 +1530,7 @@ Indents active region or entire buffer. From https://emacsredux.com/blog/2013/03
 
 Opens iTerm in the directory of the current file.
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
 (defun iterm-goto-filedir-or-home ()
   "Go to present working dir and focus iterm"
   (interactive)
