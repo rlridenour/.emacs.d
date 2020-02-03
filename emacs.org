@@ -789,8 +789,8 @@ Flyspell-correct-ivy uses the Ivy interface for spelling suggestions.
   (use-package flyspell-correct-ivy
 	:after flyspell
 	:bind (:map flyspell-mode-map
-				("s-;" . flyspell-correct-word-generic)
-				("C-;" . flyspell-correct-previous-word-generic)))
+				("s-;" . flyspell-correct-at-point)
+				("C-;" . flyspell-correct-previous)))
 #+end_src
 
 WC-mode provides word count.
