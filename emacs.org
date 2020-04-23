@@ -1,3 +1,4 @@
+
 #+TITLE: Randy Ridenour's Emacs Configuration
 #+AUTHOR: Randy Ridenour
 #+EMAIL: rlridenour@gmail.com
@@ -233,6 +234,9 @@ Use TeX to input special characters. Activated later for text, markdown, and org
 
 #+begin_src emacs-lisp :tangle yes
   (setq default-input-method 'TeX)
+(add-hook 'text-mode-hook 'toggle-input-method)
+(add-hook 'markdown-mode-hook 'toggle-input-method)
+(add-hook 'org-mode-hook 'toggle-input-method)
 #+end_src
 
 This will save the file every time the user switches apps. It's handy for ensuring regular saves, but can be annoying when there's a TeX error and latexmk is watching the file.
@@ -689,6 +693,7 @@ Evil-nerd commenter is used for quickly commenting code. It works well both with
 
 #+begin_src emacs-lisp :tangle yes
   (use-package evil-nerd-commenter
+:defines evil-normal-state-map
 	:config (evilnc-default-hotkeys))
 #+end_src
 
@@ -954,6 +959,24 @@ Use outshine for folding.
 	(add-hook 'LaTeX-mode-hook 'outshine-mode)
 	(setq outshine-use-speed-commands t))
 #+end_src
+
+#+begin_src emacs-lisp :tangle yes
+(use-package deft
+:bind ("<f9>" . deft)
+:commands (deft)
+  :config (setq deft-directory "~/Dropbox/org/notes")
+          (setq deft-extensions '("org"))
+          (setq deft-default-extension "org")
+          (setq deft-org-mode-title-prefix t)
+          (setq deft-use-filter-string-for-filename t)
+          (setq deft-file-naming-rules
+                '((noslash . "-")
+                  (nospace . "-")
+                  (case-fn . downcase)))
+          (setq deft-text-mode 'org-mode))
+
+#+end_src
+
 
 * Functions
 
@@ -1564,7 +1587,8 @@ Opens iTerm in the directory of the current file.
 		   ("\\.md\\'" . markdown-mode)
 		   ("\\.Rmd\\'" . markdown-mode))
 	:config
-	(setq markdown-indent-on-enter 'indent-and-new-item))
+	(setq markdown-indent-on-enter 'indent-and-new-item)
+    (setq markdown-asymmetric-header t))
 #+end_src
 
 Make it easier to bold and italicize in Markdown Mode
@@ -2132,20 +2156,9 @@ Tufte-book class for writing classy books
 				 ("\\paragraph{%s}" . "\\paragraph*{%s}")
 				 ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
 
-  ;; Beamer export
-  (eval-after-load "ox-latex"
-
-	;; update the list of LaTeX classes and associated header (encoding, etc.)
-	;; and structure
-	'(add-to-list 'org-latex-classes
-				  `("beamer"
-					,(concat "\\documentclass[presentation]{beamer}\n"
-							 "[DEFAULT-PACKAGES]"
-							 "[PACKAGES]"
-							 "[EXTRA]\n")
-					("\\section{%s}" . "\\section*{%s}")
-					("\\subsection{%s}" . "\\subsection*{%s}")
-					("\\subsubsection{%s}" . "\\subsubsection*{%s}"))))
+(require 'ox-beamer)
+ (require 'ox-latex)
+(setq org-export-allow-bind-keywords t)
 
   (setq org-latex-listings t)
 #+end_src
