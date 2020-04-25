@@ -357,30 +357,33 @@ Use F7 to check the current word, M-F7 for the next word.
 
 Find aspell and hunspell automatically
 
-#+begin_src emacs-lisp :tangle yes
-  (cond
-   ;; try hunspell at first
-   ;; if hunspell does NOT exist, use aspell
-   ((executable-find "hunspell")
-	(setq ispell-program-name "hunspell")
-	(setq ispell-local-dictionary "en_US")
-	(setq ispell-local-dictionary-alist
-		  ;; Please note the list `("-d" "en_US")` contains ACTUAL parameters passed to hunspell
-		  ;; You could use `("-d" "en_US,en_US-med")` to check with multiple dictionaries
-		  '(("en_US" "[[:alpha:]]" "[^[:alpha:]]" "[']" nil ("-d" "en_US") nil utf-8)
-			)))
 
-   ((executable-find "aspell")
-	(setq ispell-program-name "aspell")
+
+#+begin_src emacs-lisp :tangle yes
+(setq ispell-program-name "/usr/local/bin/aspell")
 	;; Please note ispell-extra-args contains ACTUAL parameters passed to aspell
-	(setq ispell-extra-args '("--sug-mode=ultra" "--lang=en_US"))))
+	(setq ispell-extra-args '("--sug-mode=ultra"))
 #+end_src
 
-Store personal dictionary in Dropbox to sync between machines.
+Store personal dictionary in Dropbox to sync between machines. Save to personal dictionary without asking.
 
 #+begin_src emacs-lisp :tangle yes
-  (setq ispell-personal-dictionary "/Users/rlridenour/Dropbox/emacs/ridenour-ispell-dictionary ")
+  (setq ispell-personal-dictionary "/Users/rlridenour/Dropbox/emacs/spelling/.aspell.en.pws")
+  (setq ispell-silently-savep t)
 #+end_src
+
+Use [[https://github.com/hpdeifel/synosaurus][Synosaurus]] to suggest alternative words
+
+#+begin_src emacs-lisp :tangle yes
+(use-package synosaurus
+  :diminish synosaurus-mode
+  :init    (synosaurus-mode)
+  :config  (setq synosaurus-choose-method 'popup) ;; 'ido is default.
+           (global-set-key (kbd "M-#") 'synosaurus-choose-and-replace)
+)
+#+end_src
+
+
 
 Hide various file types, mostly LaTeX auxiliary files, in Dired.
 
