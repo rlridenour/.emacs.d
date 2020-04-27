@@ -383,6 +383,11 @@ Use [[https://github.com/hpdeifel/synosaurus][Synosaurus]] to suggest alternativ
 )
 #+end_src
 
+Use GNU ls to avoid "Listing directory failed but 'access-file' worked" error.
+
+#+begin_src emacs-lisp :tangle yes
+(setq insert-directory-program "/usr/local/bin/gls"); use proper GNU ls
+#+end_src
 
 
 Hide various file types, mostly LaTeX auxiliary files, in Dired.
@@ -3351,7 +3356,7 @@ Use prescient.el
 
 Replace i-search with swiper-isearch.
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
   (global-set-key (kbd "C-s") 'swiper-isearch)
   (global-set-key (kbd "C-r") 'swiper-isearch-backward)
 #+end_src
