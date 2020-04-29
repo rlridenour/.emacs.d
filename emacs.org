@@ -1582,6 +1582,14 @@ Opens iTerm in the directory of the current file.
 (global-set-key (kbd "C-`") 'iterm-goto-filedir-or-home)
 #+end_src
 
+** Saved Keyboard Macros
+
+Splits Org-mode list items
+
+#+begin_src emacs-lisp :tangle yes
+(fset 'split-org-item
+   [?\C-k ?\M-\\ return ?\C-y])
+#+end_src
 
 * Markdown and Pandoc
 
@@ -3097,11 +3105,11 @@ Major-mode Hydras
    ("C-c f" . hydra-locate/body)
    ("C-c k" . prelude-kill-other-buffers)
    ("C-c u" . unfill-paragraph)
-   ("s-d" . bjm/ivy-dired-recent-dirs)
+   ("s-d" . rlr/ivy-dired-recent-dirs)
    ("C-c v" . counsel-M-x)
    ("s-=" . endless/ispell-word-then-abbrev)
-   ("<f5>" . call-last-kbd-macro))
-
+   ("<f5>" . call-last-kbd-macro)
+   ("C-c C-<return>" . split-org-item))
 #+end_src
 
 
