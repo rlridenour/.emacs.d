@@ -1591,6 +1591,14 @@ Splits Org-mode list items
    [?\C-k ?\M-\\ return ?\C-y])
 #+end_src
 
+
+#+begin_src emacs-lisp :tangle yes
+(fset 'convert-markdown-to-org
+   [?\M-< ?\M-% ?* return ?- return ?! ?\M-< ?\C-\M-% ?# ?* backspace backspace ?  ?# ?* ?$ return return ?! ?\M-< ?\M-% ?# return ?* return ?!])
+#+end_src
+
+
+
 * Markdown and Pandoc
 
 ** Markdown
@@ -1862,7 +1870,7 @@ PDFLaTeX export
 #+begin_src emacs-lisp :tangle yes
   (add-to-list 'org-latex-classes
 			   '("rlr-pdf-article"
-				 "\\documentclass[12pt]{article}
+				 "\\documentclass{article}
 
 	\\usepackage{graphicx,epstopdf,amsmath,amssymb,url}
 	\\usepackage[normalem]{ulem}
