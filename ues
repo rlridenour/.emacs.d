@@ -1,0 +1,1 @@
+(with-eval-after-load "moom"  (moom-fill-left))

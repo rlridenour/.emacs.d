@@ -202,6 +202,18 @@ Display line numbers.
   (global-display-line-numbers-mode)
 #+end_src
 
+
+#+begin_src emacs-lisp :tangle yes
+  (use-package moom
+:bind (("s-1" . moom-fill-left)
+("s-2" . moom-change-frame-width-double)
+("s-3" . moom-fill-band))
+:config
+  (moom-toggle-font-module)
+  (moom-screen-margin '(23 0 0 0) t)
+  )
+#+end_src
+
 * System
 
 
@@ -1647,9 +1659,6 @@ Use s-3 to insert fragment tag in reveal.js slides.
 	(end-of-line)
 	(insert "<!-- .element: class=\"fragment\" -->")
 	(next-line))
-
-
-  (global-set-key (kbd "s-4") 'insert-frag)
 #+end_src
 
 #+begin_src emacs-lisp :tangle yes
@@ -1663,7 +1672,7 @@ Use s-3 to insert fragment tag in reveal.js slides.
 		  (insert "<section data-markdown> \n <textarea data-template> \n"))
 	  (insert "\n </textarea> \n </section> \n \n  <section data-markdown> \n <textarea data-template> \n")(previous-line 3)))
 
-  (global-set-key (kbd "s-3") 'wrap-text-slide)
+
 #+end_src
 
 ** Pandoc
@@ -1972,6 +1981,15 @@ Return adds new heading or list item.
 	'scimax/org-return)
 #+end_src
 
+To avoid error that org-strip-quotes is void.
+
+#+begin_src emacs-lisp :tangle yes
+(defun org-strip-quotes (string)
+  "Strip double quotes from around STRING, if applicable.
+If STRING is nil, return nil."
+  (org-unbracket-string "\"" "\"" string))
+#+end_src
+
 ** Archive Settings
 
 Where archived projects and tasks go.
@@ -2070,32 +2088,6 @@ Personal letter
 				 ("\\paragraph{%s}" . "\\paragraph*{%s}")
 				 ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
 #+end_src
-
-#+begin_src emacs-lisp :tangle no
-(require 'ox-latex)
-(setq org-latex-listings t)
-
-;; Originally taken from Bruno Tavernier: http://thread.gmane.org/gmane.emacs.orgmode/31150/focus=31432
-;; but adapted to use latexmk 4.20 or higher.
-(defun my-auto-tex-cmd ()
-  "When exporting from .org with latex, automatically run latex,
-     pdflatex, or xelatex as appropriate, using latexmk."
-  (let ((texcmd)))
-  ;; default command: oldstyle latex via dvi
-  (setq texcmd "latexmk -dvi -pdfps -quiet %f")
-  ;; pdflatex -> .pdf
-  (if (string-match "LATEX_CMD: pdflatex" (buffer-string))
-      (setq texcmd "latexmk -pdf -interaction=nonstopmode -quiet %f"))
-  ;; xelatex -> .pdf
-  (if (string-match "LATEX_CMD: lualatex" (buffer-string))
-      (setq texcmd "latexmk -lualatex -quiet %f"))
-  ;; LaTeX compilation command
-  (setq org-latex-to-pdf-process (list texcmd)))
-
-(add-hook 'org-export-latex-after-initial-vars-hook 'my-auto-tex-cmd)
-
-#+end_src
-
 
 Code blocks
 This activates a number of widely used languages, you are encouraged to activate more languages using the customize interface for the =org-babel-load-languages= variable, or with an elisp form like the one below.  The customize interface of =org-babel-load-languages= contains an up to date list of the currently supported languages.
@@ -2330,7 +2322,7 @@ Tufte-book class for writing classy books
 
 Cdlatex makes inserting LaTeX easier.
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
   (use-package cdlatex
 	:config (add-hook 'LaTeX-mode-hook 'turn-on-cdlatex)
 	(add-hook 'org-mode-hook 'turn-on-org-cdlatex))
@@ -2469,7 +2461,7 @@ RefTeX formats for biblatex (not natbib), and for pandoc
 
 #+begin_src emacs-lisp :tangle yes
   (use-package ivy-bibtex
-	:bind ("s-2" . ivy-bibtex)
+	:bind ("s-4" . ivy-bibtex)
 	:after (ivy)
 	:config
 	(setq bibtex-completion-bibliography '("~/zotero.bib"))
@@ -3335,6 +3327,7 @@ Replace i-search with swiper-isearch.
   (global-set-key (kbd "C-r") 'swiper-isearch-backward)
 #+end_src
 
+
 * Final Steps
 
 
@@ -3349,3 +3342,4 @@ I don't need to see these minor-modes in the modeline.
   (eval-after-load "reftex"
 	'(diminish 'reftex-mode))
 #+end_src
+
