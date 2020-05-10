@@ -998,6 +998,12 @@ Use outshine for folding.
 #+end_src
 
 
+#+begin_src emacs-lisp
+(use-package fish-mode)
+(add-hook 'fish-mode-hook (lambda ()
+                             (add-hook 'before-save-hook 'fish_indent-before-save)))
+#+end_src
+
 * Functions
 
 Window management, from https://www.bytedude.com/useful-emacs-shortcuts/
