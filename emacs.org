@@ -998,7 +998,7 @@ Use outshine for folding.
 #+end_src
 
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
 (use-package fish-mode)
 (add-hook 'fish-mode-hook (lambda ()
                              (add-hook 'before-save-hook 'fish_indent-before-save)))
@@ -1771,6 +1771,7 @@ Ispell ignore TeX
 #+begin_src emacs-lisp :tangle yes
 
   (use-package org
+     :pin org
      :ensure org-plus-contrib)
 #+end_src
 
@@ -3002,8 +3003,12 @@ Major-mode Hydras
 
 	("q" nil))
 
+(major-mode-hydra-bind org-mode "Export"
+    ("b" org-beamer-export-to-pdf "Org to Beamer-PDF")
+    ("p" org-latex-export-to-pdf "Org to PDF"))
+
   (major-mode-hydra-bind org-mode "Bibtex"
-	("b" ivy-bibtex "Ivy-Bibtex"))
+	("r" ivy-bibtex "Ivy-Bibtex"))
 
   (major-mode-hydra-bind org-mode "Clean"
 	("c" tex-clean "clean aux")
