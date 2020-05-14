@@ -112,6 +112,8 @@ Set the default font. The "frame-alist" is necessary to set the font when using 
 #+begin_src emacs-lisp :tangle yes
   (set-default-font "Droid Sans Mono Slashed-13")
   (setq default-frame-alist '((font . "Droid Sans Mono Slashed-13"))) ;;; set default font for emacs --daemon / emacsclient
+  (add-to-list 'default-frame-alist '(width  . (text-pixels . 940)))
+  (add-to-list 'default-frame-alist '(height . (text-pixels . 1200)))
 #+end_src
 
 
