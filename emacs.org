@@ -708,7 +708,9 @@ Magit is an interface for Git. If I could keep only one package in Emacs, this m
 #+begin_src emacs-lisp :tangle yes
   (use-package magit
 	:defer t
-	:bind ("C-x g" . magit-status))
+	:bind ("C-x g" . magit-status)
+    :config
+    (global-auto-revert-mode))
 #+end_src
 
 Evil-nerd commenter is used for quickly commenting code. It works well both with and without evil-mode.
